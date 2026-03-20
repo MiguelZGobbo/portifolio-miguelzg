@@ -3,11 +3,9 @@ const navLinks = document.querySelectorAll('.nav-links a');
 let current = 0;
 let isScrolling = false;
 
-// Desativa scroll nativo
 const container = document.querySelector('.scroll-container');
 container.style.overflowY = 'hidden';
 
-// Define elementos animáveis por seção com delay em sequência
 const animatables = [
   ['#home .hero-tag', '#home .hero-title', '#home .hero-sub', '#home .hero-photo'],
   ['#sobre .section-label', '#sobre .section-title', '#sobre .about-text', '#sobre .about-info'],
@@ -17,7 +15,6 @@ const animatables = [
   ['#contato .section-label', '#contato .section-title', '#contato .contact-form', '#contato .contact-info'],
 ];
 
-// Reseta todos os elementos para estado invisível
 function resetSection(index) {
   if (!animatables[index]) return;
   animatables[index].forEach(selector => {
@@ -29,7 +26,6 @@ function resetSection(index) {
   });
 }
 
-// Anima elementos em stagger
 function animateSection(index) {
   if (!animatables[index]) return;
   let delay = 0;
@@ -40,9 +36,29 @@ function animateSection(index) {
         el.style.opacity = '1';
         el.style.transform = 'translateY(0)';
       }, delay);
-      delay += 80;
+      delay += 50;
     });
   });
+}
+
+// Detecta quando o scroll parou de verdade
+function waitForScrollEnd(targetSection, callback) {
+  let lastPos = container.scrollTop;
+  let attempts = 0;
+
+  const check = setInterval(() => {
+    const currentPos = container.scrollTop;
+    const targetPos = targetSection.offsetTop;
+    const arrived = Math.abs(currentPos - targetPos) < 5;
+
+    if (arrived || attempts > 40) {
+      clearInterval(check);
+      callback();
+    }
+
+    lastPos = currentPos;
+    attempts++;
+  }, 50);
 }
 
 function goTo(index) {
@@ -58,12 +74,13 @@ function goTo(index) {
     link.classList.toggle('active', link.getAttribute('href') === `#${sections[index].id}`);
   });
 
-  // Dispara animação após scroll terminar
-  setTimeout(() => animateSection(index), 400);
-  setTimeout(() => { isScrolling = false; }, 900);
+  // Aguarda o scroll chegar de verdade antes de animar
+  waitForScrollEnd(sections[index], () => {
+    animateSection(index);
+    setTimeout(() => { isScrolling = false; }, 900);
+  });
 }
 
-// Scroll do mouse
 let wheelAccum = 0;
 window.addEventListener('wheel', (e) => {
   e.preventDefault();
@@ -73,7 +90,6 @@ window.addEventListener('wheel', (e) => {
   else if (wheelAccum < -50) { wheelAccum = 0; goTo(current - 1); }
 }, { passive: false });
 
-// Cliques na navbar
 navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
@@ -83,6 +99,5 @@ navLinks.forEach(link => {
   });
 });
 
-// Inicializa
 sections.forEach((_, i) => resetSection(i));
 goTo(0);
