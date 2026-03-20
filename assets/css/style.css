@@ -45,6 +45,7 @@ nav {
     height: var(--nav-height);
     background: var(--cream);
     border-bottom: 1.5px solid var(--sand);
+    box-shadow: 0 2px 12px rgba(44, 34, 24, 0.3);
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
@@ -73,7 +74,7 @@ nav {
     letter-spacing: 0.07em;
     text-transform: uppercase;
     padding: 0.4rem 0.75rem;
-    border-radius: 4px;
+    border-radius: 5.5px;
     cursor: pointer;
     transition: background 0.18s, color 0.18s;
 }
@@ -101,6 +102,19 @@ nav {
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+}
+
+.skill-card,
+.project-card,
+.info-item {
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.skill-card:hover,
+.project-card:hover,
+.info-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
 }
 
 /* ================================
@@ -385,7 +399,7 @@ nav {
     color: var(--cream);
     background: var(--brown-dark);
     padding: 0.45rem 1rem;
-    border-radius: 2px;
+    border-radius: 7px;
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
