@@ -101,3 +101,71 @@ navLinks.forEach(link => {
 
 sections.forEach((_, i) => resetSection(i));
 goTo(0);
+
+function copyText(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        const iconCopy = btn.querySelector('.icon-copy');
+        const iconCheck = btn.querySelector('.icon-check');
+
+        // Entrada
+        iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+        iconCopy.style.opacity = '0';
+        iconCopy.style.transform = 'scale(0.6)';
+
+        setTimeout(() => {
+            iconCopy.style.display = 'none';
+            iconCheck.style.display = 'block';
+            iconCheck.style.opacity = '0';
+            iconCheck.style.transform = 'scale(0.6)';
+            iconCheck.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+            btn.classList.add('copied');
+
+            // Tooltip
+            const tooltip = document.createElement('span');
+            tooltip.textContent = 'Copiado!';
+            tooltip.style.cssText = `
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: var(--brown-dark);
+                letter-spacing: 0.04em;
+                opacity: 0;
+                transition: opacity 0.15s ease;
+            `;
+            btn.parentElement.appendChild(tooltip);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    iconCheck.style.opacity = '1';
+                    iconCheck.style.transform = 'scale(1)';
+                    tooltip.style.opacity = '1';
+                });
+            });
+
+            // Saída
+            setTimeout(() => {
+                iconCheck.style.opacity = '0';
+                iconCheck.style.transform = 'scale(0.6)';
+                tooltip.style.opacity = '0';
+
+                setTimeout(() => {
+                    iconCheck.style.display = 'none';
+                    iconCheck.style.transition = 'none';
+                    iconCopy.style.display = 'block';
+                    iconCopy.style.opacity = '0';
+                    iconCopy.style.transform = 'scale(0.6)';
+                    iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+                    btn.classList.remove('copied');
+                    tooltip.remove();
+
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            iconCopy.style.opacity = '1';
+                            iconCopy.style.transform = 'scale(1)';
+                        });
+                    });
+                }, 150);
+            }, 2000);
+
+        }, 150);
+    });
+}

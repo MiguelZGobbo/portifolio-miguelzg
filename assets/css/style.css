@@ -1,15 +1,15 @@
 /* ================================
-   VARIÁVEIS E RESET
+   1. VARIÁVEIS E RESET
 ================================ */
 :root {
-    --cream: #F8F0E5;
-    --brown: #956B4B;
+    --cream:      #F8F0E5;
+    --brown:      #956B4B;
     --brown-dark: #6B4A30;
-    --sand: #E2C7AA;
-    --warm-gray: #8F857B;
-    --tan: #B19A81;
-    --dark: #2C2218;
-    --text: #3D3028;
+    --sand:       #E2C7AA;
+    --warm-gray:  #8F857B;
+    --tan:        #B19A81;
+    --dark:       #2C2218;
+    --text:       #3D3028;
     --text-muted: #6B5C4E;
     --nav-height: 58px;
 }
@@ -35,7 +35,7 @@ body {
 }
 
 /* ================================
-   NAVEGAÇÃO
+   2. LAYOUT BASE
 ================================ */
 nav {
     position: fixed;
@@ -89,9 +89,6 @@ nav {
     color: var(--cream);
 }
 
-/* ================================
-   SCROLL CONTAINER — SUAVE
-================================ */
 .scroll-container {
     position: fixed;
     top: var(--nav-height);
@@ -104,22 +101,6 @@ nav {
     -webkit-overflow-scrolling: touch;
 }
 
-.skill-card,
-.project-card,
-.info-item {
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.skill-card:hover,
-.project-card:hover,
-.info-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
-}
-
-/* ================================
-   SEÇÕES — FULLSCREEN
-================================ */
 .snap-section {
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -137,6 +118,9 @@ nav {
     padding: 0 2rem;
 }
 
+/* ================================
+   3. COMPONENTES GENÉRICOS
+================================ */
 .section-label {
     font-size: 0.7rem;
     font-weight: 600;
@@ -156,9 +140,6 @@ nav {
     border-bottom: 1.5px solid var(--sand);
 }
 
-/* ================================
-   BOTÕES
-================================ */
 .btn {
     display: inline-block;
     padding: 0.72rem 1.6rem;
@@ -193,7 +174,7 @@ nav {
 }
 
 /* ================================
-   HERO
+   4. SEÇÃO — HERO
 ================================ */
 .hero-inner {
     display: flex;
@@ -254,14 +235,12 @@ nav {
     font-size: 0.85rem;
     font-weight: 500;
     letter-spacing: 0.05em;
-
     /* Quando tiver foto real, troque por:
-     background: url('../img/foto.jpg') center/cover no-repeat;
-  */
+       background: url('../img/foto.jpg') center/cover no-repeat; */
 }
 
 /* ================================
-   SOBRE
+   5. SEÇÃO — SOBRE
 ================================ */
 .about-grid {
     display: grid;
@@ -289,6 +268,12 @@ nav {
     border: 1.5px solid var(--sand);
     border-left: 4px solid var(--brown);
     border-radius: 3px;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.info-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
 }
 
 .info-item .label {
@@ -306,7 +291,7 @@ nav {
 }
 
 /* ================================
-   HABILIDADES
+   6. SEÇÃO — HABILIDADES
 ================================ */
 .skills-grid {
     display: grid;
@@ -319,6 +304,12 @@ nav {
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     padding: 1.2rem;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.skill-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
 }
 
 .skill-cat {
@@ -346,7 +337,7 @@ nav {
 }
 
 /* ================================
-   PROJETOS
+   7. SEÇÃO — PROJETOS
 ================================ */
 .projects-list {
     display: flex;
@@ -363,6 +354,12 @@ nav {
     grid-template-columns: 1fr auto;
     gap: 1rem;
     align-items: center;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
 }
 
 .project-name {
@@ -411,7 +408,7 @@ nav {
 }
 
 /* ================================
-   CV
+   8. SEÇÃO — CV
 ================================ */
 .cv-box {
     background: white;
@@ -444,8 +441,17 @@ nav {
 }
 
 /* ================================
-   CONTATO
+   9. SEÇÃO — CONTATO
 ================================ */
+#contato {
+    justify-content: space-between;
+    align-items: center;
+}
+
+#contato .section-inner {
+    margin: auto 0;
+}
+
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -508,6 +514,17 @@ nav {
     justify-content: center;
 }
 
+.contact-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-group--muted {
+    padding-top: 1rem;
+    border-top: 1px solid var(--sand);
+}
+
 .contact-item .label {
     font-size: 0.68rem;
     letter-spacing: 0.13em;
@@ -522,17 +539,43 @@ nav {
     color: var(--dark);
 }
 
-#contato {
-    justify-content: space-between;
+.val-row {
+    display: flex;
     align-items: center;
+    gap: 0.5rem;
+    min-height: 1.4rem;
 }
 
-#contato .section-inner {
-    margin: auto 0;
+.val-link {
+    font-size: 0.9rem;
+    color: var(--brown-dark);
+    text-decoration: none;
+    border-bottom: 1px solid var(--sand);
+    transition: border-color 0.2s, color 0.2s;
 }
+
+.val-link:hover {
+    color: var(--brown);
+    border-bottom-color: var(--brown);
+}
+
+.copy-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--tan);
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.copy-btn:hover { color: var(--brown-dark); }
+.copy-btn.copied { color: var(--brown-dark); }
 
 /* ================================
-   FOOTER
+   10. FOOTER
 ================================ */
 footer {
     background: var(--dark);
@@ -549,7 +592,7 @@ footer {
 }
 
 /* ================================
-   RESPONSIVO — MOBILE
+   11. RESPONSIVO — MOBILE
 ================================ */
 @media (max-width: 640px) {
     :root {
