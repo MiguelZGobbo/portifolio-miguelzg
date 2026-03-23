@@ -1,3 +1,5 @@
+emailjs.init('7cO86VT1CxLbCKh3n');
+
 const sections = Array.from(document.querySelectorAll('.snap-section'));
 const navLinks = document.querySelectorAll('.nav-links a');
 let current = 0;
@@ -12,10 +14,10 @@ navPill.classList.add('nav-pill');
 document.querySelector('.nav-links').appendChild(navPill);
 
 function movePill(link) {
-  const nav     = document.querySelector('.nav-links');
+  const nav = document.querySelector('.nav-links');
   const navLeft = nav.getBoundingClientRect().left;
   const linkRect = link.getBoundingClientRect();
-  navPill.style.left  = (linkRect.left - navLeft) + 'px';
+  navPill.style.left = (linkRect.left - navLeft) + 'px';
   navPill.style.width = linkRect.width + 'px';
 }
 
@@ -59,8 +61,8 @@ function waitForScrollEnd(targetSection, callback) {
   let attempts = 0;
   const check = setInterval(() => {
     const currentPos = container.scrollTop;
-    const targetPos  = targetSection.offsetTop;
-    const arrived    = Math.abs(currentPos - targetPos) < 5;
+    const targetPos = targetSection.offsetTop;
+    const arrived = Math.abs(currentPos - targetPos) < 5;
     if (arrived || attempts > 40) {
       clearInterval(check);
       callback();
@@ -96,7 +98,7 @@ window.addEventListener('wheel', (e) => {
   e.preventDefault();
   if (isScrolling) return;
   wheelAccum += e.deltaY;
-  if (wheelAccum > 50)  { wheelAccum = 0; goTo(current + 1); }
+  if (wheelAccum > 50) { wheelAccum = 0; goTo(current + 1); }
   if (wheelAccum < -50) { wheelAccum = 0; goTo(current - 1); }
 }, { passive: false });
 
@@ -104,7 +106,7 @@ window.addEventListener('wheel', (e) => {
 navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
-    const id    = link.getAttribute('href').replace('#', '');
+    const id = link.getAttribute('href').replace('#', '');
     const index = sections.findIndex(s => s.id === id);
     goTo(index);
   });
@@ -121,15 +123,15 @@ requestAnimationFrame(() => {
 // ── Copiar para clipboard ────────────────────────────────
 function copyText(text, btn) {
   navigator.clipboard.writeText(text).then(() => {
-    const iconCopy  = btn.querySelector('.icon-copy');
+    const iconCopy = btn.querySelector('.icon-copy');
     const iconCheck = btn.querySelector('.icon-check');
 
     iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-    iconCopy.style.opacity    = '0';
-    iconCopy.style.transform  = 'scale(0.6)';
+    iconCopy.style.opacity = '0';
+    iconCopy.style.transform = 'scale(0.6)';
 
     setTimeout(() => {
-      iconCopy.style.display  = 'none';
+      iconCopy.style.display = 'none';
       iconCheck.style.display = 'block';
       iconCheck.style.opacity = '0';
       iconCheck.style.transform = 'scale(0.6)';
@@ -146,32 +148,83 @@ function copyText(text, btn) {
       btn.parentElement.appendChild(tooltip);
 
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        iconCheck.style.opacity   = '1';
+        iconCheck.style.opacity = '1';
         iconCheck.style.transform = 'scale(1)';
-        tooltip.style.opacity     = '1';
+        tooltip.style.opacity = '1';
       }));
 
       setTimeout(() => {
-        iconCheck.style.opacity   = '0';
+        iconCheck.style.opacity = '0';
         iconCheck.style.transform = 'scale(0.6)';
-        tooltip.style.opacity     = '0';
+        tooltip.style.opacity = '0';
 
         setTimeout(() => {
           iconCheck.style.display = 'none';
           iconCheck.style.transition = 'none';
-          iconCopy.style.display  = 'block';
-          iconCopy.style.opacity  = '0';
+          iconCopy.style.display = 'block';
+          iconCopy.style.opacity = '0';
           iconCopy.style.transform = 'scale(0.6)';
           iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
           btn.classList.remove('copied');
           tooltip.remove();
 
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            iconCopy.style.opacity   = '1';
+            iconCopy.style.opacity = '1';
             iconCopy.style.transform = 'scale(1)';
           }));
         }, 150);
       }, 2000);
     }, 150);
+  });
+}
+
+// ── Formulário de contato ────────────────────────────────
+function enviarMensagem() {
+  const nome     = document.getElementById('campo-nome').value.trim();
+  const email    = document.getElementById('campo-email').value.trim();
+  const mensagem = document.getElementById('campo-mensagem').value.trim();
+  const btn      = document.getElementById('btn-enviar');
+  const aviso    = document.getElementById('form-aviso');
+
+  // Limpa aviso anterior
+  aviso.textContent = '';
+  aviso.className   = '';
+
+  if (!nome || !email || !mensagem) {
+    aviso.textContent = 'Preencha todos os campos antes de enviar.';
+    aviso.className   = 'erro';
+    return;
+  }
+
+  btn.textContent = 'Enviando...';
+  btn.disabled    = true;
+
+  emailjs.send('service_5hcdutl', 'template_z8knk7w', {
+    name:    nome,
+    email:   email,
+    message: mensagem
+  })
+  .then(() => {
+    btn.textContent      = 'Enviar mensagem';
+    btn.disabled         = false;
+    aviso.textContent    = 'Mensagem enviada com sucesso!';
+    aviso.className      = 'sucesso';
+    document.getElementById('campo-nome').value     = '';
+    document.getElementById('campo-email').value    = '';
+    document.getElementById('campo-mensagem').value = '';
+    setTimeout(() => {
+      aviso.textContent = '';
+      aviso.className   = '';
+    }, 4000);
+  })
+  .catch(() => {
+    btn.textContent = 'Enviar mensagem';
+    btn.disabled    = false;
+    aviso.textContent = 'Erro ao enviar. Tente novamente.';
+    aviso.className   = 'erro';
+    setTimeout(() => {
+      aviso.textContent = '';
+      aviso.className   = '';
+    }, 4000);
   });
 }

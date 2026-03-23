@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -177,17 +179,18 @@
                     <div class="contact-form">
                         <div class="form-group">
                             <label>Nome</label>
-                            <input type="text" placeholder="Seu nome" />
+                            <input type="text" id="campo-nome" placeholder="Seu nome"/>
                         </div>
                         <div class="form-group">
                             <label>E-mail</label>
-                            <input type="email" placeholder="seu@email.com" />
+                            <input type="email" id="campo-email" placeholder="seu@email.com"/>
                         </div>
                         <div class="form-group">
                             <label>Mensagem</label>
-                            <textarea placeholder="Como posso ajudar?"></textarea>
+                            <textarea id="campo-mensagem" placeholder="Como posso ajudar?"></textarea>
                         </div>
-                        <button class="btn">Enviar mensagem</button>
+                        <button class="btn" id="btn-enviar" onclick="enviarMensagem()">Enviar mensagem</button>
+                        <span id="form-aviso"></span>
                     </div>
                     <div class="contact-info">
                         <div class="contact-group">

@@ -594,6 +594,19 @@ nav {
 .copy-btn:hover { color: var(--brown-dark); }
 .copy-btn.copied { color: var(--brown-dark); }
 
+#form-aviso {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 500;
+    margin-top: 0.6rem;
+    min-height: 1.2rem;
+    transition: opacity 0.2s ease;
+    opacity: 0;
+}
+
+#form-aviso.erro  { color: #a33; opacity: 1; }
+#form-aviso.sucesso { color: var(--brown-dark); opacity: 1; }
+
 /* ================================
    10. FOOTER
 ================================ */
