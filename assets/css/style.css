@@ -64,6 +64,8 @@ nav {
 .nav-links {
     display: flex;
     gap: 0.3rem;
+    position: relative;
+    align-items: center;
 }
 
 .nav-links a {
@@ -76,17 +78,35 @@ nav {
     padding: 0.4rem 0.75rem;
     border-radius: 5.5px;
     cursor: pointer;
-    transition: background 0.18s, color 0.18s;
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.15s ease;
 }
 
 .nav-links a:hover {
-    background: var(--sand);
     color: var(--brown-dark);
+    transform: scale(1.08);
 }
 
 .nav-links a.active {
-    background: var(--brown-dark);
     color: var(--cream);
+    transform: none;
+}
+
+.nav-pill {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 28px;
+    background: var(--brown-dark);
+    border-radius: 5.5px;
+    z-index: 0;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
 }
 
 .scroll-container {
