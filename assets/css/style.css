@@ -412,15 +412,18 @@ nav {
 }
 
 .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     font-size: 0.78rem;
     color: var(--cream);
     background: var(--brown-dark);
     padding: 0.45rem 1rem;
-    border-radius: 7px;
+    border-radius: 3px;
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
-    transition: background 0.2s;
+    transition: background 0.28s ease;
 }
 
 .project-link:hover {
@@ -458,6 +461,19 @@ nav {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
+}
+
+.cv-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: background 0.28s ease, color 0.28s ease, border-color 0.28s ease;
+}
+
+.cv-actions .btn-outline:hover {
+    background: var(--sand);
+    border-color: var(--brown);
+    color: var(--brown-dark);
 }
 
 /* ================================
