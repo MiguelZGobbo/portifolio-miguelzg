@@ -618,6 +618,7 @@ footer {
     font-size: 0.78rem;
     letter-spacing: 0.06em;
     margin-top: auto;
+    margin-bottom: -0.06rem;
 }
 
 #contato footer {
