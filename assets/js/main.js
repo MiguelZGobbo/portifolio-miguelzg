@@ -82,8 +82,44 @@ function goTo(index) {
 
   navLinks.forEach(link => {
     const isActive = link.getAttribute('href') === `#${sections[index].id}`;
-    link.classList.toggle('active', isActive);
-    if (isActive) movePill(link);
+
+    if (isActive) {
+      const text = link.querySelector('.nav-text');
+      const icon = link.querySelector('.nav-icon');
+
+      // fixa a largura atual (com texto) para não mudar ao trocar para ícone
+      link.style.width = link.offsetWidth + 'px';
+
+      // 1. some o texto
+      text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+      text.style.opacity = '0';
+      text.style.transform = 'scale(0.6)';
+
+      // 2. após o texto sumir, mostra o ícone
+      setTimeout(() => {
+        text.style.display = 'none';
+        icon.style.display = 'block';
+        icon.style.animation = 'none';
+        icon.offsetHeight;
+        icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+        movePill(link);
+      }, 150);
+
+      link.classList.add('active');
+      movePill(link);
+
+    } else {
+      const text = link.querySelector('.nav-text');
+      const icon = link.querySelector('.nav-icon');
+
+      link.classList.remove('active');
+      link.style.width = ''; // libera a largura ao desativar
+      icon.style.display = 'none';
+      icon.style.animation = 'none';
+      text.style.display = 'inline-block';
+      text.style.opacity = '1';
+      text.style.transform = 'scale(1)';
+    }
   });
 
   waitForScrollEnd(sections[index], () => {
@@ -180,51 +216,51 @@ function copyText(text, btn) {
 
 // ── Formulário de contato ────────────────────────────────
 function enviarMensagem() {
-  const nome     = document.getElementById('campo-nome').value.trim();
-  const email    = document.getElementById('campo-email').value.trim();
+  const nome = document.getElementById('campo-nome').value.trim();
+  const email = document.getElementById('campo-email').value.trim();
   const mensagem = document.getElementById('campo-mensagem').value.trim();
-  const btn      = document.getElementById('btn-enviar');
-  const aviso    = document.getElementById('form-aviso');
+  const btn = document.getElementById('btn-enviar');
+  const aviso = document.getElementById('form-aviso');
 
   // Limpa aviso anterior
   aviso.textContent = '';
-  aviso.className   = '';
+  aviso.className = '';
 
   if (!nome || !email || !mensagem) {
     aviso.textContent = 'Preencha todos os campos antes de enviar.';
-    aviso.className   = 'erro';
+    aviso.className = 'erro';
     return;
   }
 
   btn.textContent = 'Enviando...';
-  btn.disabled    = true;
+  btn.disabled = true;
 
   emailjs.send('service_5hcdutl', 'template_z8knk7w', {
-    name:    nome,
-    email:   email,
+    name: nome,
+    email: email,
     message: mensagem
   })
-  .then(() => {
-    btn.textContent      = 'Enviar mensagem';
-    btn.disabled         = false;
-    aviso.textContent    = 'Mensagem enviada com sucesso!';
-    aviso.className      = 'sucesso';
-    document.getElementById('campo-nome').value     = '';
-    document.getElementById('campo-email').value    = '';
-    document.getElementById('campo-mensagem').value = '';
-    setTimeout(() => {
-      aviso.textContent = '';
-      aviso.className   = '';
-    }, 4000);
-  })
-  .catch(() => {
-    btn.textContent = 'Enviar mensagem';
-    btn.disabled    = false;
-    aviso.textContent = 'Erro ao enviar. Tente novamente.';
-    aviso.className   = 'erro';
-    setTimeout(() => {
-      aviso.textContent = '';
-      aviso.className   = '';
-    }, 4000);
-  });
+    .then(() => {
+      btn.textContent = 'Enviar mensagem';
+      btn.disabled = false;
+      aviso.textContent = 'Mensagem enviada com sucesso!';
+      aviso.className = 'sucesso';
+      document.getElementById('campo-nome').value = '';
+      document.getElementById('campo-email').value = '';
+      document.getElementById('campo-mensagem').value = '';
+      setTimeout(() => {
+        aviso.textContent = '';
+        aviso.className = '';
+      }, 4000);
+    })
+    .catch(() => {
+      btn.textContent = 'Enviar mensagem';
+      btn.disabled = false;
+      aviso.textContent = 'Erro ao enviar. Tente novamente.';
+      aviso.className = 'erro';
+      setTimeout(() => {
+        aviso.textContent = '';
+        aviso.className = '';
+      }, 4000);
+    });
 }
