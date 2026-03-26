@@ -153,6 +153,29 @@ nav {
     padding: 0 2rem;
 }
 
+.nav-links a .nav-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brown-dark);
+    color: var(--cream);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.6rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.nav-links a.active:hover .nav-tooltip {
+    opacity: 1;
+}
+
 /* ================================
    3. COMPONENTES GENÉRICOS
 ================================ */
@@ -217,7 +240,7 @@ nav {
 }
 
 /* ================================
-   12. CURSOR
+   4. CURSOR
 ================================ */
 #home,
 #sobre,
@@ -248,7 +271,7 @@ nav a,
 }
 
 /* ================================
-   4. SEÇÃO — HERO
+   5. SEÇÃO — HERO
 ================================ */
 .hero-inner {
     display: flex;
@@ -314,7 +337,7 @@ nav a,
 }
 
 /* ================================
-   5. SEÇÃO — SOBRE
+   6. SEÇÃO — SOBRE
 ================================ */
 .about-grid {
     display: grid;
@@ -365,7 +388,7 @@ nav a,
 }
 
 /* ================================
-   6. SEÇÃO — HABILIDADES
+   7. SEÇÃO — HABILIDADES
 ================================ */
 .skills-grid {
     display: grid;
@@ -411,7 +434,7 @@ nav a,
 }
 
 /* ================================
-   7. SEÇÃO — PROJETOS
+   8. SEÇÃO — PROJETOS
 ================================ */
 .projects-list {
     display: flex;
@@ -485,7 +508,7 @@ nav a,
 }
 
 /* ================================
-   8. SEÇÃO — CV
+   9. SEÇÃO — CV
 ================================ */
 .cv-box {
     background: white;
@@ -531,7 +554,7 @@ nav a,
 }
 
 /* ================================
-   9. SEÇÃO — CONTATO
+   10. SEÇÃO — CONTATO
 ================================ */
 #contato {
     justify-content: space-between;
@@ -678,7 +701,7 @@ nav a,
 #form-aviso.sucesso { color: var(--brown-dark); opacity: 1; }
 
 /* ================================
-   10. FOOTER
+   11. FOOTER
 ================================ */
 footer {
     background: var(--dark);
@@ -696,7 +719,7 @@ footer {
 }
 
 /* ================================
-   11. RESPONSIVO — MOBILE
+   12. RESPONSIVO — MOBILE
 ================================ */
 @media (max-width: 640px) {
     :root {
