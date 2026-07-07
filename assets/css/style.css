@@ -3,14 +3,14 @@
 ================================ */
 :root {
     --cream:      #F8F0E5;
-    --brown:      #956B4B;
-    --brown-dark: #6B4A30;
+    --brown:      #7A5234;
+    --brown-dark: #583A22;
     --sand:       #E2C7AA;
-    --warm-gray:  #8F857B;
-    --tan:        #B19A81;
+    --warm-gray:  #7C736B;
+    --tan:        #A0876E;
     --dark:       #2C2218;
     --text:       #3D3028;
-    --text-muted: #6B5C4E;
+    --text-muted: #5A4B3E;
     --nav-height: 58px;
 }
 
@@ -370,7 +370,7 @@ nav a,
     font-size: 0.68rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--tan);
+    color: var(--brown);
     margin-bottom: 0.3rem;
     font-weight: 600;
 }
@@ -477,7 +477,7 @@ nav a,
     padding: 0.22rem 0.55rem;
     background: var(--cream);
     border: 1.5px solid var(--sand);
-    color: var(--warm-gray);
+    color: var(--text-muted);
     border-radius: 2px;
 }
 
@@ -635,7 +635,7 @@ nav a,
     font-size: 0.68rem;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: var(--tan);
+    color: var(--brown);
     margin-bottom: 0.25rem;
     font-weight: 600;
 }
