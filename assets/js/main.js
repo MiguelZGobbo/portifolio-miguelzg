@@ -6,7 +6,6 @@ let current = 0;
 let isScrolling = false;
 
 const container = document.querySelector('.scroll-container');
-container.style.overflowY = 'hidden';
 
 // ── Pill deslizante ──────────────────────────────────────
 const navPill = document.createElement('div');
@@ -71,15 +70,9 @@ function waitForScrollEnd(targetSection, callback) {
   }, 50);
 }
 
-// ── Navegação principal ──────────────────────────────────
-function goTo(index) {
+// ── Atualização do Estado do Menu ─────────────────────────
+function setActiveNav(index) {
   if (index < 0 || index >= sections.length) return;
-  isScrolling = true;
-  resetSection(index);
-  current = index;
-
-  sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
-
   navLinks.forEach(link => {
     const isActive = link.getAttribute('href') === `#${sections[index].id}`;
 
@@ -121,22 +114,45 @@ function goTo(index) {
       text.style.transform = 'scale(1)';
     }
   });
+}
+
+// ── Navegação principal ──────────────────────────────────
+function goTo(index) {
+  if (index < 0 || index >= sections.length) return;
+  isScrolling = true;
+  resetSection(index);
+  current = index;
+
+  sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setActiveNav(index);
 
   waitForScrollEnd(sections[index], () => {
     animateSection(index);
-    setTimeout(() => { isScrolling = false; }, 5);
+    setTimeout(() => { isScrolling = false; }, 50);
   });
 }
 
-// ── Scroll do mouse ──────────────────────────────────────
-let wheelAccum = 0;
-window.addEventListener('wheel', (e) => {
-  e.preventDefault();
+// ── Intersection Observer para Scroll Nativo ──────────────
+const observerOptions = {
+  root: container,
+  threshold: 0.55 // Dispara quando 55% da seção estiver visível
+};
+
+const observer = new IntersectionObserver((entries) => {
   if (isScrolling) return;
-  wheelAccum += e.deltaY;
-  if (wheelAccum > 50) { wheelAccum = 0; goTo(current + 1); }
-  if (wheelAccum < -50) { wheelAccum = 0; goTo(current - 1); }
-}, { passive: false });
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const index = sections.indexOf(entry.target);
+      if (index !== -1) {
+        current = index;
+        setActiveNav(index);
+        animateSection(index);
+      }
+    }
+  });
+}, observerOptions);
+
+sections.forEach(section => observer.observe(section));
 
 // ── Cliques na navbar ────────────────────────────────────
 navLinks.forEach(link => {
@@ -146,6 +162,18 @@ navLinks.forEach(link => {
     const index = sections.findIndex(s => s.id === id);
     goTo(index);
   });
+});
+
+// ── Redimensionamento da Janela ───────────────────────────
+window.addEventListener('resize', () => {
+  const activeLink = document.querySelector('.nav-links a.active');
+  if (activeLink) {
+    navPill.style.transition = 'none';
+    movePill(activeLink);
+    requestAnimationFrame(() => {
+      navPill.style.transition = 'left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    });
+  }
 });
 
 // ── Inicialização ────────────────────────────────────────
