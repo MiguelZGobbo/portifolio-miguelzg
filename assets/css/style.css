@@ -319,21 +319,18 @@ nav a,
     flex-shrink: 0;
 }
 
-.photo-placeholder {
+.profile-photo {
     width: clamp(180px, 22vw, 280px);
     height: clamp(220px, 28vw, 340px);
-    background: var(--sand);
-    border: 2px solid var(--tan);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--warm-gray);
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    /* Quando tiver foto real, troque por:
-       background: url('../img/foto.jpg') center/cover no-repeat; */
+    object-fit: cover;
+    border: 2.5px solid var(--tan);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(44, 34, 24, 0.22);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.profile-photo:hover {
+    transform: translateY(-4px) scale(1.02);
 }
 
 /* ================================
@@ -759,9 +756,9 @@ footer {
         max-width: 100%;
     }
 
-    .photo-placeholder {
-        width: 120px;
-        height: 150px;
+    .profile-photo {
+        width: 140px;
+        height: 170px;
     }
 
     .about-grid,
