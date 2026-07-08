@@ -4,6 +4,7 @@ const sections = Array.from(document.querySelectorAll('.snap-section'));
 const navLinks = document.querySelectorAll('.nav-links a');
 let current = 0;
 let isScrolling = false;
+let isInitializing = true; // Flag para evitar Observer durante init
 
 const container = document.querySelector('.scroll-container');
 
@@ -94,8 +95,8 @@ function setActiveNav(index) {
         setTimeout(() => {
           text.style.display = 'none';
           icon.style.display = 'block';
-          icon.style.animation = 'none';
-          icon.offsetHeight;
+          icon.style.animation = '';
+          void icon.offsetWidth;
           icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
           movePill(link);
         }, 150);
@@ -105,29 +106,30 @@ function setActiveNav(index) {
         text.style.opacity = '1';
         text.style.transform = 'scale(1)';
         icon.style.display = 'block';
-        icon.style.animation = 'none';
-        icon.offsetHeight;
+        icon.style.animation = '';
+        void icon.offsetWidth;
         icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
         movePill(link);
       }
 
-    } else {
-      link.classList.remove('active');
-      link.style.width = '';
-
-      if (!isMobile) {
-        // Desktop: esconde ícone, mostra texto
-        icon.style.display = 'none';
-        icon.style.animation = 'none';
-        text.style.display = 'inline-block';
-        text.style.opacity = '1';
-        text.style.transform = 'scale(1)';
       } else {
-        // Mobile: mantém ambos, só muda cor do texto (via CSS .active .nav-text)
-        icon.style.display = 'block';
-        text.style.display = 'block';
+        link.classList.remove('active');
+        link.style.width = '';
+
+        if (!isMobile) {
+          // Desktop: esconde ícone, mostra texto
+          icon.style.display = 'none';
+          icon.style.animation = 'none';
+          text.style.display = 'inline-block';
+          text.style.opacity = '1';
+          text.style.transform = 'scale(1)';
+        } else {
+          // Mobile: mantém ambos visíveis, reseta animação do ícone para poder tocar de novo
+          icon.style.display = 'block';
+          icon.style.animation = 'none';
+          text.style.display = 'block';
+        }
       }
-    }
   });
 }
 
@@ -155,7 +157,7 @@ const observerOptions = {
 };
 
 const observer = new IntersectionObserver((entries) => {
-  if (isScrolling) return;
+  if (isScrolling || isInitializing) return;
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const index = sections.indexOf(entry.target);
@@ -198,6 +200,7 @@ goTo(0);
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
+  isInitializing = false; // Libera o Observer após init completo
 });
 
 // ── Copiar para clipboard ────────────────────────────────

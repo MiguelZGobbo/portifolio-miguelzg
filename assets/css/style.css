@@ -770,9 +770,10 @@ footer {
         gap: 0;
     }
 
+    /* Mobile: equal-width nav items with balanced icon + text layout */
     .nav-links a {
-        padding: 0;
         flex: 1;
+        min-width: 0;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -780,6 +781,7 @@ footer {
         align-items: center;
         border-radius: 0;
         gap: 2px;
+        padding: 0.35rem 0.25rem;
     }
 
     .nav-links a:hover {
@@ -788,9 +790,9 @@ footer {
 
     .nav-links a .nav-text {
         display: block !important;
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         font-weight: 600;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
         color: var(--text-muted);
         line-height: 1;
@@ -800,10 +802,14 @@ footer {
         max-width: 100%;
     }
 
+    .nav-links a.active .nav-text {
+        color: var(--brown-dark);
+    }
+
     .nav-links a .nav-icon {
         display: block !important;
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
         color: var(--text-muted);
         flex-shrink: 0;
     }
@@ -811,10 +817,6 @@ footer {
     .nav-links a.active .nav-icon {
         color: var(--brown-dark) !important;
         transform: scale(1.1);
-    }
-
-    .nav-links a.active .nav-text {
-        color: var(--brown-dark);
     }
 
     .nav-pill {
