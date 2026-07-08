@@ -73,45 +73,60 @@ function waitForScrollEnd(targetSection, callback) {
 // ── Atualização do Estado do Menu ─────────────────────────
 function setActiveNav(index) {
   if (index < 0 || index >= sections.length) return;
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+
   navLinks.forEach(link => {
     const isActive = link.getAttribute('href') === `#${sections[index].id}`;
+    const text = link.querySelector('.nav-text');
+    const icon = link.querySelector('.nav-icon');
 
     if (isActive) {
-      const text = link.querySelector('.nav-text');
-      const icon = link.querySelector('.nav-icon');
+      link.classList.add('active');
 
-      // fixa a largura atual (com texto) para não mudar ao trocar para ícone
-      link.style.width = link.offsetWidth + 'px';
+      if (!isMobile) {
+        // Desktop: troca texto por ícone com animação
+        link.style.width = link.offsetWidth + 'px';
 
-      // 1. some o texto
-      text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-      text.style.opacity = '0';
-      text.style.transform = 'scale(0.6)';
+        text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+        text.style.opacity = '0';
+        text.style.transform = 'scale(0.6)';
 
-      // 2. após o texto sumir, mostra o ícone
-      setTimeout(() => {
-        text.style.display = 'none';
+        setTimeout(() => {
+          text.style.display = 'none';
+          icon.style.display = 'block';
+          icon.style.animation = 'none';
+          icon.offsetHeight;
+          icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+          movePill(link);
+        }, 150);
+      } else {
+        // Mobile: mantém ambos visíveis, só muda cor
+        text.style.display = 'block';
+        text.style.opacity = '1';
+        text.style.transform = 'scale(1)';
         icon.style.display = 'block';
         icon.style.animation = 'none';
         icon.offsetHeight;
         icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
         movePill(link);
-      }, 150);
-
-      link.classList.add('active');
-      movePill(link);
+      }
 
     } else {
-      const text = link.querySelector('.nav-text');
-      const icon = link.querySelector('.nav-icon');
-
       link.classList.remove('active');
-      link.style.width = ''; // libera a largura ao desativar
-      icon.style.display = 'none';
-      icon.style.animation = 'none';
-      text.style.display = 'inline-block';
-      text.style.opacity = '1';
-      text.style.transform = 'scale(1)';
+      link.style.width = '';
+
+      if (!isMobile) {
+        // Desktop: esconde ícone, mostra texto
+        icon.style.display = 'none';
+        icon.style.animation = 'none';
+        text.style.display = 'inline-block';
+        text.style.opacity = '1';
+        text.style.transform = 'scale(1)';
+      } else {
+        // Mobile: mantém ambos, só muda cor do texto (via CSS .active .nav-text)
+        icon.style.display = 'block';
+        text.style.display = 'block';
+      }
     }
   });
 }
@@ -135,7 +150,8 @@ function goTo(index) {
 // ── Intersection Observer para Scroll Nativo ──────────────
 const observerOptions = {
   root: container,
-  threshold: 0.55 // Dispara quando 55% da seção estiver visível
+  rootMargin: '0px 0px -20% 0px', // Dispara quando a seção passa da linha dos 80% da viewport
+  threshold: 0.35 // Dispara quando 35% da seção estiver visível (mais sensível)
 };
 
 const observer = new IntersectionObserver((entries) => {
