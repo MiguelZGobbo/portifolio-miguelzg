@@ -91,6 +91,13 @@ nav {
     transform: scale(1.08);
 }
 
+.nav-links a:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    color: var(--brown-dark);
+    transform: scale(1.08);
+}
+
 .nav-links a.active {
     color: var(--cream);
     transform: none;
@@ -151,25 +158,30 @@ nav {
 
 .nav-links a .nav-tooltip {
     position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--brown-dark);
     color: var(--cream);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0.3rem 0.6rem;
-    border-radius: 3px;
+    border-radius: 5.5px;
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transform: scale(0.5);
+    transition: opacity 0.1s ease, transform 0.1s ease;
 }
 
-.nav-links a.active:hover .nav-tooltip {
+/* Tooltip aparece dentro do botão ativo ao passar o mouse (que mostra ícone em vez de texto) */
+.nav-links a.active.can-hover:hover .nav-tooltip,
+.nav-links a.active.can-hover:focus-visible .nav-tooltip {
     opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.15s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* ================================
@@ -225,12 +237,27 @@ nav {
     color: var(--cream);
 }
 
+.btn:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    background: var(--dark);
+    border-color: var(--dark);
+    color: var(--cream);
+}
+
 .btn-outline {
     background: transparent;
     color: var(--brown-dark);
 }
 
 .btn-outline:hover {
+    background: var(--brown-dark);
+    color: var(--cream);
+}
+
+.btn-outline:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
     background: var(--brown-dark);
     color: var(--cream);
 }
@@ -500,6 +527,12 @@ nav a,
     background: var(--dark);
 }
 
+.project-link:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    background: var(--dark);
+}
+
 /* ================================
    9. SEÇÃO — CV
 ================================ */
@@ -603,6 +636,13 @@ nav a,
     border-color: var(--brown);
 }
 
+.form-group input:focus-visible,
+.form-group textarea:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    border-color: var(--brown);
+}
+
 .form-group textarea {
     height: 100px;
     resize: vertical;
@@ -665,6 +705,14 @@ nav a,
     border-bottom-color: var(--brown);
 }
 
+.val-link:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    border-radius: 2px;
+    color: var(--brown);
+    border-bottom-color: var(--brown);
+}
+
 .copy-btn {
     background: transparent;
     border: none;
@@ -679,6 +727,13 @@ nav a,
 
 .copy-btn:hover { color: var(--brown-dark); }
 .copy-btn.copied { color: var(--brown-dark); }
+
+.copy-btn:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+    border-radius: 2px;
+    color: var(--brown-dark);
+}
 
 #form-aviso {
     display: block;
@@ -788,38 +843,37 @@ footer {
         transform: none;
     }
 
-    .nav-links a .nav-text {
-        display: block !important;
-        font-size: 0.5rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        line-height: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 100%;
+    .nav-links a:focus-visible {
+        outline: 2px solid var(--brown-dark);
+        outline-offset: 2px;
+        border-radius: 3px;
     }
 
-    .nav-links a.active .nav-text {
+    .nav-links a:focus-visible .nav-text,
+    .nav-links a:focus-visible .nav-icon {
         color: var(--brown-dark);
     }
 
+    .nav-links a .nav-text {
+        display: none;
+    }
+
     .nav-links a .nav-icon {
-        display: block !important;
+        display: block;
         width: 22px;
         height: 22px;
-        color: var(--text-muted);
         flex-shrink: 0;
     }
 
-    .nav-links a.active .nav-icon {
-        color: var(--brown-dark) !important;
-        transform: scale(1.1);
+    .nav-pill {
+        top: 6px;
+        bottom: 6px;
+        transform: none;
+        height: auto;
+        border-radius: 10px;
     }
 
-    .nav-pill {
+    .nav-links a .nav-tooltip {
         display: none;
     }
 

@@ -77,59 +77,54 @@ function setActiveNav(index) {
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
 
   navLinks.forEach(link => {
+    link.classList.remove('can-hover');
     const isActive = link.getAttribute('href') === `#${sections[index].id}`;
     const text = link.querySelector('.nav-text');
     const icon = link.querySelector('.nav-icon');
 
     if (isActive) {
       link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
 
       if (!isMobile) {
-        // Desktop: troca texto por ícone com animação
         link.style.width = link.offsetWidth + 'px';
+      }
 
-        text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-        text.style.opacity = '0';
-        text.style.transform = 'scale(0.6)';
+      text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+      text.style.opacity = '0';
+      text.style.transform = 'scale(0.6)';
 
-        setTimeout(() => {
-          text.style.display = 'none';
-          icon.style.display = 'block';
-          icon.style.animation = '';
-          void icon.offsetWidth;
-          icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
-          movePill(link);
-        }, 150);
-      } else {
-        // Mobile: mantém ambos visíveis, só muda cor
-        text.style.display = 'block';
-        text.style.opacity = '1';
-        text.style.transform = 'scale(1)';
+      setTimeout(() => {
+        text.style.display = 'none';
         icon.style.display = 'block';
         icon.style.animation = '';
         void icon.offsetWidth;
         icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
         movePill(link);
-      }
-
-      } else {
-        link.classList.remove('active');
-        link.style.width = '';
 
         if (!isMobile) {
-          // Desktop: esconde ícone, mostra texto
-          icon.style.display = 'none';
-          icon.style.animation = 'none';
-          text.style.display = 'inline-block';
-          text.style.opacity = '1';
-          text.style.transform = 'scale(1)';
-        } else {
-          // Mobile: mantém ambos visíveis, reseta animação do ícone para poder tocar de novo
-          icon.style.display = 'block';
-          icon.style.animation = 'none';
-          text.style.display = 'block';
+          setTimeout(() => {
+            if (link.classList.contains('active')) {
+              link.classList.add('can-hover');
+            }
+          }, 350);
         }
+      }, 150);
+
+    } else {
+      link.classList.remove('active');
+      link.removeAttribute('aria-current');
+
+      if (!isMobile) {
+        link.style.width = '';
       }
+
+      icon.style.display = isMobile ? 'block' : 'none';
+      icon.style.animation = 'none';
+      text.style.display = isMobile ? 'none' : 'inline-block';
+      text.style.opacity = '1';
+      text.style.transform = 'scale(1)';
+    }
   });
 }
 
