@@ -411,12 +411,15 @@ nav a,
    7. SEÇÃO — HABILIDADES
 ================================ */
 .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
 }
 
 .skill-card {
+    box-sizing: border-box;
+    flex: 0 0 calc((100% - 2rem) / 3);
     background: white;
     border: 1.5px solid var(--sand);
     border-radius: 3px;
@@ -780,7 +783,7 @@ footer {
     }
 }
 
-@media (max-width: 768px), (max-height: 700px) {
+@media (max-width: 768px) {
     .snap-section {
         height: auto;
         min-height: calc(100vh - var(--nav-height));
@@ -794,6 +797,12 @@ footer {
     }
     #contato .section-inner {
         margin: 0;
+    }
+}
+
+@media (max-height: 700px) {
+    .snap-section {
+        padding: 2.5rem 0;
     }
 }
 
@@ -910,6 +919,9 @@ footer {
         height: 170px;
     }
 
+    .skill-card {
+        flex: 0 0 100%;
+    }
     .about-grid,
     .contact-grid {
         grid-template-columns: 1fr;
