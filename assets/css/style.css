@@ -1019,6 +1019,7 @@ footer {
     }
     #projetos {
         padding-top: 0;
+        padding-bottom: clamp(60px, 6vh, 100px);
         justify-content: flex-start;
     }
     #projetos .section-inner {
