@@ -15,10 +15,11 @@ document.querySelector('.nav-links').appendChild(navPill);
 
 function movePill(link) {
   const nav = document.querySelector('.nav-links');
-  const navLeft = nav.getBoundingClientRect().left;
+  const navRect = nav.getBoundingClientRect();
   const linkRect = link.getBoundingClientRect();
-  navPill.style.left = (linkRect.left - navLeft) + 'px';
+  navPill.style.left = (linkRect.left - navRect.left) + 'px';
   navPill.style.width = linkRect.width + 'px';
+  navPill.style.bottom = (navRect.bottom - linkRect.bottom) + 'px';
 }
 
 // ── Animações de entrada ─────────────────────────────────
