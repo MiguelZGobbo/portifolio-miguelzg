@@ -45,21 +45,22 @@ body {
 ================================ */
 nav {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 32px;
+    left: 32px;
+    right: 32px;
     height: var(--nav-height);
-    background: rgba(248, 240, 229, 0.78);
+    background: rgba(248, 240, 229, 0.90);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow:
-        inset 0 -1px 0 rgba(44, 34, 24, 0.06),
-        0 1px 3px rgba(44, 34, 24, 0.04);
+        inset 0 -1px 0 rgba(255, 255, 255, 0.4),
+        0 8px 32px rgba(44, 34, 24, 0.12);
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    border-radius: 14px;
     transition: background 0.3s ease;
 }
 
@@ -83,6 +84,17 @@ nav {
     align-items: center;
 }
 
+.nav-links::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(44, 34, 24, 0.12);
+    pointer-events: none;
+}
+
 .nav-links a {
     font-size: 0.8rem;
     font-weight: 500;
@@ -98,6 +110,7 @@ nav {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     transition: color 0.2s ease;
 }
 
@@ -112,18 +125,17 @@ nav {
 }
 
 .nav-links a.active {
-    color: var(--cream);
+    color: var(--brown-dark);
 }
 
 .nav-pill {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 28px;
+    bottom: 2px;
+    height: 3px;
     background: var(--brown-dark);
-    border-radius: 6px;
+    border-radius: 2px;
     z-index: 0;
-    box-shadow: inset 0 1px 0 rgba(248, 240, 229, 0.15);
+    box-shadow: 0 0 14px 6px rgba(88, 58, 34, 0.25);
     transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1),
                 width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
@@ -146,7 +158,7 @@ nav {
 
 .scroll-container {
     position: fixed;
-    top: var(--nav-height);
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -154,6 +166,7 @@ nav {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     z-index: 1;
+    padding-top: calc(var(--nav-height) + 42px);
 }
 
 .snap-section {
@@ -176,7 +189,9 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--brown-dark);
+    background: linear-gradient(0deg, rgba(88, 58, 34, 0.88), rgba(122, 82, 52, 0.80));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--cream);
     font-size: 0.65rem;
     font-weight: 600;
@@ -185,17 +200,14 @@ nav {
     border-radius: 5.5px;
     white-space: nowrap;
     pointer-events: none;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: opacity 0.1s ease, transform 0.1s ease;
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 0.4s ease;
 }
 
 /* Tooltip aparece dentro do botão ativo ao passar o mouse (que mostra ícone em vez de texto) */
 .nav-links a.active.can-hover:hover .nav-tooltip,
 .nav-links a.active.can-hover:focus-visible .nav-tooltip {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 0.15s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    clip-path: inset(0 0 0 0);
 }
 
 /* ================================
@@ -1127,22 +1139,23 @@ footer {
 
     .nav-links {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        bottom: 20px;
+        left: 24px;
+        right: 24px;
         height: 72px;
-        background: rgba(248, 240, 229, 0.85);
+        background: rgba(248, 240, 229, 0.92);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         box-shadow:
-            inset 0 1px 0 rgba(44, 34, 24, 0.04),
-            0 -1px 3px rgba(44, 34, 24, 0.06);
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            0 -8px 32px rgba(44, 34, 24, 0.12);
         display: flex;
         justify-content: space-around;
         align-items: center;
         padding: 0.25rem 0.5rem;
         z-index: 100;
         gap: 0;
+        border-radius: 16px;
     }
 
     /* Mobile: equal-width nav items with balanced icon + text layout */
@@ -1186,11 +1199,11 @@ footer {
     }
 
     .nav-pill {
-        top: 6px;
-        bottom: 6px;
-        transform: none;
-        height: auto;
-        border-radius: 10px;
+        top: auto;
+        bottom: 4px;
+        height: 3px;
+        border-radius: 2px;
+        box-shadow: 0 0 14px 6px rgba(88, 58, 34, 0.25);
     }
 
     .nav-links a .nav-tooltip {
@@ -1198,11 +1211,12 @@ footer {
     }
 
     .scroll-container {
-        bottom: 72px;
+        bottom: 0;
+        padding-bottom: calc(72px + 26px);
     }
 
     .snap-section {
-        min-height: calc(100vh - var(--nav-height) - 72px);
+        min-height: calc(100vh - var(--nav-height) - 104px);
     }
 
     .section-inner {
