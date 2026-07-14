@@ -74,6 +74,7 @@ function waitForScrollEnd(targetSection, callback) {
 // ── Atualização do Estado do Menu ─────────────────────────
 function setActiveNav(index) {
   if (index < 0 || index >= sections.length) return;
+  document.body.dataset.section = sections[index].id;
   const isMobile = window.matchMedia('(max-width: 640px)').matches;
 
   navLinks.forEach(link => {

@@ -28,7 +28,13 @@ html {
 
 body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
+    background:
+        radial-gradient(ellipse 750px 520px at 82% 8%,   rgba(226, 199, 170, 0.55) 0%, transparent 72%),
+        radial-gradient(ellipse 650px 480px at 12% 88%,  rgba(160, 135, 110, 0.35) 0%, transparent 72%),
+        radial-gradient(ellipse 400px 380px at 68% 52%,  rgba(122, 82, 52, 0.13)  0%, transparent 70%),
+        radial-gradient(ellipse 500px 380px at 18% 6%,   rgba(226, 199, 170, 0.30) 0%, transparent 70%),
+        radial-gradient(ellipse 350px 300px at 45% 95%,  rgba(122, 82, 52, 0.08)  0%, transparent 70%),
+        linear-gradient(135deg, #F8F0E5 0%, #F3E9DA 50%, #EDE1CE 100%);
     color: var(--text);
     overflow: hidden;
     height: 100vh;
@@ -781,6 +787,19 @@ footer {
    12. RESPONSIVO — MOBILE
 ================================ */
 @media (min-width: 769px) {
+    body {
+        background:
+            radial-gradient(ellipse clamp(500px, 40vw, 950px) clamp(350px, 28vw, 680px) at 82% 8%,   rgba(226, 199, 170, 0.55) 0%, transparent 72%),
+            radial-gradient(ellipse clamp(420px, 35vw, 820px) clamp(320px, 26vw, 620px) at 12% 88%,  rgba(160, 135, 110, 0.35) 0%, transparent 72%),
+            radial-gradient(ellipse clamp(400px, 30vw, 750px) clamp(320px, 24vw, 600px) at 55% 45%,  rgba(226, 199, 170, 0.25) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(280px, 20vw, 520px) clamp(260px, 18vw, 480px) at 68% 52%,  rgba(122, 82, 52, 0.13)  0%, transparent 70%),
+            radial-gradient(ellipse clamp(320px, 25vw, 600px) clamp(250px, 18vw, 480px) at 18% 6%,   rgba(226, 199, 170, 0.30) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(300px, 22vw, 560px) clamp(240px, 16vw, 450px) at 30% 75%,  rgba(160, 135, 110, 0.20) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(240px, 16vw, 450px) clamp(200px, 14vw, 400px) at 45% 95%,  rgba(122, 82, 52, 0.08)  0%, transparent 70%),
+            radial-gradient(ellipse clamp(260px, 18vw, 500px) clamp(200px, 14vw, 400px) at 88% 55%,  rgba(226, 199, 170, 0.20) 0%, transparent 70%),
+            linear-gradient(135deg, #F8F0E5 0%, #F3E9DA 50%, #EDE1CE 100%);
+    }
+
     .scroll-container {
         scroll-snap-type: y mandatory;
     }
@@ -814,6 +833,124 @@ footer {
     }
 }
 
+/* ================================
+    13. BLOBS ANIMADOS (DESKTOP / TABLET)
+================================ */
+@media (min-width: 641px) {
+    body::before,
+    body::after {
+        content: '';
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        will-change: transform;
+        transition:
+            top 0.9s ease,
+            left 0.9s ease,
+            bottom 0.9s ease,
+            opacity 0.6s ease;
+    }
+
+    /* ── Tamanhos e blur responsivos ──────────── */
+
+    body::before {
+        width: clamp(280px, 28vw, 750px);
+        height: clamp(280px, 28vw, 750px);
+        background: radial-gradient(circle at center, rgba(226, 199, 170, 0.55), transparent 70%);
+        animation: blobFloat1 26s ease-in-out infinite;
+    }
+
+    body::after {
+        width: clamp(200px, 20vw, 600px);
+        height: clamp(200px, 20vw, 600px);
+        background: radial-gradient(circle at center, rgba(160, 135, 110, 0.35), transparent 70%);
+    }
+
+    /* ── Posições base ────────────────────────── */
+
+    /* Início — top-right + bottom-left */
+    body[data-section="home"]::before,
+    body::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-130px, -7vw, -60px);
+        left: calc(100% - clamp(240px, 22vw, 650px));
+    }
+    body[data-section="home"]::after,
+    body::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-80px, -4vw, -40px);
+        left: clamp(-100px, -6vw, -40px);
+    }
+
+    /* Sobre — top-left + bottom-right */
+    body[data-section="sobre"]::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-130px, -7vw, -60px);
+        left: clamp(-160px, -10vw, -50px);
+    }
+    body[data-section="sobre"]::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-80px, -4vw, -40px);
+        left: calc(100% - clamp(170px, 17vw, 500px));
+    }
+
+    /* Habilidades — top-center + bottom-right */
+    body[data-section="habilidades"]::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-110px, -6vw, -50px);
+        left: clamp(5%, 8%, 12%);
+    }
+    body[data-section="habilidades"]::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-60px, -3vw, -30px);
+        left: calc(100% - clamp(150px, 15vw, 460px));
+    }
+
+    /* Projetos — upper-right + bottom-left */
+    body[data-section="projetos"]::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-90px, -4vw, -40px);
+        left: calc(100% - clamp(260px, 24vw, 680px));
+    }
+    body[data-section="projetos"]::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-60px, -2.5vw, -25px);
+        left: clamp(3%, 6%, 10%);
+    }
+
+    /* Currículo — top-center + bottom-center */
+    body[data-section="cv"]::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-100px, -5vw, -45px);
+        left: clamp(15%, 25%, 35%);
+    }
+    body[data-section="cv"]::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-40px, -2vw, -20px);
+        left: clamp(15%, 25%, 35%);
+    }
+
+    /* Contato — upper-right + lower-left */
+    body[data-section="contato"]::before {
+        filter: blur(clamp(50px, 5vw, 120px));
+        top: clamp(-60px, -2vw, -20px);
+        left: calc(100% - clamp(280px, 26vw, 700px));
+    }
+    body[data-section="contato"]::after {
+        filter: blur(clamp(40px, 4vw, 90px));
+        bottom: clamp(-30px, -1vw, -10px);
+        left: clamp(5%, 10%, 15%);
+    }
+
+    @keyframes blobFloat1 {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        25%      { transform: translate(3vw, -2vw) scale(1.04); }
+        50%      { transform: translate(-2vw, 1.5vw) scale(0.97); }
+        75%      { transform: translate(1.5vw, 2.5vw) scale(1.02); }
+    }
+}
+
 @media (max-width: 640px) {
     :root {
         --nav-height: 52px;
@@ -822,7 +959,12 @@ footer {
     nav {
         padding: 0 1.2rem;
         justify-content: center;
-        box-shadow: 0 1px 4px rgba(44, 34, 24, 0.1);
+        background: rgba(248, 240, 229, 0.92);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow:
+            inset 0 -1px 0 rgba(44, 34, 24, 0.04),
+            0 1px 3px rgba(44, 34, 24, 0.04);
     }
 
     .nav-links {
@@ -831,9 +973,12 @@ footer {
         left: 0;
         right: 0;
         height: 72px;
-        background: var(--cream);
-        border-top: 1.5px solid var(--sand);
-        box-shadow: 0 -2px 10px rgba(44, 34, 24, 0.12);
+        background: rgba(248, 240, 229, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow:
+            inset 0 1px 0 rgba(44, 34, 24, 0.04),
+            0 -1px 3px rgba(44, 34, 24, 0.06);
         display: flex;
         justify-content: space-around;
         align-items: center;
