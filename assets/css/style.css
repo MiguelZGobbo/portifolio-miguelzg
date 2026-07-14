@@ -12,6 +12,8 @@
     --text:       #3D3028;
     --text-muted: #5A4B3E;
     --nav-height: 58px;
+    --nav-top: 32px;
+    --section-padding-top: calc(var(--nav-top) + var(--nav-height) - 5px);
 }
 
 *,
@@ -180,7 +182,6 @@ nav {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     z-index: 1;
-    padding-top: calc(var(--nav-height) + 42px);
 }
 
 .snap-section {
@@ -831,24 +832,9 @@ footer {
             radial-gradient(ellipse clamp(260px, 18vw, 500px) clamp(200px, 14vw, 400px) at 88% 55%,  rgba(226, 199, 170, 0.20) 0%, transparent 70%),
             linear-gradient(135deg, #F8F0E5 0%, #F3E9DA 50%, #EDE1CE 100%);
     }
-
-    .scroll-container {
-        scroll-snap-type: y mandatory;
-    }
-    .snap-section {
-        scroll-snap-align: start;
-        scroll-snap-stop: always;
-        min-height: calc(100vh - var(--nav-height));
-    }
 }
 
 @media (max-width: 900px) {
-    .snap-section {
-        height: auto;
-        min-height: calc(100vh - var(--nav-height));
-        padding: 3.5rem 0;
-        box-sizing: border-box;
-    }
     #contato {
         padding-bottom: 50px;
     }
@@ -908,9 +894,6 @@ footer {
 }
 
 @media (max-height: 700px) {
-    .snap-section {
-        padding: 2.5rem 0;
-    }
     #contato {
         padding-bottom: 60px;
     }
@@ -960,7 +943,6 @@ footer {
 /* max-height 650 ainda mais compacto */
 @media (max-height: 650px) {
     #contato {
-        padding-top: 2rem;
         padding-bottom: 48px;
     }
     #contato footer {
@@ -1018,8 +1000,77 @@ footer {
 }
 
 /* ================================
-    13. BLOBS ANIMADOS (DESKTOP / TABLET)
-================================ */
+    13. LAYOUT PRINCIPAL — DESKTOP / TABLET (641px+)
+=============================== */
+@media (min-width: 641px) {
+    .scroll-container {
+        scroll-snap-type: y mandatory;
+    }
+    .snap-section {
+        min-height: 100vh;
+        padding-top: var(--section-padding-top);
+        box-sizing: border-box;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+    }
+    .section-inner {
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+    #projetos {
+        padding-top: 0;
+        justify-content: flex-start;
+    }
+    #projetos .section-inner {
+        padding-top: 110px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+/* ================================
+    14. TELAS MÉDIAS — TM (641px - 768px)
+=============================== */
+@media (min-width: 641px) and (max-width: 768px) {
+    .section-label {
+        font-size: 0.62rem;
+        margin-bottom: 0.35rem;
+    }
+    .section-title {
+        font-size: 1.45rem;
+        margin-bottom: 1.4rem;
+        padding-bottom: 0.6rem;
+    }
+    .hero-title {
+        font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    }
+    .hero-inner {
+        gap: 2rem;
+    }
+    .hero-sub {
+        max-width: 380px;
+    }
+    .profile-photo {
+        width: 150px;
+        height: 185px;
+    }
+    .skill-card {
+        flex: 0 0 calc((100% - 1rem) / 2);
+    }
+    .about-grid {
+        gap: 1.5rem;
+    }
+    .contact-grid {
+        gap: 1.5rem;
+    }
+    #contato {
+        padding-bottom: 60px;
+    }
+}
+
+/* ================================
+    15. BLOBS ANIMADOS (DESKTOP / TABLET)
+=============================== */
 @media (min-width: 641px) {
     body::before,
     body::after {
@@ -1230,6 +1281,7 @@ footer {
     }
 
     .snap-section {
+        height: auto;
         min-height: calc(100vh - var(--nav-height) - 104px);
     }
 
