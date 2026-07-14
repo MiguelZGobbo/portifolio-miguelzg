@@ -600,12 +600,24 @@ nav a,
    10. SEÇÃO — CONTATO
 ================================ */
 #contato {
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
+    justify-content: center;
+    padding-bottom: 80px;
+    border-bottom: none;
 }
 
 #contato .section-inner {
-    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+#contato footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .contact-grid {
@@ -775,12 +787,6 @@ footer {
     padding: 1rem;
     font-size: 0.78rem;
     letter-spacing: 0.06em;
-    margin-top: auto;
-    margin-bottom: -0.06rem;
-}
-
-#contato footer {
-    align-self: stretch;
 }
 
 /* ================================
@@ -810,26 +816,178 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .snap-section {
         height: auto;
         min-height: calc(100vh - var(--nav-height));
-        padding: 4rem 0;
+        padding: 3.5rem 0;
         box-sizing: border-box;
     }
     #contato {
-        justify-content: flex-start;
-        gap: 2rem;
-        padding-bottom: 0;
+        padding-bottom: 50px;
     }
     #contato .section-inner {
-        margin: 0;
+        margin: 0 auto;
+    }
+
+    .section-label {
+        font-size: 0.62rem;
+        margin-bottom: 0.35rem;
+    }
+    .section-title {
+        font-size: 1.45rem;
+        margin-bottom: 1.4rem;
+        padding-bottom: 0.6rem;
+    }
+    .contact-grid {
+        gap: 1.8rem;
+    }
+    .form-group {
+        margin-bottom: 0.55rem;
+    }
+    .form-group label {
+        font-size: 0.65rem;
+        margin-bottom: 0.25rem;
+    }
+    .form-group input,
+    .form-group textarea {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.8rem;
+    }
+    .form-group textarea {
+        height: 72px;
+    }
+    .contact-info {
+        padding: 1rem;
+        gap: 0.7rem;
+    }
+    .contact-group {
+        gap: 0.6rem;
+    }
+    .contact-group--muted {
+        padding-top: 0.5rem;
+    }
+    .contact-item .label {
+        font-size: 0.62rem;
+        margin-bottom: 0.2rem;
+    }
+    .contact-item .val,
+    .val-link {
+        font-size: 0.8rem;
+    }
+    .val-row {
+        gap: 0.4rem;
+        min-height: 1.1rem;
     }
 }
 
 @media (max-height: 700px) {
     .snap-section {
         padding: 2.5rem 0;
+    }
+    #contato {
+        padding-bottom: 60px;
+    }
+    #contato footer {
+        padding: 0.6rem;
+    }
+    .contact-grid {
+        gap: 1.5rem;
+    }
+    .form-group {
+        margin-bottom: 0.5rem;
+    }
+    .form-group label {
+        font-size: 0.65rem;
+        margin-bottom: 0.25rem;
+    }
+    .form-group input,
+    .form-group textarea {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.78rem;
+    }
+    .form-group textarea {
+        height: 65px;
+    }
+    .contact-info {
+        padding: 0.8rem;
+        gap: 0.6rem;
+    }
+    .contact-group {
+        gap: 0.5rem;
+    }
+    .contact-group--muted {
+        padding-top: 0.4rem;
+    }
+    .contact-item .label {
+        font-size: 0.6rem;
+    }
+    .contact-item .val,
+    .val-link {
+        font-size: 0.78rem;
+    }
+    .val-row {
+        gap: 0.35rem;
+        min-height: 1rem;
+    }
+} 
+/* max-height 650 ainda mais compacto */
+@media (max-height: 650px) {
+    #contato {
+        padding-top: 2rem;
+        padding-bottom: 48px;
+    }
+    #contato footer {
+        padding: 0.5rem;
+    }
+    .section-label {
+        font-size: 0.58rem;
+        margin-bottom: 0.3rem;
+    }
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+    .contact-grid {
+        gap: 1.2rem;
+    }
+    .form-group {
+        margin-bottom: 0.4rem;
+    }
+    .form-group label {
+        font-size: 0.6rem;
+        margin-bottom: 0.2rem;
+    }
+    .form-group input,
+    .form-group textarea {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.75rem;
+    }
+    .form-group textarea {
+        height: 55px;
+    }
+    .contact-info {
+        padding: 0.6rem;
+        gap: 0.5rem;
+    }
+    .contact-group {
+        gap: 0.35rem;
+    }
+    .contact-group--muted {
+        padding-top: 0.3rem;
+    }
+    .contact-item .label {
+        font-size: 0.55rem;
+        margin-bottom: 0.15rem;
+    }
+    .contact-item .val,
+    .val-link {
+        font-size: 0.75rem;
+    }
+    .val-row {
+        gap: 0.25rem;
+        min-height: 0.85rem;
     }
 }
 
@@ -1052,13 +1210,29 @@ footer {
     }
 
     .section-title {
-        font-size: 1.4rem;
-        margin-bottom: 1.4rem;
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+        padding-bottom: 0.3rem;
+        gap: 0.25rem;
+    }
+    .section-title svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .section-label {
+        font-size: 0.5rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .btn {
+        padding: 0.3rem 0.7rem;
+        font-size: 0.65rem;
     }
 
     .hero-inner {
         flex-direction: column-reverse;
-        gap: 1.5rem;
+        gap: 1rem;
         justify-content: center;
         text-align: center;
     }
@@ -1068,8 +1242,8 @@ footer {
     }
 
     .profile-photo {
-        width: 140px;
-        height: 170px;
+        width: 120px;
+        height: 145px;
     }
 
     .skill-card {
@@ -1078,6 +1252,67 @@ footer {
     .about-grid,
     .contact-grid {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    .contact-form {
+        gap: 0.2rem;
+    }
+    .form-group {
+        margin-bottom: 0;
+    }
+    .form-group label {
+        font-size: 0.5rem;
+        margin-bottom: 0.1rem;
+    }
+    .form-group input,
+    .form-group textarea {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.68rem;
+    }
+    .form-group textarea {
+        height: 38px;
+    }
+    #form-aviso {
+        font-size: 0.65rem;
+        margin-top: 0.2rem;
+        min-height: 0.6rem;
+    }
+    .contact-info {
+        padding: 0.35rem;
+        gap: 0.2rem;
+    }
+    .contact-group {
+        gap: 0.15rem;
+    }
+    .contact-group--muted {
+        padding-top: 0.15rem;
+    }
+    .contact-item .label {
+        font-size: 0.5rem;
+        margin-bottom: 0.05rem;
+    }
+    .contact-item .val,
+    .val-link {
+        font-size: 0.68rem;
+    }
+    .val-row {
+        gap: 0.15rem;
+        min-height: 0;
+    }
+    .copy-btn {
+        padding: 1px;
+    }
+    .copy-btn svg {
+        width: 9px;
+        height: 9px;
+    }
+
+    #contato {
+        padding-top: 1.5rem;
+        padding-bottom: 38px;
+    }
+    #contato footer {
+        padding: 0.5rem;
     }
 
     .cv-box {
