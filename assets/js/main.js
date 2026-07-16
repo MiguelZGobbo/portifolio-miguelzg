@@ -22,42 +22,7 @@ function movePill(link) {
   navPill.style.bottom = (navRect.bottom - linkRect.bottom) + 'px';
 }
 
-// ── Animações de entrada ─────────────────────────────────
-const animatables = [
-  ['#home .hero-tag', '#home .hero-title', '#home .hero-sub', '#home .hero-photo'],
-  ['#sobre .section-label', '#sobre .section-title', '#sobre .about-text', '#sobre .about-info'],
-  ['#habilidades .section-label', '#habilidades .section-title', '#habilidades .skill-card'],
-  ['#projetos .section-label', '#projetos .section-title', '#projetos .project-card'],
-  ['#cv .section-label', '#cv .section-title', '#cv .cv-box'],
-  ['#contato .section-label', '#contato .section-title', '#contato .contact-form', '#contato .contact-info'],
-];
-
-function resetSection(index) {
-  if (!animatables[index]) return;
-  animatables[index].forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
-      el.style.transition = 'none';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(24px)';
-    });
-  });
-}
-
-function animateSection(index) {
-  if (!animatables[index]) return;
-  let delay = 0;
-  animatables[index].forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
-      setTimeout(() => {
-        el.style.transition = 'opacity 0.45s ease-out, transform 0.45s ease-out';
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      }, delay);
-      delay += 80;
-    });
-  });
-}
-
+// ── Scroll suave ──────────────────────────────────────────
 function waitForScrollEnd(targetSection, callback) {
   let attempts = 0;
   const check = setInterval(() => {
@@ -131,18 +96,55 @@ function setActiveNav(index) {
 }
 
 // ── Navegação principal ──────────────────────────────────
+
+function triggerReveals(section) {
+  sections.forEach(s => {
+    s.querySelectorAll('.reveal').forEach(el => {
+      el.style.transition = 'none';
+      el.classList.remove('visible');
+      el.style.transition = '';
+    });
+  });
+  void document.body.offsetHeight;
+
+  const isHeader = el =>
+    el.classList.contains('section-label') ||
+    el.classList.contains('section-title') ||
+    el.classList.contains('hero-tag') ||
+    el.classList.contains('hero-title');
+
+  const allReveals = section.querySelectorAll('.reveal');
+  const headerReveals = [];
+  const contentReveals = [];
+  allReveals.forEach(el => {
+    (isHeader(el) ? headerReveals : contentReveals).push(el);
+  });
+
+  const stagger = parseInt(section.dataset.stagger, 10) || 80;
+  const gap = 400;
+
+  headerReveals.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * stagger);
+  });
+
+  const contentStart = (headerReveals.length - 1) * stagger + gap;
+  contentReveals.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), contentStart + i * stagger);
+  });
+
+}
+
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
   isScrolling = true;
-  resetSection(index);
   current = index;
 
   sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
   setActiveNav(index);
 
   waitForScrollEnd(sections[index], () => {
-    animateSection(index);
-    setTimeout(() => { isScrolling = false; }, 50);
+    isScrolling = false;
+    triggerReveals(sections[index]);
   });
 }
 
@@ -159,9 +161,14 @@ const observer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) {
       const index = sections.indexOf(entry.target);
       if (index !== -1) {
+        isScrolling = true;
         current = index;
         setActiveNav(index);
-        animateSection(index);
+        entry.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        waitForScrollEnd(sections[index], () => {
+          isScrolling = false;
+          triggerReveals(sections[index]);
+        });
       }
     }
   });
@@ -192,12 +199,11 @@ window.addEventListener('resize', () => {
 });
 
 // ── Inicialização ────────────────────────────────────────
-sections.forEach((_, i) => resetSection(i));
 goTo(0);
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
-  isInitializing = false; // Libera o Observer após init completo
+  isInitializing = false;
 });
 
 // ── Copiar para clipboard ────────────────────────────────

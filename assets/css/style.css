@@ -225,8 +225,19 @@ nav {
     clip-path: inset(0 0 0 0);
 }
 
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* ================================
-   3. COMPONENTES GENÉRICOS
+    3. COMPONENTES GENÉRICOS
 ================================ */
 .section-label {
     font-size: 0.7rem;
@@ -244,10 +255,25 @@ nav {
     color: var(--dark);
     margin-bottom: 2rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1.5px solid var(--sand);
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sand), var(--tan));
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.section-title.reveal.visible::after {
+    width: 100%;
 }
 
 .section-title svg {
@@ -269,13 +295,34 @@ nav {
     cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     text-decoration: none;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    pointer-events: none;
+}
+
+.btn:hover::after {
+    transform: translateX(100%);
 }
 
 .btn:hover {
     background: var(--dark);
     border-color: var(--dark);
     color: var(--cream);
+    box-shadow: 0 0 28px rgba(226, 199, 170, 0.40);
+    transform: scale(1.03);
 }
 
 .btn:focus-visible {
@@ -294,6 +341,12 @@ nav {
 .btn-outline:hover {
     background: var(--brown-dark);
     color: var(--cream);
+    box-shadow: 0 0 28px rgba(160, 135, 110, 0.35);
+    transform: scale(1.03);
+}
+
+.btn-outline {
+    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .btn-outline:focus-visible {
@@ -381,6 +434,22 @@ nav a,
 
 .hero-photo {
     flex-shrink: 0;
+    position: relative;
+    isolation: isolate;
+}
+
+.hero-photo::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 10px;
+    background: conic-gradient(from 0deg, var(--sand), var(--tan), var(--brown-dark), var(--tan), var(--sand));
+    z-index: -1;
+    animation: spinBorder 4s linear infinite;
+}
+
+@keyframes spinBorder {
+    to { rotate: 360deg; }
 }
 
 .profile-photo {
@@ -465,12 +534,13 @@ nav a,
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     padding: 1.2rem;
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
 }
 
 .skill-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(226, 199, 170, 0.55);
+    border-color: var(--tan);
 }
 
 .skill-cat {
@@ -515,12 +585,13 @@ nav a,
     grid-template-columns: 1fr auto;
     gap: 1rem;
     align-items: center;
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
 }
 
 .project-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(226, 199, 170, 0.55);
+    border-color: var(--tan);
 }
 
 .project-name {
@@ -564,11 +635,32 @@ nav a,
     text-decoration: none;
     font-weight: 600;
     white-space: nowrap;
-    transition: background 0.28s ease;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.project-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+    pointer-events: none;
+}
+
+.project-link:hover::after {
+    transform: translateX(100%);
 }
 
 .project-link:hover {
     background: var(--dark);
+    transform: scale(1.04);
+    box-shadow: 0 0 24px rgba(226, 199, 170, 0.35);
 }
 
 .project-link:focus-visible {
@@ -614,13 +706,15 @@ nav a,
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    transition: background 0.28s ease, color 0.28s ease, border-color 0.28s ease;
+    transition: background 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
 }
 
 .cv-actions .btn-outline:hover {
     background: var(--sand);
     border-color: var(--brown);
     color: var(--brown-dark);
+    transform: scale(1.03);
+    box-shadow: 0 0 24px rgba(226, 199, 170, 0.35);
 }
 
 /* ================================
@@ -822,14 +916,14 @@ footer {
 @media (min-width: 769px) {
     body {
         background:
-            radial-gradient(ellipse clamp(500px, 40vw, 950px) clamp(350px, 28vw, 680px) at 82% 8%,   rgba(226, 199, 170, 0.55) 0%, transparent 72%),
-            radial-gradient(ellipse clamp(420px, 35vw, 820px) clamp(320px, 26vw, 620px) at 12% 88%,  rgba(160, 135, 110, 0.35) 0%, transparent 72%),
-            radial-gradient(ellipse clamp(400px, 30vw, 750px) clamp(320px, 24vw, 600px) at 55% 45%,  rgba(226, 199, 170, 0.25) 0%, transparent 70%),
-            radial-gradient(ellipse clamp(280px, 20vw, 520px) clamp(260px, 18vw, 480px) at 68% 52%,  rgba(122, 82, 52, 0.13)  0%, transparent 70%),
-            radial-gradient(ellipse clamp(320px, 25vw, 600px) clamp(250px, 18vw, 480px) at 18% 6%,   rgba(226, 199, 170, 0.30) 0%, transparent 70%),
-            radial-gradient(ellipse clamp(300px, 22vw, 560px) clamp(240px, 16vw, 450px) at 30% 75%,  rgba(160, 135, 110, 0.20) 0%, transparent 70%),
-            radial-gradient(ellipse clamp(240px, 16vw, 450px) clamp(200px, 14vw, 400px) at 45% 95%,  rgba(122, 82, 52, 0.08)  0%, transparent 70%),
-            radial-gradient(ellipse clamp(260px, 18vw, 500px) clamp(200px, 14vw, 400px) at 88% 55%,  rgba(226, 199, 170, 0.20) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(500px, 40vw, 1800px) clamp(350px, 28vw, 1200px) at 82% 8%,   rgba(226, 199, 170, 0.55) 0%, transparent 72%),
+            radial-gradient(ellipse clamp(420px, 35vw, 1600px) clamp(320px, 26vw, 1100px) at 12% 88%,  rgba(160, 135, 110, 0.35) 0%, transparent 72%),
+            radial-gradient(ellipse clamp(400px, 30vw, 1400px) clamp(320px, 24vw, 1000px) at 55% 45%,  rgba(226, 199, 170, 0.25) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(280px, 20vw, 1000px) clamp(260px, 18vw, 800px) at 68% 52%,  rgba(122, 82, 52, 0.13)  0%, transparent 70%),
+            radial-gradient(ellipse clamp(320px, 25vw, 1100px) clamp(250px, 18vw, 800px) at 18% 6%,   rgba(226, 199, 170, 0.30) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(300px, 22vw, 1000px) clamp(240px, 16vw, 750px) at 30% 75%,  rgba(160, 135, 110, 0.20) 0%, transparent 70%),
+            radial-gradient(ellipse clamp(240px, 16vw, 800px) clamp(200px, 14vw, 650px) at 45% 95%,  rgba(122, 82, 52, 0.08)  0%, transparent 70%),
+            radial-gradient(ellipse clamp(260px, 18vw, 900px) clamp(200px, 14vw, 650px) at 88% 55%,  rgba(226, 199, 170, 0.20) 0%, transparent 70%),
             linear-gradient(135deg, #F8F0E5 0%, #F3E9DA 50%, #EDE1CE 100%);
     }
 }
@@ -1070,124 +1164,258 @@ footer {
 }
 
 /* ================================
-    15. BLOBS ANIMADOS (DESKTOP / TABLET)
-=============================== */
-@media (min-width: 641px) {
-    body::before,
-    body::after {
-        content: '';
-        position: fixed;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 0;
-        will-change: transform;
-        transition:
-            top 0.9s ease,
-            left 0.9s ease,
-            bottom 0.9s ease,
-            opacity 0.6s ease;
+    15. ONDAS ANIMADAS
+================================= */
+.bg-wave {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bg-wave-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+    transition: transform 0.9s ease, opacity 0.6s ease;
+}
+
+.bg-wave-inner svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.wave-2 .bg-wave-inner {
+    top: auto;
+    bottom: 0;
+}
+
+/* ── Wave 1: grande, horizontal, areia ── */
+.wave-1 .bg-wave-inner {
+    width: min(95vw, 3400px);
+    height: min(28vw, 1100px);
+    color: rgba(226, 199, 170, 0.55);
+}
+.wave-1 .wave-blurred {
+    filter: blur(min(6vw, 250px));
+    animation: waveFloat1 28s ease-in-out infinite;
+}
+
+/* ── Wave 2: média, diagonal, tan ── */
+.wave-2 .bg-wave-inner {
+    width: min(80vw, 3000px);
+    height: min(22vw, 900px);
+    color: rgba(160, 135, 110, 0.35);
+}
+.wave-2 .wave-blurred {
+    filter: blur(min(5.5vw, 220px));
+    animation: waveFloat2 22s ease-in-out infinite;
+}
+
+/* ── Wave 3: pequena, contra-diagonal, marrom ── */
+.wave-3 .bg-wave-inner {
+    width: min(60vw, 2400px);
+    height: min(18vw, 700px);
+    color: rgba(122, 82, 52, 0.15);
+}
+.wave-3 .wave-blurred {
+    filter: blur(min(4.5vw, 190px));
+    animation: waveFloat3 18s ease-in-out infinite;
+}
+
+/* ── Posições base (home) ── */
+body[data-section="home"] .wave-1 .bg-wave-inner,
+.wave-1 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(240px, 22vw, 650px)), clamp(-130px, -7vw, -60px));
+    opacity: 1;
+}
+body[data-section="home"] .wave-2 .bg-wave-inner,
+.wave-2 .bg-wave-inner {
+    transform: translate(clamp(-100px, -6vw, -40px), clamp(80px, 4vw, 40px));
+    opacity: 1;
+}
+body[data-section="home"] .wave-3 .bg-wave-inner,
+.wave-3 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(150px, 15vw, 300px)), clamp(30vh, 35vh, 40vh));
+    opacity: 0.8;
+}
+
+/* ── Sobre ── */
+body[data-section="sobre"] .wave-1 .bg-wave-inner {
+    transform: translate(clamp(-160px, -10vw, -50px), clamp(-130px, -7vw, -60px));
+}
+body[data-section="sobre"] .wave-2 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(170px, 17vw, 500px)), clamp(80px, 4vw, 40px));
+}
+body[data-section="sobre"] .wave-3 .bg-wave-inner {
+    transform: translate(clamp(5vw, 10vw, 15vw), clamp(30vh, 35vh, 40vh));
+}
+
+/* ── Habilidades ── */
+body[data-section="habilidades"] .wave-1 .bg-wave-inner {
+    transform: translate(clamp(5vw, 8vw, 12vw), clamp(-110px, -6vw, -50px));
+}
+body[data-section="habilidades"] .wave-2 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(150px, 15vw, 460px)), clamp(60px, 3vw, 30px));
+}
+body[data-section="habilidades"] .wave-3 .bg-wave-inner {
+    transform: translate(clamp(35vw, 40vw, 45vw), clamp(35vh, 40vh, 45vh));
+}
+
+/* ── Projetos ── */
+body[data-section="projetos"] .wave-1 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(260px, 24vw, 680px)), clamp(-90px, -4vw, -40px));
+}
+body[data-section="projetos"] .wave-2 .bg-wave-inner {
+    transform: translate(clamp(3vw, 6vw, 10vw), clamp(60px, 2.5vw, 25px));
+}
+body[data-section="projetos"] .wave-3 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(150px, 15vw, 350px)), clamp(25vh, 30vh, 35vh));
+}
+
+/* ── Currículo ── */
+body[data-section="cv"] .wave-1 .bg-wave-inner {
+    transform: translate(clamp(15vw, 25vw, 35vw), clamp(-100px, -5vw, -45px));
+}
+body[data-section="cv"] .wave-2 .bg-wave-inner {
+    transform: translate(clamp(15vw, 25vw, 35vw), clamp(40px, 2vw, 20px));
+}
+body[data-section="cv"] .wave-3 .bg-wave-inner {
+    transform: translate(clamp(35vw, 40vw, 45vw), clamp(30vh, 35vh, 40vh));
+}
+
+/* ── Contato ── */
+body[data-section="contato"] .wave-1 .bg-wave-inner {
+    transform: translate(calc(100vw - clamp(280px, 26vw, 700px)), clamp(-60px, -2vw, -20px));
+}
+body[data-section="contato"] .wave-2 .bg-wave-inner {
+    transform: translate(clamp(5vw, 10vw, 15vw), clamp(30px, 1vw, 10px));
+}
+body[data-section="contato"] .wave-3 .bg-wave-inner {
+    transform: translate(clamp(5vw, 10vw, 15vw), clamp(30vh, 35vh, 40vh));
+}
+
+/* ── Keyframes ── */
+@keyframes waveFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(2vw, -1.5vw) scale(1.03); }
+    66%      { transform: translate(-1.5vw, 1vw) scale(0.98); }
+}
+
+@keyframes waveFloat2 {
+    0%, 100% { transform: rotate(35deg) translate(0, 0) scale(1); }
+    33%      { transform: rotate(37deg) translate(1.5vw, -1.2vw) scale(1.04); }
+    66%      { transform: rotate(33deg) translate(-1vw, 0.8vw) scale(0.97); }
+}
+
+@keyframes waveFloat3 {
+    0%, 100% { transform: rotate(-25deg) translate(0, 0) scale(1); }
+    33%      { transform: rotate(-23deg) translate(1vw, -1vw) scale(1.02); }
+    66%      { transform: rotate(-27deg) translate(-0.8vw, 0.6vw) scale(0.98); }
+}
+
+/* ── Ondas reduzidas (telas médias) ── */
+@media (max-width: 1199px) {
+    .wave-1 .bg-wave-inner {
+        width: clamp(600px, 60vw, 2200px);
+        height: clamp(200px, 20vw, 720px);
+    }
+    .wave-1 .wave-blurred {
+        filter: blur(clamp(40px, 4vw, 150px));
     }
 
-    /* ── Tamanhos e blur responsivos ──────────── */
-
-    body::before {
-        width: clamp(280px, 28vw, 750px);
-        height: clamp(280px, 28vw, 750px);
-        background: radial-gradient(circle at center, rgba(226, 199, 170, 0.55), transparent 70%);
-        animation: blobFloat1 26s ease-in-out infinite;
+    .wave-2 .bg-wave-inner {
+        width: clamp(450px, 45vw, 1800px);
+        height: clamp(150px, 15vw, 600px);
+    }
+    .wave-2 .wave-blurred {
+        filter: blur(clamp(35px, 3.5vw, 130px));
     }
 
-    body::after {
-        width: clamp(200px, 20vw, 600px);
-        height: clamp(200px, 20vw, 600px);
-        background: radial-gradient(circle at center, rgba(160, 135, 110, 0.35), transparent 70%);
+    .wave-3 .bg-wave-inner {
+        width: clamp(300px, 30vw, 1200px);
+        height: clamp(100px, 10vw, 400px);
     }
-
-    /* ── Posições base ────────────────────────── */
-
-    /* Início — top-right + bottom-left */
-    body[data-section="home"]::before,
-    body::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-130px, -7vw, -60px);
-        left: calc(100% - clamp(240px, 22vw, 650px));
-    }
-    body[data-section="home"]::after,
-    body::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-80px, -4vw, -40px);
-        left: clamp(-100px, -6vw, -40px);
-    }
-
-    /* Sobre — top-left + bottom-right */
-    body[data-section="sobre"]::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-130px, -7vw, -60px);
-        left: clamp(-160px, -10vw, -50px);
-    }
-    body[data-section="sobre"]::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-80px, -4vw, -40px);
-        left: calc(100% - clamp(170px, 17vw, 500px));
-    }
-
-    /* Habilidades — top-center + bottom-right */
-    body[data-section="habilidades"]::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-110px, -6vw, -50px);
-        left: clamp(5%, 8%, 12%);
-    }
-    body[data-section="habilidades"]::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-60px, -3vw, -30px);
-        left: calc(100% - clamp(150px, 15vw, 460px));
-    }
-
-    /* Projetos — upper-right + bottom-left */
-    body[data-section="projetos"]::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-90px, -4vw, -40px);
-        left: calc(100% - clamp(260px, 24vw, 680px));
-    }
-    body[data-section="projetos"]::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-60px, -2.5vw, -25px);
-        left: clamp(3%, 6%, 10%);
-    }
-
-    /* Currículo — top-center + bottom-center */
-    body[data-section="cv"]::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-100px, -5vw, -45px);
-        left: clamp(15%, 25%, 35%);
-    }
-    body[data-section="cv"]::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-40px, -2vw, -20px);
-        left: clamp(15%, 25%, 35%);
-    }
-
-    /* Contato — upper-right + lower-left */
-    body[data-section="contato"]::before {
-        filter: blur(clamp(50px, 5vw, 120px));
-        top: clamp(-60px, -2vw, -20px);
-        left: calc(100% - clamp(280px, 26vw, 700px));
-    }
-    body[data-section="contato"]::after {
-        filter: blur(clamp(40px, 4vw, 90px));
-        bottom: clamp(-30px, -1vw, -10px);
-        left: clamp(5%, 10%, 15%);
-    }
-
-    @keyframes blobFloat1 {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        25%      { transform: translate(3vw, -2vw) scale(1.04); }
-        50%      { transform: translate(-2vw, 1.5vw) scale(0.97); }
-        75%      { transform: translate(1.5vw, 2.5vw) scale(1.02); }
+    .wave-3 .wave-blurred {
+        filter: blur(clamp(30px, 3vw, 110px));
     }
 }
 
+/* ── Esconde as linhas finas sobre o blur ── */
+.wave-crisp {
+    display: none;
+}
+
+/* ================================
+    16. ONDAS BRUTAS — TRAÇOS FINOS
+================================ */
+.bg-raw {
+    position: fixed;
+    left: 0;
+    width: 100vw;
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform;
+}
+
+.bg-raw svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.raw-1 {
+    top: clamp(10%, 12vh, 15%);
+    height: clamp(100px, 12vh, 150px);
+    color: rgba(122, 82, 52, 0.08);
+    animation: rawDrift 50s ease-in-out infinite;
+}
+
+.raw-2 {
+    top: clamp(28%, 30vh, 32%);
+    height: clamp(90px, 10vh, 130px);
+    color: rgba(122, 82, 52, 0.06);
+    animation: rawDrift 45s ease-in-out infinite reverse;
+}
+
+.raw-3 {
+    top: clamp(52%, 55vh, 58%);
+    height: clamp(80px, 9vh, 110px);
+    color: rgba(160, 135, 110, 0.05);
+    animation: rawDrift 55s ease-in-out infinite;
+}
+
+.raw-4 {
+    top: clamp(75%, 78vh, 82%);
+    height: clamp(70px, 8vh, 100px);
+    color: rgba(160, 135, 110, 0.04);
+    animation: rawDrift 60s ease-in-out infinite reverse;
+}
+
+@keyframes rawDrift {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(1.5vw); }
+}
+
+/* ================================
+    17. TELAS PEQUENAS (≤ 640px)
+================================ */
 @media (max-width: 640px) {
+    .bg-wave {
+        display: none;
+    }
+
+    .bg-raw {
+        display: none;
+    }
+
     :root {
         --nav-height: 52px;
     }
@@ -1243,7 +1471,8 @@ footer {
     }
 
     .nav-links a:focus-visible {
-        outline: 2px solid var(--brown-dark);
+.btn:focus-visible {
+    outline: 2px solid var(--brown-dark);
         outline-offset: 2px;
         border-radius: 3px;
     }

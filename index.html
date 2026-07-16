@@ -10,11 +10,56 @@
     <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
     <link rel="stylesheet" href="assets/css/style.css" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=optional"
         rel="stylesheet" />
 </head>
 
 <body>
+
+    <!-- ONDAS DE FUNDO -->
+    <div class="bg-wave wave-1" aria-hidden="true">
+        <div class="bg-wave-inner">
+            <svg class="wave-blurred" viewBox="0 0 600 200" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+                <path d="M 10,100 C 110,10 210,190 310,100 C 410,10 510,190 590,100" fill="none" stroke="currentColor" stroke-width="80" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+    <div class="bg-wave wave-2" aria-hidden="true">
+        <div class="bg-wave-inner">
+            <svg class="wave-blurred" viewBox="0 0 600 200" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+                <path d="M 15,100 C 130,30 230,170 315,100 C 400,30 500,170 585,100" fill="none" stroke="currentColor" stroke-width="70" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+    <div class="bg-wave wave-3" aria-hidden="true">
+        <div class="bg-wave-inner">
+            <svg class="wave-blurred" viewBox="0 0 600 200" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+                <path d="M 20,100 C 150,40 250,160 320,100 C 390,40 490,160 580,100" fill="none" stroke="currentColor" stroke-width="60" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- ONDAS BRUTAS (L→R) -->
+    <div class="bg-raw raw-1" aria-hidden="true">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+            <path d="M 0,50 C 80,5 170,95 250,50 C 330,5 420,95 500,50 C 580,5 670,95 750,50 C 830,5 920,95 1000,50" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="bg-raw raw-2" aria-hidden="true">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+            <path d="M 0,50 C 110,20 220,80 330,50 C 440,20 550,80 660,50 C 770,20 880,80 1000,50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="bg-raw raw-3" aria-hidden="true">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+            <path d="M 0,50 C 60,30 140,70 200,50 C 260,30 340,70 400,50 C 460,30 540,70 600,50 C 660,30 740,70 800,50 C 860,30 940,70 1000,50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="bg-raw raw-4" aria-hidden="true">
+        <svg viewBox="0 0 1000 100" preserveAspectRatio="none" width="100%" height="100%" overflow="visible">
+            <path d="M 0,50 C 170,0 330,100 500,50 C 670,0 830,100 1000,50" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+    </div>
 
     <nav aria-label="Navegação principal">
         <div class="logo">MIGUEL ZAGER GOBBO</div>
@@ -87,12 +132,12 @@
         <section class="snap-section" id="home">
             <div class="section-inner hero-inner">
                 <div class="hero-text">
-                    <div class="hero-tag">Engenharia de Software</div>
-                    <h1 class="hero-title">Olá, sou <em>Miguel</em><br>Foco em Backend<br>e Sistemas</h1>
-                    <p class="hero-sub">Estudante de Engenharia de Software apaixonado por construir sistemas robustos e escaláveis — onde lógica, arquitetura e boas soluções se encontram.</p>
+                    <div class="hero-tag reveal">Engenharia de Software</div>
+                    <h1 class="hero-title reveal">Olá, sou <em>Miguel</em><br>Foco em Backend<br>e Sistemas</h1>
+                    <p class="hero-sub reveal">Estudante de Engenharia de Software apaixonado por construir sistemas robustos e escaláveis — onde lógica, arquitetura e boas soluções se encontram.</p>
                 </div>
-                <div class="hero-photo">
-                    <img src="assets/img/foto-perfil.jpeg" alt="Foto de perfil de Miguel Zager Gobbo" class="profile-photo" />
+                <div class="hero-photo reveal">
+                    <img src="assets/img/foto-perfil.jpeg" alt="Foto de perfil de Miguel Zager Gobbo" width="280" height="340" class="profile-photo" />
                 </div>
             </div>
         </section>
@@ -100,8 +145,8 @@
         <!-- SOBRE -->
         <section class="snap-section" id="sobre">
             <div class="section-inner">
-                <div class="section-label">Quem sou eu</div>
-                <div class="section-title">
+                <div class="section-label reveal">Quem sou eu</div>
+                <div class="section-title reveal">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="8" r="4" />
@@ -111,19 +156,19 @@
                 </div>
                 <div class="about-grid">
                     <div class="about-text">
-                        <p>Sempre tive afinidade com exatas e com problemas que exigem raciocínio lógico estruturado — é isso que me trouxe para Engenharia de Software e mantém meu interesse voltado a backend, sistemas e infraestrutura.</p>
-                        <p>Tenho experiência prática com backend, front-end e banco de dados, e busco oportunidades para aplicar e expandir esse conhecimento no mercado de trabalho.</p>
+                        <p class="reveal">Sempre tive afinidade com exatas e com problemas que exigem raciocínio lógico estruturado — é isso que me trouxe para Engenharia de Software e mantém meu interesse voltado a backend, sistemas e infraestrutura.</p>
+                        <p class="reveal">Tenho experiência prática com backend, front-end e banco de dados, e busco oportunidades para aplicar e expandir esse conhecimento no mercado de trabalho.</p>
                     </div>
-                    <div class="about-info">
-                        <div class="info-item">
+                    <div class="about-info reveal">
+                        <div class="info-item reveal">
                             <div class="label">Formação</div>
                             <div class="value">Engenharia de Software — Em andamento</div>
                         </div>
-                        <div class="info-item">
+                        <div class="info-item reveal">
                             <div class="label">Foco</div>
                             <div class="value">Backend · Sistemas · Infraestrutura</div>
                         </div>
-                        <div class="info-item">
+                        <div class="info-item reveal">
                             <div class="label">Status</div>
                             <div class="value">Aberto a estágios e oportunidades</div>
                         </div>
@@ -133,10 +178,10 @@
         </section>
 
         <!-- HABILIDADES -->
-        <section class="snap-section" id="habilidades">
+        <section class="snap-section" id="habilidades" data-stagger="160">
             <div class="section-inner">
-                <div class="section-label">O que sei fazer</div>
-                <div class="section-title">
+                <div class="section-label reveal">O que sei fazer</div>
+                <div class="section-title reveal">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="16 18 22 12 16 6" />
@@ -145,7 +190,7 @@
                     Habilidades
                 </div>
                 <div class="skills-grid">
-                    <div class="skill-card">
+                    <div class="skill-card reveal">
                         <div class="skill-cat">Linguagens</div>
                         <div class="skill-tags">
                             <span class="tag">Python</span><span class="tag">Java</span>
@@ -153,7 +198,7 @@
                             <span class="tag">JavaScript</span>
                         </div>
                     </div>
-                    <div class="skill-card">
+                    <div class="skill-card reveal">
                         <div class="skill-cat">Backend</div>
                         <div class="skill-tags">
                             <span class="tag">Flask</span><span class="tag">REST APIs</span><span class="tag">JWT</span>
@@ -161,14 +206,14 @@
                             <span class="tag">Docker</span><span class="tag">Swagger</span>
                         </div>
                     </div>
-                    <div class="skill-card">
+                    <div class="skill-card reveal">
                         <div class="skill-cat">Banco de dados</div>
                         <div class="skill-tags">
                             <span class="tag">PostgreSQL</span><span class="tag">MySQL</span>
                             <span class="tag">Neo4j</span>
                         </div>
                     </div>
-                    <div class="skill-card">
+                    <div class="skill-card reveal">
                         <div class="skill-cat">Ferramentas</div>
                         <div class="skill-tags">
                             <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Figma</span>
@@ -176,7 +221,7 @@
                             <span class="tag">Postman</span><span class="tag">Excel</span><span class="tag">PowerPoint</span>
                         </div>
                     </div>
-                    <div class="skill-card">
+                    <div class="skill-card reveal">
                         <div class="skill-cat">Soft Skills</div>
                         <div class="skill-tags">
                             <span class="tag">Organização</span><span class="tag">Comprometimento</span>
@@ -189,10 +234,10 @@
         </section>
 
         <!-- PROJETOS -->
-        <section class="snap-section" id="projetos">
+        <section class="snap-section" id="projetos" data-stagger="160">
             <div class="section-inner">
-                <div class="section-label">O que construí</div>
-                <div class="section-title">
+                <div class="section-label reveal">O que construí</div>
+                <div class="section-title reveal">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="6" y1="3" x2="6" y2="15" />
@@ -203,7 +248,7 @@
                     Projetos
                 </div>
                 <div class="projects-list">
-                    <div class="project-card">
+                    <div class="project-card reveal">
                         <div>
                             <div class="project-name">Purchase Orders API</div>
                             <div class="project-desc">API REST para gerenciamento de pedidos de compra, com autenticação JWT, containerização via Docker e documentação interativa via Swagger.</div>
@@ -230,7 +275,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="project-card">
+                    <div class="project-card reveal">
                         <div>
                             <div class="project-name">API de Gerenciamento de Tarefas</div>
                             <div class="project-desc">API REST para gerenciamento de tarefas com CRUD completo, desenvolvida com Java e Spring Boot.</div>
@@ -256,7 +301,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="project-card">
+                    <div class="project-card reveal">
                         <div>
                             <div class="project-name">Retro Car Horizon</div>
                             <div class="project-desc">Jogo arcade 2D desenvolvido em Pygame, com três níveis de dificuldade e arquitetura baseada em Factory e Mediator para gerenciar entidades e colisões.</div>
@@ -280,7 +325,7 @@
                             </svg>
                         </a>
                     </div>
-                    <div class="project-card">
+                    <div class="project-card reveal">
                         <div>
                             <div class="project-name">Portfólio Miguel ZG</div>
                             <div class="project-desc">Site pessoal desenvolvido com HTML, CSS e JavaScript, apresentando projetos, habilidades e contato com design responsivo e navegação fluida.</div>
@@ -312,8 +357,8 @@
         <!-- Currículo -->
         <section class="snap-section" id="cv">
             <div class="section-inner">
-                <div class="section-label">Meu currículo</div>
-                <div class="section-title">
+                <div class="section-label reveal">Meu currículo</div>
+                <div class="section-title reveal">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -324,13 +369,13 @@
                     </svg>
                     Currículo
                 </div>
-                <div class="cv-box">
+                <div class="cv-box reveal">
                     <div class="cv-info">
                         <div class="cv-title">Currículo completo em PDF</div>
                         <div class="cv-sub">Visualize direto no navegador ou faça o download</div>
                     </div>
                     <div class="cv-actions">
-                        <a href="assets/img/cv.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline" aria-label="Visualizar currículo em PDF em nova aba">
+                        <a href="assets/img/cv.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" aria-label="Visualizar currículo em PDF em nova aba">
                             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -339,7 +384,7 @@
                             </svg>
                             Visualizar
                         </a>
-                        <a href="assets/img/cv.pdf" download class="btn" aria-label="Baixar currículo em PDF">
+                        <a href="assets/img/cv.pdf" download class="btn reveal" aria-label="Baixar currículo em PDF">
                             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -357,8 +402,8 @@
         <!-- CONTATO -->
         <section class="snap-section" id="contato">
             <div class="section-inner">
-                <div class="section-label">Fale comigo</div>
-                <div class="section-title">
+                <div class="section-label reveal">Fale comigo</div>
+                <div class="section-title reveal">
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -367,25 +412,25 @@
                     Contato
                 </div>
                 <div class="contact-grid">
-                    <div class="contact-form">
-                        <div class="form-group">
+                    <div class="contact-form reveal">
+                        <div class="form-group reveal">
                             <label for="campo-nome">Nome</label>
                             <input type="text" id="campo-nome" placeholder="Seu nome" />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group reveal">
                             <label for="campo-email">E-mail</label>
                             <input type="email" id="campo-email" placeholder="seu@email.com" />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group reveal">
                             <label for="campo-mensagem">Mensagem</label>
                             <textarea id="campo-mensagem" placeholder="Como posso ajudar?"></textarea>
                         </div>
-                        <button class="btn" id="btn-enviar" onclick="enviarMensagem()">Enviar mensagem</button>
+                        <button class="btn reveal" id="btn-enviar" onclick="enviarMensagem()">Enviar mensagem</button>
                         <span id="form-aviso"></span>
                     </div>
-                    <div class="contact-info">
+                    <div class="contact-info reveal">
                         <div class="contact-group">
-                            <div class="contact-item">
+                            <div class="contact-item reveal">
                                 <div class="label">LinkedIn</div>
                                 <div class="val-row">
                                     <a href="https://www.linkedin.com/in/miguel-zager-gobbo" target="_blank" rel="noopener noreferrer"
@@ -407,7 +452,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="contact-item">
+                            <div class="contact-item reveal">
                                 <div class="label">GitHub</div>
                                 <div class="val-row">
                                     <a href="https://github.com/MiguelZGobbo" target="_blank" rel="noopener noreferrer"
@@ -431,7 +476,7 @@
                             </div>
                         </div>
                         <div class="contact-group contact-group--muted">
-                            <div class="contact-item">
+                            <div class="contact-item reveal">
                                 <div class="label">E-mail</div>
                                 <div class="val-row">
                                     <span class="val">miguelzgobbo@gmail.com</span>
