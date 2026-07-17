@@ -1413,22 +1413,31 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     .wave-1 .bg-wave-inner {
-        transform: translate(calc(100vw - 300px), -40px);
+        color: rgba(226, 199, 170, 0.85);
+    }
+    .wave-1 .wave-blurred path {
+        stroke-width: 200;
     }
     .wave-1 .wave-blurred {
-        filter: blur(36px);
+        filter: blur(100px);
     }
     .wave-2 .bg-wave-inner {
-        transform: translate(-30px, calc(100vh - 180px));
+        color: rgba(160, 135, 110, 0.65);
+    }
+    .wave-2 .wave-blurred path {
+        stroke-width: 170;
     }
     .wave-2 .wave-blurred {
-        filter: blur(30px);
+        filter: blur(80px);
     }
     .wave-3 .bg-wave-inner {
-        transform: translate(calc(100vw - 280px), calc(100vh - 160px));
+        color: rgba(122, 82, 52, 0.40);
+    }
+    .wave-3 .wave-blurred path {
+        stroke-width: 140;
     }
     .wave-3 .wave-blurred {
-        filter: blur(26px);
+        filter: blur(60px);
     }
 
     :root {
