@@ -188,7 +188,7 @@ function triggerReveals(section) {
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
   if (current === index) return;
-  resetSectionReveals(sections[current]);
+  if (isMobileWidth()) resetSectionReveals(sections[current]);
 
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
