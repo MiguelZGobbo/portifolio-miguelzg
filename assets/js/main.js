@@ -5,7 +5,9 @@ const navLinks = document.querySelectorAll('.nav-links a');
 let current = 0;
 let isScrolling = false;
 let isRevealing = false;
-let isInitializing = true; // Flag para evitar Observer durante init
+let isInitializing = true;
+let revealTimeouts = [];
+let unlockTimeout = null;
 
 const container = document.querySelector('.scroll-container');
 
@@ -117,6 +119,9 @@ function setActiveNav(index) {
 // ── Navegação principal ──────────────────────────────────
 
 function triggerReveals(section) {
+  revealTimeouts.forEach(t => clearTimeout(t));
+  revealTimeouts = [];
+
   sections.forEach(s => {
     s.querySelectorAll('.reveal').forEach(el => {
       el.style.transition = 'none';
@@ -143,20 +148,27 @@ function triggerReveals(section) {
   const gap = 400;
 
   headerReveals.forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), i * stagger);
+    revealTimeouts.push(setTimeout(() => el.classList.add('visible'), i * stagger));
   });
 
   const contentStart = (headerReveals.length - 1) * stagger + gap;
   contentReveals.forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), contentStart + i * stagger);
+    revealTimeouts.push(setTimeout(() => el.classList.add('visible'), contentStart + i * stagger));
   });
-
 }
 
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
-  if (isScrolling || isRevealing) return;
   if (current === index) return;
+
+  revealTimeouts.forEach(t => clearTimeout(t));
+  revealTimeouts = [];
+  if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
+  if (scrollWaiter) scrollWaiter();
+  unlockScroll();
+  isRevealing = false;
+  isScrolling = false;
+
   isScrolling = true;
   isRevealing = true;
   current = index;
@@ -169,9 +181,10 @@ function goTo(index) {
     isScrolling = false;
     triggerReveals(sections[index]);
 
-    setTimeout(() => {
+    unlockTimeout = setTimeout(() => {
       isRevealing = false;
       unlockScroll();
+      unlockTimeout = null;
     }, calcRevealDuration(sections[index]));
   });
 }
@@ -199,9 +212,10 @@ const observer = new IntersectionObserver((entries) => {
           isScrolling = false;
           triggerReveals(sections[index]);
 
-          setTimeout(() => {
+          unlockTimeout = setTimeout(() => {
             isRevealing = false;
             unlockScroll();
+            unlockTimeout = null;
           }, calcRevealDuration(sections[index]));
         });
       }
