@@ -1663,6 +1663,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding-bottom: 100px;
     }
     #contato footer {
+        position: static;
         padding: 0.5rem;
     }
 

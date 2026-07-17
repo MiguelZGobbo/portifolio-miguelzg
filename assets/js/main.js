@@ -127,11 +127,21 @@ function revealSection(section) {
   if (isMobileWidth()) {
     section.querySelectorAll('.reveal').forEach(el => {
       el.style.transition = 'none';
-      el.classList.remove('visible');
-      el.style.removeProperty('transition');
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      void el.offsetHeight;
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
     });
-    void document.body.offsetHeight;
-    section.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    setTimeout(() => {
+      section.querySelectorAll('.reveal').forEach(el => {
+        el.style.transition = '';
+        el.style.opacity = '';
+        el.style.transform = '';
+        el.classList.add('visible');
+      });
+    }, 650);
   } else {
     triggerReveals(section);
   }
