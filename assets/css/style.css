@@ -1558,7 +1558,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     .reveal {
-        transition: opacity 0.6s ease, transform 0.6s ease;
+        transition: none;
     }
 
     .section-title {
@@ -1668,7 +1668,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     #contato footer {
         position: static;
         margin-top: auto;
-        margin-bottom: -6px;
+        transform: translateY(-6px);
         padding: 0.5rem;
     }
 
