@@ -1680,3 +1680,48 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         margin-top: 0.5rem;
     }
 }
+
+@media (hover: none) and (pointer: coarse) {
+    .btn:hover,
+    .btn:focus-visible:hover {
+        background: var(--brown-dark) !important;
+        border-color: var(--brown-dark) !important;
+        color: var(--cream) !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn-outline:hover {
+        background: transparent !important;
+        color: var(--brown-dark) !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .project-link:hover {
+        background: var(--brown-dark) !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn:hover::after,
+    .project-link:hover::after {
+        transform: translateX(-100%) !important;
+    }
+
+    .copy-btn:hover {
+        color: var(--tan) !important;
+    }
+
+    .info-item:hover,
+    .skill-card:hover,
+    .project-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .val-link:hover {
+        color: var(--tan) !important;
+        border-bottom-color: var(--tan) !important;
+    }
+}
