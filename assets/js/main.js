@@ -174,7 +174,7 @@ function goTo(index) {
   isScrolling = false;
 
   isScrolling = true;
-  isRevealing = isMobileWidth();
+  isRevealing = isMobileWidth() && !isInitializing;
   current = index;
   lockScroll();
 
