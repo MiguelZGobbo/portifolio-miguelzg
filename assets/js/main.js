@@ -125,13 +125,21 @@ function setActiveNav(index) {
 
 function revealSection(section) {
   if (isMobileWidth()) {
-    section.querySelectorAll('.reveal').forEach(el => {
+    const els = section.querySelectorAll('.reveal');
+
+    els.forEach(el => {
       el.getAnimations().forEach(anim => anim.cancel());
+      el.classList.remove('visible');
+    });
+
+    void section.offsetHeight;
+
+    els.forEach(el => {
       el.classList.add('visible');
       el.animate([
         { opacity: 0, transform: 'translateY(20px)' },
         { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 600, easing: 'ease' });
+      ], { duration: 600, easing: 'ease', fill: 'forwards' });
     });
   } else {
     triggerReveals(section);

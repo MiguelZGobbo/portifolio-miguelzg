@@ -1660,7 +1660,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     #contato {
-        padding-bottom: 80px;
+        padding-bottom: 0;
     }
     #contato .section-inner {
         justify-content: flex-start;
@@ -1668,6 +1668,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     #contato footer {
         position: static;
         margin-top: auto;
+        margin-bottom: -6px;
         padding: 0.5rem;
     }
 
