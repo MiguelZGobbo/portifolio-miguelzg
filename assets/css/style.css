@@ -1408,10 +1408,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     17. TELAS PEQUENAS (≤ 640px)
 ================================ */
 @media (max-width: 640px) {
-    .bg-wave {
-        display: none;
-    }
-
     .bg-raw {
         display: none;
     }
