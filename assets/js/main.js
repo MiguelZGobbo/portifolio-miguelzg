@@ -125,21 +125,27 @@ function setActiveNav(index) {
 
 function revealSection(section) {
   if (isMobileWidth()) {
-    const els = section.querySelectorAll('.reveal');
+    const els = Array.from(section.querySelectorAll('.reveal'));
 
     els.forEach(el => {
       el.getAnimations().forEach(anim => anim.cancel());
       el.classList.remove('visible');
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
     });
 
-    void section.offsetHeight;
-
-    els.forEach(el => {
-      el.classList.add('visible');
-      el.animate([
-        { opacity: 0, transform: 'translateY(20px)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 600, easing: 'ease', fill: 'forwards' });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        els.forEach(el => {
+          el.classList.add('visible');
+          el.style.opacity = '';
+          el.style.transform = '';
+          el.animate([
+            { opacity: 0, transform: 'translateY(20px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], { duration: 600, easing: 'ease', fill: 'forwards' });
+        });
+      });
     });
   } else {
     triggerReveals(section);
@@ -282,7 +288,6 @@ window.addEventListener('resize', () => {
 
 // ── Inicialização ────────────────────────────────────────
 goTo(0);
-revealSection(sections[0]);
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
