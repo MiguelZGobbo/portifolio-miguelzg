@@ -127,6 +127,12 @@ function resetSectionReveals(section) {
   if (!section) return;
   section.querySelectorAll('.reveal').forEach(el => {
     el.getAnimations().forEach(anim => anim.cancel());
+    if (isMobileWidth() && el.classList.contains('visible')) {
+      el.animate([
+        { opacity: 1, transform: 'translateY(0)' },
+        { opacity: 0, transform: 'translateY(8px)' }
+      ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+    }
     el.classList.remove('visible');
     el.style.opacity = '';
     el.style.transform = '';
@@ -137,6 +143,7 @@ function revealSection(section) {
   if (isMobileWidth()) {
     const els = Array.from(section.querySelectorAll('.reveal'));
     els.forEach(el => {
+      el.getAnimations().forEach(anim => anim.cancel());
       el.classList.add('visible');
       el.animate([
         { opacity: 0, transform: 'translateY(20px)' },
@@ -151,13 +158,6 @@ function revealSection(section) {
 function triggerReveals(section) {
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
-
-  section.querySelectorAll('.reveal').forEach(el => {
-    el.style.transition = 'none';
-    el.classList.remove('visible');
-    el.style.transition = '';
-  });
-  void document.body.offsetHeight;
 
   const isHeader = el =>
     el.classList.contains('section-label') ||
@@ -176,19 +176,21 @@ function triggerReveals(section) {
   const gap = 400;
 
   headerReveals.forEach((el, i) => {
-    revealTimeouts.push(setTimeout(() => el.classList.add('visible'), i * stagger));
+    if (!el.classList.contains('visible'))
+      revealTimeouts.push(setTimeout(() => el.classList.add('visible'), i * stagger));
   });
 
   const contentStart = (headerReveals.length - 1) * stagger + gap;
   contentReveals.forEach((el, i) => {
-    revealTimeouts.push(setTimeout(() => el.classList.add('visible'), contentStart + i * stagger));
+    if (!el.classList.contains('visible'))
+      revealTimeouts.push(setTimeout(() => el.classList.add('visible'), contentStart + i * stagger));
   });
 }
 
-function goTo(index) {
+function goTo(index, skipWait = false) {
   if (index < 0 || index >= sections.length) return;
   if (current === index) return;
-  if (isMobileWidth()) resetSectionReveals(sections[current]);
+  resetSectionReveals(sections[current]);
 
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
@@ -207,17 +209,27 @@ function goTo(index) {
   sections[index].scrollIntoView(scrollOpts);
   setActiveNav(index);
 
-  waitForScrollEnd(sections[index], () => {
+  if (skipWait) {
     isScrolling = false;
     revealSection(sections[index]);
-
     if (isRevealing) {
       unlockTimeout = setTimeout(() => {
         isRevealing = false;
         unlockTimeout = null;
       }, calcRevealDuration(sections[index]));
     }
-  });
+  } else {
+    waitForScrollEnd(sections[index], () => {
+      isScrolling = false;
+      revealSection(sections[index]);
+      if (isRevealing) {
+        unlockTimeout = setTimeout(() => {
+          isRevealing = false;
+          unlockTimeout = null;
+        }, calcRevealDuration(sections[index]));
+      }
+    });
+  }
 }
 
 // ── Intersection Observer para Scroll Nativo ──────────────
@@ -235,7 +247,7 @@ const observer = new IntersectionObserver((entries) => {
       if (index !== -1 && index !== current) {
         if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
         isRevealing = false;
-        if (isMobileWidth() && current >= 0) resetSectionReveals(sections[current]);
+        if (current >= 0) resetSectionReveals(sections[current]);
         isScrolling = true;
         if (isMobileWidth()) isRevealing = true;
         current = index;
@@ -285,7 +297,7 @@ window.addEventListener('resize', () => {
 });
 
 // ── Inicialização ────────────────────────────────────────
-goTo(0);
+goTo(0, true);
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
