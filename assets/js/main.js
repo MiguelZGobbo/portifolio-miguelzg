@@ -123,29 +123,25 @@ function setActiveNav(index) {
 
 // ── Navegação principal ──────────────────────────────────
 
+function resetSectionReveals(section) {
+  if (!section) return;
+  section.querySelectorAll('.reveal').forEach(el => {
+    el.getAnimations().forEach(anim => anim.cancel());
+    el.classList.remove('visible');
+    el.style.opacity = '';
+    el.style.transform = '';
+  });
+}
+
 function revealSection(section) {
   if (isMobileWidth()) {
     const els = Array.from(section.querySelectorAll('.reveal'));
-
     els.forEach(el => {
-      el.getAnimations().forEach(anim => anim.cancel());
-      el.classList.remove('visible');
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-    });
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        els.forEach(el => {
-          el.classList.add('visible');
-          el.style.opacity = '';
-          el.style.transform = '';
-          el.animate([
-            { opacity: 0, transform: 'translateY(20px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-          ], { duration: 600, easing: 'ease', fill: 'forwards' });
-        });
-      });
+      el.classList.add('visible');
+      el.animate([
+        { opacity: 0, transform: 'translateY(20px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 600, easing: 'ease', fill: 'forwards' });
     });
   } else {
     triggerReveals(section);
@@ -192,6 +188,7 @@ function triggerReveals(section) {
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
   if (current === index) return;
+  resetSectionReveals(sections[current]);
 
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
@@ -238,6 +235,7 @@ const observer = new IntersectionObserver((entries) => {
       if (index !== -1 && index !== current) {
         if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
         isRevealing = false;
+        if (isMobileWidth() && current >= 0) resetSectionReveals(sections[current]);
         isScrolling = true;
         if (isMobileWidth()) isRevealing = true;
         current = index;
