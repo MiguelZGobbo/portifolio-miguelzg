@@ -125,6 +125,12 @@ function setActiveNav(index) {
 
 function revealSection(section) {
   if (isMobileWidth()) {
+    section.querySelectorAll('.reveal').forEach(el => {
+      el.style.transition = 'none';
+      el.classList.remove('visible');
+      el.style.transition = '';
+    });
+    void document.body.offsetHeight;
     section.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
   } else {
     triggerReveals(section);
@@ -265,6 +271,7 @@ window.addEventListener('resize', () => {
 
 // ── Inicialização ────────────────────────────────────────
 goTo(0);
+revealSection(sections[0]);
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
