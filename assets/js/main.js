@@ -176,7 +176,7 @@ function goTo(index) {
   isScrolling = true;
   isRevealing = isMobileWidth() && !isInitializing;
   current = index;
-  lockScroll();
+  if (isRevealing) lockScroll();
 
   sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
   setActiveNav(index);
@@ -207,11 +207,11 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const index = sections.indexOf(entry.target);
-      if (index !== -1) {
+      if (index !== -1 && index !== current) {
         isScrolling = true;
         if (isMobileWidth()) isRevealing = true;
         current = index;
-        lockScroll();
+        if (isRevealing) lockScroll();
         setActiveNav(index);
         entry.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         waitForScrollEnd(sections[index], () => {
