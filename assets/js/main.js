@@ -232,7 +232,7 @@ const observer = new IntersectionObserver((entries) => {
         );
         waitForScrollEnd(sections[index], () => {
           isScrolling = false;
-          revealSection(sections[index]);
+          if (!isInitializing || !isMobileWidth()) revealSection(sections[index]);
 
           if (isRevealing) {
             unlockTimeout = setTimeout(() => {
