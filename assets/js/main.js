@@ -2,7 +2,7 @@ emailjs.init('7cO86VT1CxLbCKh3n');
 
 const sections = Array.from(document.querySelectorAll('.snap-section'));
 const navLinks = document.querySelectorAll('.nav-links a');
-let current = 0;
+let current = -1;
 let isScrolling = false;
 let isRevealing = false;
 let isInitializing = true;
