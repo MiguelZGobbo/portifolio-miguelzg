@@ -1413,19 +1413,19 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     .wave-1 .bg-wave-inner {
-        transform: translate(calc(100vw - 300px), -40px) !important;
+        transform: translate(calc(100vw - 300px), -40px);
     }
     .wave-1 .wave-blurred {
         filter: blur(14px);
     }
     .wave-2 .bg-wave-inner {
-        transform: translate(-30px, calc(100vh - 180px)) !important;
+        transform: translate(-30px, calc(100vh - 180px));
     }
     .wave-2 .wave-blurred {
         filter: blur(12px);
     }
     .wave-3 .bg-wave-inner {
-        transform: translate(calc(100vw - 280px), calc(100vh - 160px)) !important;
+        transform: translate(calc(100vw - 280px), calc(100vh - 160px));
     }
     .wave-3 .wave-blurred {
         filter: blur(10px);
@@ -1685,10 +1685,22 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     #contato .section-inner {
         justify-content: flex-start;
     }
+
     #contato footer {
-        position: static;
-        margin-top: 2rem;
+        position: fixed;
+        bottom: 86px;
+        left: 24px;
+        right: 24px;
+        z-index: 2;
         padding: 0.5rem;
+        text-align: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    body[data-section="contato"] #contato footer {
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .cv-box {
