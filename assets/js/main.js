@@ -128,7 +128,7 @@ function revealSection(section) {
     section.querySelectorAll('.reveal').forEach(el => {
       el.style.transition = 'none';
       el.classList.remove('visible');
-      el.style.transition = '';
+      el.style.removeProperty('transition');
     });
     void document.body.offsetHeight;
     section.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
