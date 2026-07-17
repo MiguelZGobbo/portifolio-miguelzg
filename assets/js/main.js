@@ -225,11 +225,13 @@ const observerOptions = {
 };
 
 const observer = new IntersectionObserver((entries) => {
-  if (isScrolling || isRevealing || isInitializing) return;
+  if (isScrolling || isInitializing) return;
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const index = sections.indexOf(entry.target);
       if (index !== -1 && index !== current) {
+        if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
+        isRevealing = false;
         isScrolling = true;
         if (isMobileWidth()) isRevealing = true;
         current = index;
@@ -240,7 +242,7 @@ const observer = new IntersectionObserver((entries) => {
         );
         waitForScrollEnd(sections[index], () => {
           isScrolling = false;
-          if (!isInitializing || !isMobileWidth()) revealSection(sections[index]);
+          revealSection(sections[index]);
 
           if (isRevealing) {
             unlockTimeout = setTimeout(() => {

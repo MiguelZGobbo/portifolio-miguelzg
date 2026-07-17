@@ -1666,9 +1666,10 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         justify-content: flex-start;
     }
     #contato footer {
-        position: static;
-        margin-top: auto;
-        transform: translateY(-6px);
+        position: absolute;
+        bottom: 6px;
+        left: 0;
+        right: 0;
         padding: 0.5rem;
     }
 
