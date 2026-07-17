@@ -26,7 +26,8 @@ function unlockScroll() {
 function calcRevealDuration(section) {
   const stagger = parseInt(section.dataset.stagger, 10) || 80;
   const count = section.querySelectorAll('.reveal').length;
-  return Math.min(count * stagger + 1000, 2200);
+  const max = isMobileWidth() ? 1200 : 2200;
+  return Math.min(count * stagger + 1000, max);
 }
 
 // ── Pill deslizante ──────────────────────────────────────
@@ -126,12 +127,10 @@ function triggerReveals(section) {
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
 
-  sections.forEach(s => {
-    s.querySelectorAll('.reveal').forEach(el => {
-      el.style.transition = 'none';
-      el.classList.remove('visible');
-      el.style.transition = '';
-    });
+  section.querySelectorAll('.reveal').forEach(el => {
+    el.style.transition = 'none';
+    el.classList.remove('visible');
+    el.style.transition = '';
   });
   void document.body.offsetHeight;
 
@@ -169,14 +168,12 @@ function goTo(index) {
   revealTimeouts = [];
   if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
   if (scrollWaiter) scrollWaiter();
-  unlockScroll();
   isRevealing = false;
   isScrolling = false;
 
   isScrolling = true;
   isRevealing = isMobileWidth() && !isInitializing;
   current = index;
-  if (isRevealing) lockScroll();
 
   sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
   setActiveNav(index);
@@ -188,7 +185,6 @@ function goTo(index) {
     if (isRevealing) {
       unlockTimeout = setTimeout(() => {
         isRevealing = false;
-        unlockScroll();
         unlockTimeout = null;
       }, calcRevealDuration(sections[index]));
     }
@@ -211,7 +207,6 @@ const observer = new IntersectionObserver((entries) => {
         isScrolling = true;
         if (isMobileWidth()) isRevealing = true;
         current = index;
-        if (isRevealing) lockScroll();
         setActiveNav(index);
         entry.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         waitForScrollEnd(sections[index], () => {
@@ -221,7 +216,6 @@ const observer = new IntersectionObserver((entries) => {
           if (isRevealing) {
             unlockTimeout = setTimeout(() => {
               isRevealing = false;
-              unlockScroll();
               unlockTimeout = null;
             }, calcRevealDuration(sections[index]));
           }
