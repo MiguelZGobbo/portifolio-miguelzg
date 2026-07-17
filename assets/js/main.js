@@ -55,28 +55,28 @@ function setActiveNav(index) {
 
       if (!isMobile) {
         link.style.width = link.offsetWidth + 'px';
-      }
 
-      text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-      text.style.opacity = '0';
-      text.style.transform = 'scale(0.6)';
+        text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+        text.style.opacity = '0';
+        text.style.transform = 'scale(0.6)';
 
-      setTimeout(() => {
-        text.style.display = 'none';
-        icon.style.display = 'block';
-        icon.style.animation = '';
-        void icon.offsetWidth;
-        icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
-        movePill(link);
+        setTimeout(() => {
+          text.style.display = 'none';
+          icon.style.display = 'block';
+          icon.style.animation = '';
+          void icon.offsetWidth;
+          icon.style.animation = 'iconPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
+          movePill(link);
 
-        if (!isMobile) {
           setTimeout(() => {
             if (link.classList.contains('active')) {
               link.classList.add('can-hover');
             }
           }, 350);
-        }
-      }, 150);
+        }, 150);
+      } else {
+        movePill(link);
+      }
 
     } else {
       link.classList.remove('active');

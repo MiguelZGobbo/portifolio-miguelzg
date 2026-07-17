@@ -1423,12 +1423,31 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     nav {
         padding: 0 1.2rem;
         justify-content: center;
-        background: rgba(248, 240, 229, 0.92);
+        background: transparent;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
+        box-shadow: none;
+        pointer-events: none;
+        transition: background 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    nav .logo {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s ease;
+    }
+
+    body[data-section="home"] nav {
+        background: rgba(248, 240, 229, 0.92);
         box-shadow:
             inset 0 -1px 0 rgba(44, 34, 24, 0.04),
             0 1px 3px rgba(44, 34, 24, 0.04);
+        pointer-events: auto;
+    }
+
+    body[data-section="home"] nav .logo {
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .nav-links {
@@ -1436,7 +1455,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         bottom: 20px;
         left: 24px;
         right: 24px;
-        height: 72px;
+        height: 60px;
         background: rgba(248, 240, 229, 0.92);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
@@ -1446,10 +1465,11 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         display: flex;
         justify-content: space-around;
         align-items: center;
-        padding: 0.25rem 0.5rem;
+        padding: 0.2rem 0.5rem;
         z-index: 100;
         gap: 0;
         border-radius: 16px;
+        pointer-events: auto;
     }
 
     /* Mobile: equal-width nav items with balanced icon + text layout */
@@ -1463,7 +1483,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         align-items: center;
         border-radius: 0;
         gap: 2px;
-        padding: 0.35rem 0.25rem;
+        padding: 0.25rem;
     }
 
     .nav-links a:hover {
@@ -1471,8 +1491,13 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     .nav-links a:focus-visible {
-.btn:focus-visible {
-    outline: 2px solid var(--brown-dark);
+        outline: 2px solid var(--brown-dark);
+        outline-offset: 2px;
+        border-radius: 3px;
+    }
+
+    .btn:focus-visible {
+        outline: 2px solid var(--brown-dark);
         outline-offset: 2px;
         border-radius: 3px;
     }
@@ -1488,17 +1513,26 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     .nav-links a .nav-icon {
         display: block;
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-links a.active {
+        background: linear-gradient(135deg, var(--brown), var(--brown-dark));
+        border-radius: 8px;
+        color: var(--cream);
+        transform: scale(0.95);
+    }
+
+    .nav-links a.active .nav-icon {
+        color: var(--cream);
+        transform: scale(1.1);
     }
 
     .nav-pill {
-        top: auto;
-        bottom: 4px;
-        height: 3px;
-        border-radius: 2px;
-        box-shadow: 0 -2px 6px 2px rgba(88, 58, 34, 0.20);
+        display: none;
     }
 
     .nav-links a .nav-tooltip {
@@ -1507,12 +1541,20 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     .scroll-container {
         bottom: 0;
-        padding-bottom: calc(72px + 26px);
+        padding-bottom: 86px;
     }
 
     .snap-section {
         height: auto;
-        min-height: calc(100vh - var(--nav-height) - 104px);
+        min-height: calc(100vh - 86px);
+        justify-content: center;
+        padding-top: 28px;
+        box-sizing: border-box;
+    }
+
+    body[data-section="home"] #home {
+        padding-top: 88px;
+        justify-content: center;
     }
 
     .section-inner {
@@ -1542,7 +1584,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     .hero-inner {
         flex-direction: column-reverse;
-        gap: 1rem;
+        gap: 2rem;
         justify-content: center;
         text-align: center;
     }
@@ -1618,7 +1660,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     #contato {
-        padding-top: 1.5rem;
         padding-bottom: 38px;
     }
     #contato footer {
