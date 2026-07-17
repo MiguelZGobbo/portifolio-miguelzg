@@ -1413,19 +1413,25 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     }
 
     .wave-1 .bg-wave-inner {
-        transform: translate(calc(100vw - 140px), -50px) !important;
+        width: 160px;
+        height: 120px;
+        transform: translate(calc(100vw - 160px), -30px) !important;
     }
     .wave-1 .wave-blurred {
         filter: blur(20px);
     }
     .wave-2 .bg-wave-inner {
-        transform: translate(-50px, calc(100vh - 160px)) !important;
+        width: 140px;
+        height: 100px;
+        transform: translate(0, calc(100vh - 120px)) !important;
     }
     .wave-2 .wave-blurred {
-        filter: blur(15px);
+        filter: blur(16px);
     }
     .wave-3 .bg-wave-inner {
-        transform: translate(calc(100vw - 100px), calc(100vh - 120px)) !important;
+        width: 120px;
+        height: 90px;
+        transform: translate(calc(100vw - 130px), calc(100vh - 110px)) !important;
     }
     .wave-3 .wave-blurred {
         filter: blur(12px);
@@ -1680,14 +1686,14 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     #contato {
         justify-content: flex-start;
-        padding-bottom: 30px;
+        padding-bottom: 0;
     }
     #contato .section-inner {
         justify-content: flex-start;
     }
     #contato footer {
         position: static;
-        margin-top: 0.75rem;
+        margin-top: auto;
         padding: 0.5rem;
     }
 
