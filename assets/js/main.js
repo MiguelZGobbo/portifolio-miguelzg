@@ -126,22 +126,13 @@ function setActiveNav(index) {
 function revealSection(section) {
   if (isMobileWidth()) {
     section.querySelectorAll('.reveal').forEach(el => {
-      el.style.transition = 'none';
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      void el.offsetHeight;
-      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
+      el.getAnimations().forEach(anim => anim.cancel());
+      el.classList.add('visible');
+      el.animate([
+        { opacity: 0, transform: 'translateY(20px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 600, easing: 'ease' });
     });
-    setTimeout(() => {
-      section.querySelectorAll('.reveal').forEach(el => {
-        el.style.transition = '';
-        el.style.opacity = '';
-        el.style.transform = '';
-        el.classList.add('visible');
-      });
-    }, 650);
   } else {
     triggerReveals(section);
   }
