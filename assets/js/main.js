@@ -11,12 +11,16 @@ let unlockTimeout = null;
 
 const container = document.querySelector('.scroll-container');
 
+function isMobileWidth() {
+  return window.matchMedia('(max-width: 640px)').matches;
+}
+
 function lockScroll() {
-  container.style.overflow = 'hidden';
+  if (isMobileWidth()) container.style.overflow = 'hidden';
 }
 
 function unlockScroll() {
-  container.style.overflow = '';
+  if (isMobileWidth()) container.style.overflow = '';
 }
 
 function calcRevealDuration(section) {
@@ -170,7 +174,7 @@ function goTo(index) {
   isScrolling = false;
 
   isScrolling = true;
-  isRevealing = true;
+  isRevealing = isMobileWidth();
   current = index;
   lockScroll();
 
@@ -181,11 +185,13 @@ function goTo(index) {
     isScrolling = false;
     triggerReveals(sections[index]);
 
-    unlockTimeout = setTimeout(() => {
-      isRevealing = false;
-      unlockScroll();
-      unlockTimeout = null;
-    }, calcRevealDuration(sections[index]));
+    if (isRevealing) {
+      unlockTimeout = setTimeout(() => {
+        isRevealing = false;
+        unlockScroll();
+        unlockTimeout = null;
+      }, calcRevealDuration(sections[index]));
+    }
   });
 }
 
@@ -203,7 +209,7 @@ const observer = new IntersectionObserver((entries) => {
       const index = sections.indexOf(entry.target);
       if (index !== -1) {
         isScrolling = true;
-        isRevealing = true;
+        if (isMobileWidth()) isRevealing = true;
         current = index;
         lockScroll();
         setActiveNav(index);
@@ -212,11 +218,13 @@ const observer = new IntersectionObserver((entries) => {
           isScrolling = false;
           triggerReveals(sections[index]);
 
-          unlockTimeout = setTimeout(() => {
-            isRevealing = false;
-            unlockScroll();
-            unlockTimeout = null;
-          }, calcRevealDuration(sections[index]));
+          if (isRevealing) {
+            unlockTimeout = setTimeout(() => {
+              isRevealing = false;
+              unlockScroll();
+              unlockTimeout = null;
+            }, calcRevealDuration(sections[index]));
+          }
         });
       }
     }
