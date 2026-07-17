@@ -4,9 +4,24 @@ const sections = Array.from(document.querySelectorAll('.snap-section'));
 const navLinks = document.querySelectorAll('.nav-links a');
 let current = 0;
 let isScrolling = false;
+let isRevealing = false;
 let isInitializing = true; // Flag para evitar Observer durante init
 
 const container = document.querySelector('.scroll-container');
+
+function lockScroll() {
+  container.style.overflow = 'hidden';
+}
+
+function unlockScroll() {
+  container.style.overflow = '';
+}
+
+function calcRevealDuration(section) {
+  const stagger = parseInt(section.dataset.stagger, 10) || 80;
+  const count = section.querySelectorAll('.reveal').length;
+  return Math.min(count * stagger + 1000, 2200);
+}
 
 // ── Pill deslizante ──────────────────────────────────────
 const navPill = document.createElement('div');
@@ -137,7 +152,9 @@ function triggerReveals(section) {
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
   isScrolling = true;
+  isRevealing = true;
   current = index;
+  lockScroll();
 
   sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
   setActiveNav(index);
@@ -145,6 +162,11 @@ function goTo(index) {
   waitForScrollEnd(sections[index], () => {
     isScrolling = false;
     triggerReveals(sections[index]);
+
+    setTimeout(() => {
+      isRevealing = false;
+      unlockScroll();
+    }, calcRevealDuration(sections[index]));
   });
 }
 
@@ -156,18 +178,25 @@ const observerOptions = {
 };
 
 const observer = new IntersectionObserver((entries) => {
-  if (isScrolling || isInitializing) return;
+  if (isScrolling || isRevealing || isInitializing) return;
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       const index = sections.indexOf(entry.target);
       if (index !== -1) {
         isScrolling = true;
+        isRevealing = true;
         current = index;
+        lockScroll();
         setActiveNav(index);
         entry.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         waitForScrollEnd(sections[index], () => {
           isScrolling = false;
           triggerReveals(sections[index]);
+
+          setTimeout(() => {
+            isRevealing = false;
+            unlockScroll();
+          }, calcRevealDuration(sections[index]));
         });
       }
     }

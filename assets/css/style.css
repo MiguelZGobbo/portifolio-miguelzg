@@ -1557,6 +1557,10 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 0 1.2rem;
     }
 
+    .reveal {
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
     .section-title {
         font-size: 1rem;
         margin-bottom: 0.4rem;
