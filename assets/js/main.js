@@ -24,10 +24,10 @@ function unlockScroll() {
 }
 
 function calcRevealDuration(section) {
+  if (isMobileWidth()) return 500;
   const stagger = parseInt(section.dataset.stagger, 10) || 80;
   const count = section.querySelectorAll('.reveal').length;
-  const max = isMobileWidth() ? 1200 : 2200;
-  return Math.min(count * stagger + 1000, max);
+  return Math.min(count * stagger + 1000, 2200);
 }
 
 // ── Pill deslizante ──────────────────────────────────────
@@ -123,6 +123,14 @@ function setActiveNav(index) {
 
 // ── Navegação principal ──────────────────────────────────
 
+function revealSection(section) {
+  if (isMobileWidth()) {
+    section.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  } else {
+    triggerReveals(section);
+  }
+}
+
 function triggerReveals(section) {
   revealTimeouts.forEach(t => clearTimeout(t));
   revealTimeouts = [];
@@ -175,12 +183,15 @@ function goTo(index) {
   isRevealing = isMobileWidth() && !isInitializing;
   current = index;
 
-  sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollOpts = isMobileWidth()
+    ? { block: 'start' }
+    : { behavior: 'smooth', block: 'start' };
+  sections[index].scrollIntoView(scrollOpts);
   setActiveNav(index);
 
   waitForScrollEnd(sections[index], () => {
     isScrolling = false;
-    triggerReveals(sections[index]);
+    revealSection(sections[index]);
 
     if (isRevealing) {
       unlockTimeout = setTimeout(() => {
@@ -208,10 +219,13 @@ const observer = new IntersectionObserver((entries) => {
         if (isMobileWidth()) isRevealing = true;
         current = index;
         setActiveNav(index);
-        entry.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        entry.target.scrollIntoView(isMobileWidth()
+          ? { block: 'start' }
+          : { behavior: 'smooth', block: 'start' }
+        );
         waitForScrollEnd(sections[index], () => {
           isScrolling = false;
-          triggerReveals(sections[index]);
+          revealSection(sections[index]);
 
           if (isRevealing) {
             unlockTimeout = setTimeout(() => {
