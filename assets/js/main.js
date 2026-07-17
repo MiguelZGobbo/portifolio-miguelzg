@@ -38,7 +38,10 @@ function movePill(link) {
 }
 
 // ── Scroll suave ──────────────────────────────────────────
+let scrollWaiter = null;
+
 function waitForScrollEnd(targetSection, callback) {
+  if (scrollWaiter) scrollWaiter();
   let attempts = 0;
   const check = setInterval(() => {
     const currentPos = container.scrollTop;
@@ -50,6 +53,7 @@ function waitForScrollEnd(targetSection, callback) {
     }
     attempts++;
   }, 50);
+  scrollWaiter = () => clearInterval(check);
 }
 
 // ── Atualização do Estado do Menu ─────────────────────────
@@ -151,6 +155,8 @@ function triggerReveals(section) {
 
 function goTo(index) {
   if (index < 0 || index >= sections.length) return;
+  if (isScrolling || isRevealing) return;
+  if (current === index) return;
   isScrolling = true;
   isRevealing = true;
   current = index;
