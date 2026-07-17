@@ -1416,19 +1416,19 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         transform: translate(calc(100vw - 300px), -40px);
     }
     .wave-1 .wave-blurred {
-        filter: blur(24px);
+        filter: blur(36px);
     }
     .wave-2 .bg-wave-inner {
         transform: translate(-30px, calc(100vh - 180px));
     }
     .wave-2 .wave-blurred {
-        filter: blur(20px);
+        filter: blur(30px);
     }
     .wave-3 .bg-wave-inner {
         transform: translate(calc(100vw - 280px), calc(100vh - 160px));
     }
     .wave-3 .wave-blurred {
-        filter: blur(16px);
+        filter: blur(26px);
     }
 
     :root {
