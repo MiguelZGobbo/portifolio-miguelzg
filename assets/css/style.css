@@ -228,7 +228,8 @@ nav {
 .reveal {
     opacity: 0;
     transform: translateY(24px);
-    transition: opacity 1.2s ease, transform 1.2s ease;
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .reveal.visible {
@@ -266,14 +267,16 @@ nav {
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 0;
+    width: 100%;
     height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
     background: linear-gradient(90deg, var(--sand), var(--tan));
-    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .section-title.reveal.visible::after {
-    width: 100%;
+    transform: scaleX(1);
 }
 
 .section-title svg {
@@ -1111,6 +1114,9 @@ footer {
         margin-top: auto;
         margin-bottom: auto;
     }
+    .reveal {
+        will-change: opacity, transform;
+    }
     #projetos {
         padding-top: 0;
         padding-bottom: clamp(60px, 6vh, 100px);
@@ -1181,7 +1187,7 @@ footer {
     top: 0;
     left: 0;
     will-change: transform;
-    transition: transform 0.9s ease, opacity 0.6s ease;
+    transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .bg-wave-inner svg {
@@ -1189,6 +1195,11 @@ footer {
     width: 100%;
     height: 100%;
     overflow: visible;
+}
+
+.wave-blurred {
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 .wave-2 .bg-wave-inner {
@@ -1303,21 +1314,21 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
 /* ── Keyframes ── */
 @keyframes waveFloat1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%      { transform: translate(2vw, -1.5vw) scale(1.03); }
-    66%      { transform: translate(-1.5vw, 1vw) scale(0.98); }
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(2vw, -1.5vw); }
+    66%      { transform: translate(-1.5vw, 1vw); }
 }
 
 @keyframes waveFloat2 {
-    0%, 100% { transform: rotate(35deg) translate(0, 0) scale(1); }
-    33%      { transform: rotate(37deg) translate(1.5vw, -1.2vw) scale(1.04); }
-    66%      { transform: rotate(33deg) translate(-1vw, 0.8vw) scale(0.97); }
+    0%, 100% { transform: rotate(35deg) translate(0, 0); }
+    33%      { transform: rotate(37deg) translate(1.5vw, -1.2vw); }
+    66%      { transform: rotate(33deg) translate(-1vw, 0.8vw); }
 }
 
 @keyframes waveFloat3 {
-    0%, 100% { transform: rotate(-25deg) translate(0, 0) scale(1); }
-    33%      { transform: rotate(-23deg) translate(1vw, -1vw) scale(1.02); }
-    66%      { transform: rotate(-27deg) translate(-0.8vw, 0.6vw) scale(0.98); }
+    0%, 100% { transform: rotate(-25deg) translate(0, 0); }
+    33%      { transform: rotate(-23deg) translate(1vw, -1vw); }
+    66%      { transform: rotate(-27deg) translate(-0.8vw, 0.6vw); }
 }
 
 /* ── Ondas reduzidas (telas médias) ── */

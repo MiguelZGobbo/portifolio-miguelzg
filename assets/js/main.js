@@ -126,12 +126,14 @@ function setActiveNav(index) {
 function resetSectionReveals(section) {
   if (!section) return;
   section.querySelectorAll('.reveal').forEach(el => {
-    el.getAnimations().forEach(anim => anim.cancel());
-    if (isMobileWidth() && el.classList.contains('visible')) {
-      el.animate([
-        { opacity: 1, transform: 'translateY(0)' },
-        { opacity: 0, transform: 'translateY(8px)' }
-      ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+    if (isMobileWidth()) {
+      el.getAnimations().forEach(anim => anim.cancel());
+      if (el.classList.contains('visible')) {
+        el.animate([
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(8px)' }
+        ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+      }
     }
     el.classList.remove('visible');
     el.style.opacity = '';
@@ -172,8 +174,8 @@ function triggerReveals(section) {
     (isHeader(el) ? headerReveals : contentReveals).push(el);
   });
 
-  const stagger = parseInt(section.dataset.stagger, 10) || 80;
-  const gap = 400;
+  const stagger = parseInt(section.dataset.stagger, 10) || 70;
+  const gap = 260;
 
   headerReveals.forEach((el, i) => {
     if (!el.classList.contains('visible'))
