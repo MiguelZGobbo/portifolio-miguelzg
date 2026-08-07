@@ -2,9 +2,6 @@ import { translations } from '../lib/i18n';
 import { projects } from '../data/projects';
 import { skillGroups } from '../data/skills';
 
-/* global emailjs */
-emailjs.init('7cO86VT1CxLbCKh3n');
-
 const sections = Array.from(document.querySelectorAll('.snap-section'));
 const navLinks = document.querySelectorAll('.nav-links a');
 let current = -1;
@@ -57,6 +54,7 @@ navPill.classList.add('nav-pill');
 document.querySelector('.nav-links').appendChild(navPill);
 
 function movePill(link) {
+  if (isMobileWidth()) return;
   const nav = document.querySelector('.nav-links');
   const navRect = nav.getBoundingClientRect();
   const linkRect = link.getBoundingClientRect();
@@ -70,11 +68,10 @@ let scrollWaiter = null;
 
 function waitForScrollEnd(targetSection, callback) {
   if (scrollWaiter) scrollWaiter();
+  const targetPos = targetSection.offsetTop;
   let attempts = 0;
   const check = setInterval(() => {
-    const currentPos = container.scrollTop;
-    const targetPos = targetSection.offsetTop;
-    const arrived = Math.abs(currentPos - targetPos) < 5;
+    const arrived = Math.abs(container.scrollTop - targetPos) < 5;
     if (arrived || attempts > 40) {
       clearInterval(check);
       callback();
@@ -567,6 +564,23 @@ async function copyText(text, btn) {
 }
 
 // ── Formulário de contato ────────────────────────────────
+let emailjsPromise = null;
+
+function loadEmailJS() {
+  if (window.emailjs) return Promise.resolve();
+  if (!emailjsPromise) {
+    emailjsPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => { emailjsPromise = null; reject(new Error('EmailJS load failed')); };
+      document.head.appendChild(s);
+    });
+  }
+  return emailjsPromise;
+}
+
 function resetFormBtn(btn, aviso, message, className) {
   btn.textContent = t('form.submit');
   btn.disabled = false;
@@ -603,11 +617,15 @@ function enviarMensagem() {
   btn.textContent = t('form.sending');
   btn.disabled = true;
 
-  emailjs.send('service_5hcdutl', 'template_z8knk7w', {
-    name: nome,
-    email: email,
-    message: mensagem
-  })
+  loadEmailJS()
+    .then(() => {
+      window.emailjs.init('7cO86VT1CxLbCKh3n');
+      return window.emailjs.send('service_5hcdutl', 'template_z8knk7w', {
+        name: nome,
+        email: email,
+        message: mensagem
+      });
+    })
     .then(() => {
       resetFormBtn(btn, aviso, t('form.ok'), 'sucesso');
       document.getElementById('campo-nome').value = '';
