@@ -31,7 +31,16 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
           <p class="hero-sub reveal">Estudante de Engenharia de Software apaixonado por construir sistemas robustos e escaláveis — onde lógica, arquitetura e boas soluções se encontram.</p>
         </div>
         <div class="hero-photo reveal">
-          <Image src={foto} alt="Foto de perfil de Miguel Zager Gobbo" width={280} height={340} class="profile-photo" fetchpriority="high" loading="eager" />
+          <Image
+            src={foto}
+            alt="Foto de perfil de Miguel Zager Gobbo"
+            class="profile-photo"
+            fetchpriority="high"
+            loading="eager"
+            decoding="sync"
+            widths={[120, 150, 180, 240, 280]}
+            sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, min(280px, 22vw)"
+          />
         </div>
       </div>
     </section>

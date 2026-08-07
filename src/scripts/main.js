@@ -69,6 +69,12 @@ function setActiveNav(index) {
   document.body.dataset.section = sections[index].id;
   const isMobile = isMobileWidth();
 
+  const widths = new Map();
+  navLinks.forEach(link => {
+    const isActive = link.getAttribute('href') === `#${sections[index].id}`;
+    widths.set(link, isActive && !isMobile ? link.offsetWidth : null);
+  });
+
   navLinks.forEach(link => {
     link.classList.remove('can-hover');
     const isActive = link.getAttribute('href') === `#${sections[index].id}`;
@@ -80,7 +86,7 @@ function setActiveNav(index) {
       link.setAttribute('aria-current', 'page');
 
       if (!isMobile) {
-        link.style.width = link.offsetWidth + 'px';
+        link.style.width = widths.get(link) + 'px';
 
         text.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
         text.style.opacity = '0';

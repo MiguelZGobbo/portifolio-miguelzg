@@ -5,4 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://miguelzgobbo.github.io',
   base: '/portifolio-miguelzg/',
+  build: {
+    inlineStylesheets: 'always',
+  },
 });

@@ -1,5 +1,10 @@
 ---
 import '../styles/global.css';
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/500.css';
+import '@fontsource/dm-sans/300.css';
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
 
 interface Props {
   title: string;
@@ -27,9 +32,6 @@ const base = import.meta.env.BASE_URL;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content="Portfólio de Miguel Zager Gobbo — foco em backend e sistemas." />
     <link rel="icon" type="image/svg+xml" href={`${base}img/favicon.svg`} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
     <script src="../scripts/main.js"></script>
   </head>
