@@ -55,7 +55,7 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
    ```bash
    npm run dev
    ```
-   Acesse **http://localhost:4321**.
+   Acesse **http://localhost:4321/portifolio-miguelzg/**.
 
 4. **Build de produção**
    ```bash
