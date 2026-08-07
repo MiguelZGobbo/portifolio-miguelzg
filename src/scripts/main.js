@@ -231,6 +231,17 @@ function applyLang(lang) {
     el.textContent = dict[key] ?? '';
   });
 
+  document.querySelectorAll('footer[data-i18n="contact.footer"]').forEach(el => {
+    el.textContent = (dict['contact.footer'] ?? '').replace('{year}', String(new Date().getFullYear()));
+  });
+
+  const cvFiles = { pt: 'MiguelZagerGobbo-CV.pdf', en: 'MiguelZagerGobbo-CV-EN.pdf' };
+  document.querySelectorAll('a[data-cv]').forEach(a => {
+    const name = cvFiles[currentLang];
+    a.href = `${import.meta.env.BASE_URL}files/${name}`;
+    if (a.hasAttribute('download')) a.setAttribute('download', name);
+  });
+
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const key = el.getAttribute('data-i18n-html');
     el.innerHTML = dict[key] ?? '';

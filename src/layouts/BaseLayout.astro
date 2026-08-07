@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '@fontsource-variable/playfair-display';
 import '@fontsource-variable/dm-sans';
+import playfairLatin from '@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2';
 import { translations, type Lang } from '../lib/i18n';
 
 interface Props {
@@ -36,6 +37,7 @@ const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
     <link rel="icon" type="image/svg+xml" href={`${base}img/favicon.svg`} />
     <link rel="manifest" href={`${base}site.webmanifest`} />
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <link rel="preload" href={playfairLatin} as="font" type="font/woff2" crossorigin />
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',

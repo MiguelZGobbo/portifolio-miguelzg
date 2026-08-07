@@ -1983,3 +1983,34 @@ html[data-lang="en"] .lang-en {
         scroll-behavior: auto !important;
     }
 }
+
+/* ================================
+   18. POLIMENTO
+=============================== */
+::selection {
+    background: var(--brown);
+    color: var(--cream);
+}
+
+.scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--tan) transparent;
+}
+
+.scroll-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background: var(--tan);
+    border-radius: 5px;
+    border: 2px solid var(--cream);
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background: var(--brown);
+}

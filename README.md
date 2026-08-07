@@ -1,6 +1,6 @@
 # 👨‍💻 Portfólio Miguel Zager Gobbo
 
-Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, scroll-snap e animações de reveal.
+Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, scroll-snap, animações de reveal, **dark mode**, **i18n PT/EN**, **PWA** e **SEO**.
 
 ![Astro](https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
@@ -21,13 +21,25 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
 
 ---
 
+## ✨ Funcionalidades
+
+- **Dark mode** — automático (`prefers-color-scheme`) com toggle manual persistido
+- **i18n PT/EN** — toggle na página, com detecção do idioma do navegador
+- **Efeitos** — partículas em canvas, parallax no hero e tilt 3D nos cards
+- **Acessibilidade** — skip-link, foco visível e suporte a `prefers-reduced-motion`
+- **PWA** — manifest e ícones instaláveis
+- **SEO** — sitemap, robots, canonical, Open Graph e JSON-LD
+
+---
+
 ## 🛠️ Tecnologias
 
 - **Astro** — Framework estático com componentes e otimização automática de imagens (WebP)
 - **CSS3** — Estilização, layout responsivo e ondas decorativas em SVG
 - **JavaScript** — Navegação com scroll-snap, animações de reveal e interações
-- **EmailJS** — Envio de mensagens pelo formulário de contato
-- **Google Fonts** — Tipografia (Playfair Display e DM Sans)
+- **EmailJS** — Envio de mensagens pelo formulário de contato (carregado sob demanda)
+- **@fontsource-variable** — Fontes variáveis auto-hospedadas (Playfair Display e DM Sans)
+- **@astrojs/sitemap** — Geração automática do sitemap
 - **GitHub Actions** — Build e deploy automático no GitHub Pages
 
 ---
@@ -36,7 +48,7 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
 
 ### Pré-requisitos
 
-- Node.js 22+
+- Node.js 22.12+
 
 ### Passos
 
@@ -57,7 +69,12 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
    ```
    Acesse **http://localhost:4321/portifolio-miguelzg/**.
 
-4. **Build de produção**
+4. **Verifique tipos e erros**
+   ```bash
+   npm run check
+   ```
+
+5. **Build de produção**
    ```bash
    npm run build
    npm run preview
@@ -71,10 +88,15 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
 portifolio-miguelzg/
 ├── public/                   # Recursos estáticos
 │   ├── files/
-│   │   └── MiguelZagerGobbo-CV.pdf
-│   └── img/
-│       ├── favicon.svg
-│       └── foto-perfil.jpeg  # Imagem para compartilhamento (OG)
+│   │   ├── MiguelZagerGobbo-CV.pdf
+│   │   └── MiguelZagerGobbo-CV-EN.pdf
+│   ├── img/
+│   │   ├── favicon.svg
+│   │   └── foto-perfil.jpeg  # Imagem para compartilhamento (OG)
+│   ├── robots.txt
+│   ├── site.webmanifest
+│   ├── icon-192.png / icon-512.png / icon-maskable-512.png
+│   └── apple-touch-icon.png
 └── src/
     ├── assets/
     │   └── foto-perfil.jpeg  # Foto otimizada pelo Astro
@@ -82,20 +104,27 @@ portifolio-miguelzg/
     │   ├── ContactForm.astro
     │   ├── CopyButton.astro
     │   ├── Icon.astro        # Ícones SVG centralizados
+    │   ├── LangToggle.astro  # Alternância PT/EN
     │   ├── Nav.astro
+    │   ├── Particles.astro   # Partículas em canvas
     │   ├── ProjectCard.astro
     │   ├── SectionTitle.astro
     │   ├── SkillCard.astro
+    │   ├── ThemeToggle.astro # Alternância de tema
     │   └── Waves.astro       # Ondas de fundo animadas
     ├── data/
-    │   ├── projects.ts       # Projetos (adicionar = 3 linhas)
+    │   ├── projects.ts       # Projetos (conteúdo bilingue pt/en)
     │   └── skills.ts
     ├── layouts/
-    │   └── BaseLayout.astro  # Head, SEO, fontes e scripts
+    │   └── BaseLayout.astro  # Head, SEO, preload de fontes e init de tema/idioma
+    ├── lib/
+    │   └── i18n.ts           # Dicionários PT/EN
     ├── pages/
     │   └── index.astro
     ├── scripts/
-    │   └── main.js           # Interações e animações
+    │   ├── main.js           # Interações, animações e i18n
+    │   ├── generate-icons.mjs
+    │   └── generate-cv-placeholder.mjs
     └── styles/
         └── global.css        # Estilos globais
 ```

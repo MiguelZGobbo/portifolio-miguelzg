@@ -113,14 +113,14 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
             <div class="cv-sub" data-i18n="cv.boxSub">{dict['cv.boxSub']}</div>
           </div>
           <div class="cv-actions">
-            <a href={cvUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" data-i18n-aria="cv.viewAria" aria-label={dict['cv.viewAria']}>
+            <a href={cvUrl} data-cv target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" data-i18n-aria="cv.viewAria" aria-label={dict['cv.viewAria']}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
               <span data-i18n="cv.view">{dict['cv.view']}</span>
             </a>
-            <a href={cvUrl} download="MiguelZagerGobbo-CV.pdf" class="btn reveal" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
+            <a href={cvUrl} data-cv download="MiguelZagerGobbo-CV.pdf" class="btn reveal" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
@@ -174,7 +174,7 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
           </div>
         </div>
       </div>
-      <footer data-i18n="contact.footer">{dict['contact.footer']}</footer>
+      <footer data-i18n="contact.footer">{dict['contact.footer'].replace('{year}', String(new Date().getFullYear()))}</footer>
     </section>
 
   </main>
