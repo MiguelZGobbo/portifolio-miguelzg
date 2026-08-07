@@ -37,7 +37,7 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
       <div class="section-inner hero-inner">
         <div class="hero-text">
           <div class="hero-tag reveal" data-i18n="hero.tag">{dict['hero.tag']}</div>
-          <h1 class="hero-title reveal" data-i18n-html="hero.title">{dict['hero.title']}</h1>
+          <h1 class="hero-title reveal" data-i18n-html="hero.title" set:html={dict['hero.title']}></h1>
           <p class="hero-sub reveal" data-i18n="hero.sub">{dict['hero.sub']}</p>
         </div>
         <div class="hero-photo reveal">
@@ -68,7 +68,7 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
           <div class="about-info reveal">
             <div class="info-item reveal">
               <div class="label" data-i18n="sobre.formacao">{dict['sobre.formacao']}</div>
-              <div class="value" data-i18n-html="sobre.formacao.val">{dict['sobre.formacao.val']}</div>
+              <div class="value" data-i18n-html="sobre.formacao.val" set:html={dict['sobre.formacao.val']}></div>
             </div>
             <div class="info-item reveal">
               <div class="label" data-i18n="sobre.foco">{dict['sobre.foco']}</div>
