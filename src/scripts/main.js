@@ -282,7 +282,7 @@ function updateControlAria() {
 
 function applyTheme(theme, persist = true) {
   document.documentElement.setAttribute('data-theme', theme);
-  setMetaContent('theme-color', theme === 'dark' ? '#17120E' : '#F8F0E5');
+  setMetaContent('theme-color', theme === 'dark' ? '#241C14' : '#F8F0E5');
   updateControlAria();
   document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
   if (persist) savePref('theme', theme);

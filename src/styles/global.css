@@ -1739,28 +1739,28 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 =============================== */
 :root[data-theme="dark"] {
     color-scheme: dark;
-    --cream:      #211A14;
-    --brown:      #D8A56C;
-    --brown-dark: #F0CAA2;
-    --sand:       #3B3126;
-    --warm-gray:  #9C9082;
-    --tan:        #8A6F55;
-    --dark:       #F2E8DA;
-    --text:       #E9DCC9;
-    --text-muted: #B9AA97;
-    --surface:    #2A211A;
-    --particle-a: rgba(216, 165, 108, 0.50);
-    --particle-b: rgba(240, 202, 162, 0.35);
+    --cream:      #2A2118;
+    --brown:      #DFB078;
+    --brown-dark: #F3CDA5;
+    --sand:       #5A4A36;
+    --warm-gray:  #B7A891;
+    --tan:        #A3896B;
+    --dark:       #F5EDE0;
+    --text:       #F0E4CF;
+    --text-muted: #C6B8A3;
+    --surface:    #372D20;
+    --particle-a: rgba(223, 176, 120, 0.55);
+    --particle-b: rgba(243, 205, 165, 0.35);
 }
 
 [data-theme="dark"] body {
     background:
-        radial-gradient(ellipse 750px 520px at 82% 8%,   rgba(216, 165, 108, 0.10) 0%, transparent 72%),
-        radial-gradient(ellipse 650px 480px at 12% 88%,  rgba(138, 111, 85, 0.14) 0%, transparent 72%),
-        radial-gradient(ellipse 400px 380px at 68% 52%,  rgba(216, 165, 108, 0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 500px 380px at 18% 6%,   rgba(240, 202, 162, 0.05) 0%, transparent 70%),
-        radial-gradient(ellipse 350px 300px at 45% 95%,  rgba(216, 165, 108, 0.04) 0%, transparent 70%),
-        linear-gradient(135deg, #1B1510 0%, #1F1812 50%, #171310 100%);
+        radial-gradient(ellipse 750px 520px at 82% 8%,   rgba(216, 165, 108, 0.13) 0%, transparent 72%),
+        radial-gradient(ellipse 650px 480px at 12% 88%,  rgba(138, 111, 85, 0.16) 0%, transparent 72%),
+        radial-gradient(ellipse 400px 380px at 68% 52%,  rgba(216, 165, 108, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 380px at 18% 6%,   rgba(240, 202, 162, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 350px 300px at 45% 95%,  rgba(216, 165, 108, 0.06) 0%, transparent 70%),
+        linear-gradient(135deg, #241C14 0%, #291F16 50%, #1F1811 100%);
 }
 
 [data-theme="dark"] nav {
@@ -1771,7 +1771,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] .nav-links::before {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.10);
 }
 
 [data-theme="dark"] .nav-pill {
@@ -1783,7 +1783,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] footer {
-    background: #14100C;
+    background: #1E1812;
     color: var(--warm-gray);
 }
 
@@ -1797,24 +1797,32 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     background: var(--surface);
 }
 
+[data-theme="dark"] .skill-card,
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .info-item,
+[data-theme="dark"] .cv-box,
+[data-theme="dark"] .contact-info {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
 /* Ondas em dark */
-[data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.14); }
-[data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.18); }
-[data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.06); }
-[data-theme="dark"] .raw-1 { color: rgba(240, 202, 162, 0.06); }
-[data-theme="dark"] .raw-2 { color: rgba(240, 202, 162, 0.05); }
-[data-theme="dark"] .raw-3 { color: rgba(216, 165, 108, 0.04); }
-[data-theme="dark"] .raw-4 { color: rgba(216, 165, 108, 0.03); }
+[data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.20); }
+[data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.24); }
+[data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.10); }
+[data-theme="dark"] .raw-1 { color: rgba(240, 202, 162, 0.09); }
+[data-theme="dark"] .raw-2 { color: rgba(240, 202, 162, 0.07); }
+[data-theme="dark"] .raw-3 { color: rgba(216, 165, 108, 0.06); }
+[data-theme="dark"] .raw-4 { color: rgba(216, 165, 108, 0.05); }
 
 @media (max-width: 640px) {
     [data-theme="dark"] body[data-section="home"] nav,
     [data-theme="dark"] .nav-links {
-        background: rgba(26, 20, 15, 0.92);
+        background: rgba(38, 30, 22, 0.92);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 -8px 32px rgba(0, 0, 0, 0.45);
     }
-    [data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.16); }
-    [data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.16); }
-    [data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.06); }
+    [data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.22); }
+    [data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.22); }
+    [data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.10); }
 }
 
 /* ================================
