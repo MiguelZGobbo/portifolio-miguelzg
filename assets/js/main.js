@@ -67,7 +67,7 @@ function waitForScrollEnd(targetSection, callback) {
 function setActiveNav(index) {
   if (index < 0 || index >= sections.length) return;
   document.body.dataset.section = sections[index].id;
-  const isMobile = window.matchMedia('(max-width: 640px)').matches;
+  const isMobile = isMobileWidth();
 
   navLinks.forEach(link => {
     link.classList.remove('can-hover');
@@ -189,6 +189,17 @@ function triggerReveals(section) {
   });
 }
 
+function finalizeSection(index) {
+  isScrolling = false;
+  revealSection(sections[index]);
+  if (isRevealing) {
+    unlockTimeout = setTimeout(() => {
+      isRevealing = false;
+      unlockTimeout = null;
+    }, calcRevealDuration(sections[index]));
+  }
+}
+
 function goTo(index, skipWait = false) {
   if (index < 0 || index >= sections.length) return;
   if (current === index) return;
@@ -212,25 +223,9 @@ function goTo(index, skipWait = false) {
   setActiveNav(index);
 
   if (skipWait) {
-    isScrolling = false;
-    revealSection(sections[index]);
-    if (isRevealing) {
-      unlockTimeout = setTimeout(() => {
-        isRevealing = false;
-        unlockTimeout = null;
-      }, calcRevealDuration(sections[index]));
-    }
+    finalizeSection(index);
   } else {
-    waitForScrollEnd(sections[index], () => {
-      isScrolling = false;
-      revealSection(sections[index]);
-      if (isRevealing) {
-        unlockTimeout = setTimeout(() => {
-          isRevealing = false;
-          unlockTimeout = null;
-        }, calcRevealDuration(sections[index]));
-      }
-    });
+    waitForScrollEnd(sections[index], () => finalizeSection(index));
   }
 }
 
@@ -258,17 +253,7 @@ const observer = new IntersectionObserver((entries) => {
           ? { block: 'start' }
           : { behavior: 'smooth', block: 'start' }
         );
-        waitForScrollEnd(sections[index], () => {
-          isScrolling = false;
-          revealSection(sections[index]);
-
-          if (isRevealing) {
-            unlockTimeout = setTimeout(() => {
-              isRevealing = false;
-              unlockTimeout = null;
-            }, calcRevealDuration(sections[index]));
-          }
-        });
+        waitForScrollEnd(sections[index], () => finalizeSection(index));
       }
     }
   });
@@ -307,64 +292,70 @@ requestAnimationFrame(() => {
 });
 
 // ── Copiar para clipboard ────────────────────────────────
-function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(() => {
-    const iconCopy = btn.querySelector('.icon-copy');
-    const iconCheck = btn.querySelector('.icon-check');
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-    iconCopy.style.opacity = '0';
-    iconCopy.style.transform = 'scale(0.6)';
+async function copyText(text, btn) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    return;
+  }
 
-    setTimeout(() => {
-      iconCopy.style.display = 'none';
-      iconCheck.style.display = 'block';
-      iconCheck.style.opacity = '0';
-      iconCheck.style.transform = 'scale(0.6)';
-      iconCheck.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-      btn.classList.add('copied');
+  const iconCopy = btn.querySelector('.icon-copy');
+  const iconCheck = btn.querySelector('.icon-check');
+  const tooltip = document.createElement('span');
+  tooltip.textContent = 'Copiado!';
+  tooltip.style.cssText = `
+    font-size: 0.7rem; font-weight: 600;
+    color: var(--brown-dark); letter-spacing: 0.04em;
+    opacity: 0; transition: opacity 0.15s ease;
+  `;
+  btn.parentElement.appendChild(tooltip);
 
-      const tooltip = document.createElement('span');
-      tooltip.textContent = 'Copiado!';
-      tooltip.style.cssText = `
-        font-size: 0.7rem; font-weight: 600;
-        color: var(--brown-dark); letter-spacing: 0.04em;
-        opacity: 0; transition: opacity 0.15s ease;
-      `;
-      btn.parentElement.appendChild(tooltip);
+  const fade = (icon, opacity, scale) => {
+    icon.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+    icon.style.opacity = opacity;
+    icon.style.transform = `scale(${scale})`;
+  };
 
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        iconCheck.style.opacity = '1';
-        iconCheck.style.transform = 'scale(1)';
-        tooltip.style.opacity = '1';
-      }));
+  fade(iconCopy, 0, 0.6);
+  await delay(150);
 
-      setTimeout(() => {
-        iconCheck.style.opacity = '0';
-        iconCheck.style.transform = 'scale(0.6)';
-        tooltip.style.opacity = '0';
+  iconCopy.style.display = 'none';
+  iconCheck.style.display = 'block';
+  fade(iconCheck, 0, 0.6);
+  btn.classList.add('copied');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    fade(iconCheck, 1, 1);
+    tooltip.style.opacity = '1';
+  }));
 
-        setTimeout(() => {
-          iconCheck.style.display = 'none';
-          iconCheck.style.transition = 'none';
-          iconCopy.style.display = 'block';
-          iconCopy.style.opacity = '0';
-          iconCopy.style.transform = 'scale(0.6)';
-          iconCopy.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-          btn.classList.remove('copied');
-          tooltip.remove();
+  await delay(2000);
+  fade(iconCheck, 0, 0.6);
+  tooltip.style.opacity = '0';
+  await delay(150);
 
-          requestAnimationFrame(() => requestAnimationFrame(() => {
-            iconCopy.style.opacity = '1';
-            iconCopy.style.transform = 'scale(1)';
-          }));
-        }, 150);
-      }, 2000);
-    }, 150);
-  });
+  iconCheck.style.display = 'none';
+  iconCheck.style.transition = 'none';
+  iconCopy.style.display = 'block';
+  fade(iconCopy, 0, 0.6);
+  btn.classList.remove('copied');
+  tooltip.remove();
+  requestAnimationFrame(() => requestAnimationFrame(() => fade(iconCopy, 1, 1)));
 }
 
 // ── Formulário de contato ────────────────────────────────
+function resetFormBtn(btn, aviso, message, className) {
+  btn.textContent = 'Enviar mensagem';
+  btn.disabled = false;
+  aviso.textContent = message;
+  aviso.className = className;
+  setTimeout(() => {
+    aviso.textContent = '';
+    aviso.className = '';
+  }, 4000);
+}
+
 function enviarMensagem() {
   const nome = document.getElementById('campo-nome').value.trim();
   const email = document.getElementById('campo-email').value.trim();
@@ -372,7 +363,6 @@ function enviarMensagem() {
   const btn = document.getElementById('btn-enviar');
   const aviso = document.getElementById('form-aviso');
 
-  // Limpa aviso anterior
   aviso.textContent = '';
   aviso.className = '';
 
@@ -391,26 +381,12 @@ function enviarMensagem() {
     message: mensagem
   })
     .then(() => {
-      btn.textContent = 'Enviar mensagem';
-      btn.disabled = false;
-      aviso.textContent = 'Mensagem enviada com sucesso!';
-      aviso.className = 'sucesso';
+      resetFormBtn(btn, aviso, 'Mensagem enviada com sucesso!', 'sucesso');
       document.getElementById('campo-nome').value = '';
       document.getElementById('campo-email').value = '';
       document.getElementById('campo-mensagem').value = '';
-      setTimeout(() => {
-        aviso.textContent = '';
-        aviso.className = '';
-      }, 4000);
     })
     .catch(() => {
-      btn.textContent = 'Enviar mensagem';
-      btn.disabled = false;
-      aviso.textContent = 'Erro ao enviar. Tente novamente.';
-      aviso.className = 'erro';
-      setTimeout(() => {
-        aviso.textContent = '';
-        aviso.className = '';
-      }, 4000);
+      resetFormBtn(btn, aviso, 'Erro ao enviar. Tente novamente.', 'erro');
     });
 }

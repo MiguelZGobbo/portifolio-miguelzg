@@ -63,8 +63,9 @@ portifolio-miguelzg/
 ├── assets/                  # Recursos do site
 │   ├── css/
 │   │   └── style.css        # Estilos
+│   ├── files/
+│   │   └── MiguelZagerGobbo-CV.pdf
 │   ├── img/
-│   │   ├── cv - Miguel Zager Gobbo.pdf
 │   │   ├── favicon.svg
 │   │   └── foto-perfil.jpeg
 │   └── js/

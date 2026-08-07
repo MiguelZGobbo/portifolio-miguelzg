@@ -303,7 +303,8 @@ nav {
     transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
-.btn::after {
+.btn::after,
+.project-link::after {
     content: '';
     position: absolute;
     top: 0;
@@ -316,7 +317,8 @@ nav {
     pointer-events: none;
 }
 
-.btn:hover::after {
+.btn:hover::after,
+.project-link:hover::after {
     transform: translateX(100%);
 }
 
@@ -343,13 +345,7 @@ nav {
 
 .btn-outline:hover {
     background: var(--brown-dark);
-    color: var(--cream);
     box-shadow: 0 0 28px rgba(160, 135, 110, 0.35);
-    transform: scale(1.03);
-}
-
-.btn-outline {
-    transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .btn-outline:focus-visible {
@@ -362,27 +358,12 @@ nav {
 /* ================================
    4. CURSOR
 ================================ */
-#home,
-#sobre,
-#habilidades,
-#projetos,
-#cv {
+.snap-section,
+.snap-section * {
     cursor: default;
 }
 
-#home *,
-#sobre *,
-#habilidades *,
-#projetos *,
-#cv * {
-    cursor: default;
-}
-
-#home a,
-#sobre a,
-#habilidades a,
-#projetos a,
-#cv a,
+.snap-section a,
 nav a,
 .copy-btn,
 .btn,
@@ -531,7 +512,6 @@ nav a,
 }
 
 .skill-card {
-    box-sizing: border-box;
     flex: 0 0 calc((100% - 2rem) / 3);
     background: white;
     border: 1.5px solid var(--sand);
@@ -540,7 +520,8 @@ nav a,
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
 }
 
-.skill-card:hover {
+.skill-card:hover,
+.project-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 12px 40px rgba(226, 199, 170, 0.55);
     border-color: var(--tan);
@@ -561,13 +542,17 @@ nav a,
     gap: 0.4rem;
 }
 
-.tag {
-    font-size: 0.75rem;
-    padding: 0.28rem 0.65rem;
+.tag,
+.stack-tag {
     background: var(--cream);
     border: 1.5px solid var(--sand);
     color: var(--text-muted);
     border-radius: 2px;
+}
+
+.tag {
+    font-size: 0.75rem;
+    padding: 0.28rem 0.65rem;
 }
 
 /* ================================
@@ -589,12 +574,6 @@ nav a,
     gap: 1rem;
     align-items: center;
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
-}
-
-.project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 40px rgba(226, 199, 170, 0.55);
-    border-color: var(--tan);
 }
 
 .project-name {
@@ -620,10 +599,6 @@ nav a,
 .stack-tag {
     font-size: 0.7rem;
     padding: 0.22rem 0.55rem;
-    background: var(--cream);
-    border: 1.5px solid var(--sand);
-    color: var(--text-muted);
-    border-radius: 2px;
 }
 
 .project-link {
@@ -641,23 +616,6 @@ nav a,
     position: relative;
     overflow: hidden;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-
-.project-link::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s ease;
-    pointer-events: none;
-}
-
-.project-link:hover::after {
-    transform: translateX(100%);
 }
 
 .project-link:hover {
@@ -935,9 +893,6 @@ footer {
     #contato {
         padding-bottom: 50px;
     }
-    #contato .section-inner {
-        margin: 0 auto;
-    }
 
     .section-label {
         font-size: 0.62rem;
@@ -1106,7 +1061,6 @@ footer {
     .snap-section {
         min-height: 100vh;
         padding-top: var(--section-padding-top);
-        box-sizing: border-box;
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }
@@ -1356,11 +1310,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .wave-3 .wave-blurred {
         filter: blur(clamp(30px, 3vw, 110px));
     }
-}
-
-/* ── Esconde as linhas finas sobre o blur ── */
-.wave-crisp {
-    display: none;
 }
 
 /* ================================
