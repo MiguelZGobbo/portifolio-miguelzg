@@ -1,0 +1,116 @@
+---
+---
+
+<canvas class="particles-canvas" id="particles-canvas" aria-hidden="true"></canvas>
+
+<script>
+  const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement | null;
+  const ctx = canvas?.getContext('2d');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  const COUNT = 30;
+
+  let width = 0;
+  let height = 0;
+  let particles: { x: number; y: number; r: number; vx: number; vy: number; color: string }[] = [];
+  let rafId: number | null = null;
+  let running = false;
+  let heroVisible = false;
+
+  function getColors() {
+    const cs = getComputedStyle(document.documentElement);
+    const a = cs.getPropertyValue('--particle-a').trim() || 'rgba(160, 135, 110, 0.55)';
+    const b = cs.getPropertyValue('--particle-b').trim() || 'rgba(122, 82, 52, 0.45)';
+    return { a, b };
+  }
+
+  function resize() {
+    if (!canvas || !ctx) return;
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.floor(width * DPR);
+    canvas.height = Math.floor(height * DPR);
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
+  function initParticles() {
+    const colors = getColors();
+    particles = Array.from({ length: COUNT }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      r: Math.random() * 1.8 + 0.6,
+      vx: (Math.random() - 0.5) * 0.22,
+      vy: (Math.random() - 0.5) * 0.22,
+      color: Math.random() > 0.45 ? colors.a : colors.b,
+    }));
+  }
+
+  function step() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, width, height);
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -6) p.x = width + 6;
+      else if (p.x > width + 6) p.x = -6;
+      if (p.y < -6) p.y = height + 6;
+      else if (p.y > height + 6) p.y = -6;
+      ctx.globalAlpha = 0.7;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+    }
+    rafId = requestAnimationFrame(step);
+  }
+
+  function start() {
+    if (running || reducedMotion.matches || document.hidden) return;
+    if (!particles.length) {
+      resize();
+      initParticles();
+    }
+    running = true;
+    step();
+  }
+
+  function stop() {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  const hero = document.getElementById('home');
+  if (hero) {
+    new IntersectionObserver((entries) => {
+      heroVisible = entries[0].isIntersecting;
+      if (heroVisible) start();
+      else stop();
+    }, { threshold: 0.05 }).observe(hero);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (heroVisible) start();
+  });
+
+  window.addEventListener('resize', resize);
+
+  document.addEventListener('themechange', () => {
+    if (!particles.length) return;
+    const colors = getColors();
+    particles.forEach((p) => {
+      p.color = Math.random() > 0.45 ? colors.a : colors.b;
+    });
+  });
+
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) stop();
+    else if (heroVisible) start();
+  });
+
+  if (isTouch) stop();
+</script>

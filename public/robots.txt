@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://miguelzgobbo.github.io/portifolio-miguelzg/sitemap-index.xml

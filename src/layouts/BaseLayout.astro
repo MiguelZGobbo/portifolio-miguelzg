@@ -2,37 +2,74 @@
 import '../styles/global.css';
 import '@fontsource-variable/playfair-display';
 import '@fontsource-variable/dm-sans';
+import { translations, type Lang } from '../lib/i18n';
 
 interface Props {
   title: string;
   description: string;
+  lang?: Lang;
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang = 'pt' } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const dict = translations[lang] as Record<string, string>;
+const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang={lang} data-theme="light" data-lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F8F0E5" />
+    <link rel="canonical" href={url} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content="https://miguelzgobbo.github.io/portifolio-miguelzg/" />
-    <meta property="og:image" content="https://miguelzgobbo.github.io/portifolio-miguelzg/img/foto-perfil.jpeg" />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={`${url}img/foto-perfil.jpeg`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content="Portfólio de Miguel Zager Gobbo — foco em backend e sistemas." />
+    <meta name="twitter:description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${base}img/favicon.svg`} />
+    <link rel="manifest" href={`${base}site.webmanifest`} />
+    <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Miguel Zager Gobbo',
+      jobTitle: 'Software Engineering Student',
+      url,
+      image: `${url}img/foto-perfil.jpeg`,
+      email: 'mailto:miguelzgobbo@gmail.com',
+      sameAs: [
+        'https://www.linkedin.com/in/miguel-zager-gobbo',
+        'https://github.com/MiguelZGobbo',
+      ],
+    })} />
+    <script is:inline>
+      (function () {
+        var savedTheme = null;
+        try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
+        var dark = savedTheme
+          ? savedTheme === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+
+        var savedLang = null;
+        try { savedLang = localStorage.getItem('lang'); } catch (e) {}
+        var lang = savedLang
+          || (navigator.language && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en');
+        document.documentElement.setAttribute('data-lang', lang);
+      })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
     <script src="../scripts/main.js"></script>
   </head>
   <body>
+    <a class="skip-link" href="#home" data-i18n="a11y.skip">{dict['a11y.skip']}</a>
     <slot />
   </body>
 </html>

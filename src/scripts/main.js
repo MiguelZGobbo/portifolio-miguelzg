@@ -1,3 +1,8 @@
+import { translations } from '../lib/i18n';
+import { projects } from '../data/projects';
+import { skillGroups } from '../data/skills';
+
+/* global emailjs */
 emailjs.init('7cO86VT1CxLbCKh3n');
 
 const sections = Array.from(document.querySelectorAll('.snap-section'));
@@ -11,9 +16,25 @@ let unlockTimeout = null;
 
 const container = document.querySelector('.scroll-container');
 
+// ── Idioma e tema ─────────────────────────────────────────
+let currentLang = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
+const t = (key) => translations[currentLang][key] ?? translations.pt[key] ?? key;
+
+function savePref(key, value) {
+  try { localStorage.setItem(key, value); } catch (e) {}
+}
+
+function setMetaContent(attr, content) {
+  const meta = document.querySelector(`meta[name="${attr}"]`) || document.querySelector(`meta[property="${attr}"]`);
+  if (meta) meta.setAttribute('content', content);
+}
+
 function isMobileWidth() {
   return window.matchMedia('(max-width: 640px)').matches;
 }
+
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
 function lockScroll() {
   if (isMobileWidth()) container.style.overflow = 'hidden';
@@ -127,6 +148,154 @@ function setActiveNav(index) {
   });
 }
 
+// ── Re-medida da navbar após troca de idioma ──────────────
+function remeasureNav() {
+  if (isMobileWidth()) {
+    const activeLink = document.querySelector('.nav-links a.active');
+    if (activeLink) movePill(activeLink);
+    return;
+  }
+
+  const isActiveSet = new Set();
+  navLinks.forEach(link => {
+    const text = link.querySelector('.nav-text');
+    text.style.display = 'inline-block';
+    text.style.opacity = '1';
+    text.style.transform = 'scale(1)';
+    if (link.classList.contains('active')) isActiveSet.add(link);
+  });
+
+  const widths = new Map();
+  isActiveSet.forEach(link => {
+    widths.set(link, link.offsetWidth);
+  });
+
+  navLinks.forEach(link => {
+    const text = link.querySelector('.nav-text');
+    const icon = link.querySelector('.nav-icon');
+    const isActive = isActiveSet.has(link);
+    if (isActive) {
+      link.style.width = widths.get(link) + 'px';
+      icon.style.display = 'block';
+      text.style.display = 'none';
+      text.style.opacity = '0';
+    } else {
+      link.style.width = '';
+      icon.style.display = 'none';
+      text.style.display = 'inline-block';
+      text.style.opacity = '1';
+    }
+  });
+
+  const activeLink = document.querySelector('.nav-links a.active');
+  if (activeLink) movePill(activeLink);
+}
+
+// ── Renderização de projetos e habilidades ───────────────
+const GITHUB_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>';
+const EXTERNAL_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>';
+
+function renderProjects(lang) {
+  const list = document.getElementById('projects-list');
+  if (!list) return;
+  list.innerHTML = projects.map((p) => `
+    <div class="project-card reveal visible">
+      <div class="project-card-inner">
+        <div class="project-name">${p.name[lang]}</div>
+        <div class="project-desc">${p.desc[lang]}</div>
+        <div class="project-stack">${p.stack.map((s) => `<span class="stack-tag">${s}</span>`).join('')}</div>
+      </div>
+      <a href="${p.href}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="${p.ariaLabel[lang]}">
+        ${GITHUB_SVG}<span>GitHub</span>${EXTERNAL_SVG}
+      </a>
+    </div>`).join('');
+  setupTilt();
+}
+
+function renderSkills(lang) {
+  const grid = document.getElementById('skills-grid');
+  if (!grid) return;
+  grid.innerHTML = skillGroups.map((g) => `
+    <div class="skill-card reveal visible">
+      <div class="skill-cat">${g.cat[lang]}</div>
+      <div class="skill-tags">${g.tags[lang].map((s) => `<span class="tag">${s}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+// ── Troca de idioma ──────────────────────────────────────
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.documentElement.dataset.lang = lang;
+  const dict = translations[lang];
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    el.textContent = dict[key] ?? '';
+  });
+
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    el.innerHTML = dict[key] ?? '';
+  });
+
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    el.setAttribute('aria-label', dict[el.getAttribute('data-i18n-aria')] ?? '');
+  });
+
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.setAttribute('placeholder', dict[el.getAttribute('data-i18n-ph')] ?? '');
+  });
+
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    el.setAttribute('alt', dict[el.getAttribute('data-i18n-alt')] ?? '');
+  });
+
+  renderProjects(lang);
+  renderSkills(lang);
+
+  document.title = dict['meta.title'];
+  setMetaContent('description', dict['meta.description']);
+  setMetaContent('og:title', dict['meta.title']);
+  setMetaContent('og:description', dict['meta.description']);
+
+  updateControlAria();
+  savePref('lang', lang);
+  remeasureNav();
+}
+
+// ── Tema claro/escuro ────────────────────────────────────
+const themeToggle = document.getElementById('theme-toggle');
+const langToggle = document.getElementById('lang-toggle');
+
+function currentTheme() {
+  return document.documentElement.getAttribute('data-theme') || 'light';
+}
+
+function updateControlAria() {
+  if (themeToggle) {
+    themeToggle.setAttribute('aria-pressed', currentTheme() === 'dark' ? 'true' : 'false');
+    themeToggle.setAttribute('aria-label', t(currentTheme() === 'dark' ? 'theme.light' : 'theme.dark'));
+  }
+  if (langToggle) langToggle.setAttribute('aria-label', t('lang.switch'));
+}
+
+function applyTheme(theme, persist = true) {
+  document.documentElement.setAttribute('data-theme', theme);
+  setMetaContent('theme-color', theme === 'dark' ? '#17120E' : '#F8F0E5');
+  updateControlAria();
+  document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+  if (persist) savePref('theme', theme);
+}
+
+themeToggle?.addEventListener('click', () => {
+  applyTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+});
+
+langToggle?.addEventListener('click', () => {
+  applyLang(currentLang === 'pt' ? 'en' : 'pt');
+});
+
 // ── Navegação principal ──────────────────────────────────
 
 function resetSectionReveals(section) {
@@ -238,8 +407,8 @@ function goTo(index, skipWait = false) {
 // ── Intersection Observer para Scroll Nativo ──────────────
 const observerOptions = {
   root: container,
-  rootMargin: '0px 0px -20% 0px', // Dispara quando a seção passa da linha dos 80% da viewport
-  threshold: 0.35 // Dispara quando 35% da seção estiver visível (mais sensível)
+  rootMargin: '0px 0px -20% 0px',
+  threshold: 0.35
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -289,6 +458,43 @@ window.addEventListener('resize', () => {
   }
 });
 
+// ── Parallax sutil no hero ───────────────────────────────
+const heroPhoto = document.querySelector('.hero-photo');
+let rafParallax = null;
+
+function updateParallax() {
+  if (reducedMotion.matches || !heroPhoto) return;
+  heroPhoto.style.translate = `0 ${Math.round(-container.scrollTop * 0.08)}px`;
+}
+
+container.addEventListener('scroll', () => {
+  if (rafParallax) return;
+  rafParallax = requestAnimationFrame(() => {
+    updateParallax();
+    rafParallax = null;
+  });
+}, { passive: true });
+
+// ── Tilt 3D nos cards de projeto ─────────────────────────
+function setupTilt() {
+  if (reducedMotion.matches || isTouchDevice()) return;
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('pointermove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width - 0.5;
+      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      card.classList.add('tilting');
+      card.style.setProperty('--rx', (-py * 6).toFixed(2) + 'deg');
+      card.style.setProperty('--ry', (px * 6).toFixed(2) + 'deg');
+    });
+    card.addEventListener('pointerleave', () => {
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+      setTimeout(() => card.classList.remove('tilting'), 200);
+    });
+  });
+}
+
 // ── Inicialização ────────────────────────────────────────
 goTo(0, true);
 requestAnimationFrame(() => {
@@ -296,6 +502,12 @@ requestAnimationFrame(() => {
   if (activeLink) movePill(activeLink);
   isInitializing = false;
 });
+
+applyTheme(currentTheme(), false);
+const initLang = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
+if (initLang !== 'pt') applyLang('en');
+else setupTilt();
+updateParallax();
 
 // ── Copiar para clipboard ────────────────────────────────
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -314,7 +526,7 @@ async function copyText(text, btn) {
   const iconCopy = btn.querySelector('.icon-copy');
   const iconCheck = btn.querySelector('.icon-check');
   const tooltip = document.createElement('span');
-  tooltip.textContent = 'Copiado!';
+  tooltip.textContent = t('copy.done');
   tooltip.style.cssText = `
     font-size: 0.7rem; font-weight: 600;
     color: var(--brown-dark); letter-spacing: 0.04em;
@@ -356,7 +568,7 @@ async function copyText(text, btn) {
 
 // ── Formulário de contato ────────────────────────────────
 function resetFormBtn(btn, aviso, message, className) {
-  btn.textContent = 'Enviar mensagem';
+  btn.textContent = t('form.submit');
   btn.disabled = false;
   aviso.textContent = message;
   aviso.className = className;
@@ -372,17 +584,23 @@ function enviarMensagem() {
   const mensagem = document.getElementById('campo-mensagem').value.trim();
   const btn = document.getElementById('btn-enviar');
   const aviso = document.getElementById('form-aviso');
+  const site = document.getElementById('campo-site');
 
   aviso.textContent = '';
   aviso.className = '';
 
+  if (site && site.value.trim() !== '') {
+    btn.textContent = t('form.submit');
+    return;
+  }
+
   if (!nome || !email || !mensagem) {
-    aviso.textContent = 'Preencha todos os campos antes de enviar.';
+    aviso.textContent = t('form.required');
     aviso.className = 'erro';
     return;
   }
 
-  btn.textContent = 'Enviando...';
+  btn.textContent = t('form.sending');
   btn.disabled = true;
 
   emailjs.send('service_5hcdutl', 'template_z8knk7w', {
@@ -391,13 +609,13 @@ function enviarMensagem() {
     message: mensagem
   })
     .then(() => {
-      resetFormBtn(btn, aviso, 'Mensagem enviada com sucesso!', 'sucesso');
+      resetFormBtn(btn, aviso, t('form.ok'), 'sucesso');
       document.getElementById('campo-nome').value = '';
       document.getElementById('campo-email').value = '';
       document.getElementById('campo-mensagem').value = '';
     })
     .catch(() => {
-      resetFormBtn(btn, aviso, 'Erro ao enviar. Tente novamente.', 'erro');
+      resetFormBtn(btn, aviso, t('form.err'), 'erro');
     });
 }
 

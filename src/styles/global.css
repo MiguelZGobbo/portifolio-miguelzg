@@ -11,6 +11,9 @@
     --dark:       #2C2218;
     --text:       #3D3028;
     --text-muted: #5A4B3E;
+    --surface:    #FFFFFF;
+    --particle-a: rgba(160, 135, 110, 0.55);
+    --particle-b: rgba(122, 82, 52, 0.45);
     --nav-height: 58px;
     --nav-top: 32px;
     --section-padding-top: calc(var(--nav-top) + var(--nav-height) - 5px);
@@ -475,7 +478,7 @@ nav a,
 
 .info-item {
     padding: 0.9rem 1.1rem;
-    background: white;
+    background: var(--surface);
     border: 1.5px solid var(--sand);
     border-left: 4px solid var(--brown);
     border-radius: 3px;
@@ -513,7 +516,7 @@ nav a,
 
 .skill-card {
     flex: 0 0 calc((100% - 2rem) / 3);
-    background: white;
+    background: var(--surface);
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     padding: 1.2rem;
@@ -565,7 +568,7 @@ nav a,
 }
 
 .project-card {
-    background: white;
+    background: var(--surface);
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     padding: 1.4rem;
@@ -634,7 +637,7 @@ nav a,
    9. SEÇÃO — CV
 ================================ */
 .cv-box {
-    background: white;
+    background: var(--surface);
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     padding: 2rem;
@@ -737,7 +740,7 @@ nav a,
     font-size: 0.9rem;
     font-family: 'DM Sans Variable', sans-serif;
     color: var(--dark);
-    background: white;
+    background: var(--surface);
     outline: none;
     transition: border-color 0.2s;
 }
@@ -764,7 +767,7 @@ nav a,
     flex-direction: column;
     gap: 1.2rem;
     padding: 1.5rem;
-    background: white;
+    background: var(--surface);
     border: 1.5px solid var(--sand);
     border-radius: 3px;
     align-self: stretch;
@@ -1729,5 +1732,246 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .val-link:hover {
         color: var(--tan) !important;
         border-bottom-color: var(--tan) !important;
+    }
+}
+/* ================================
+   13. DARK MODE
+=============================== */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --cream:      #211A14;
+    --brown:      #D8A56C;
+    --brown-dark: #F0CAA2;
+    --sand:       #3B3126;
+    --warm-gray:  #9C9082;
+    --tan:        #8A6F55;
+    --dark:       #F2E8DA;
+    --text:       #E9DCC9;
+    --text-muted: #B9AA97;
+    --surface:    #2A211A;
+    --particle-a: rgba(216, 165, 108, 0.50);
+    --particle-b: rgba(240, 202, 162, 0.35);
+}
+
+[data-theme="dark"] body {
+    background:
+        radial-gradient(ellipse 750px 520px at 82% 8%,   rgba(216, 165, 108, 0.10) 0%, transparent 72%),
+        radial-gradient(ellipse 650px 480px at 12% 88%,  rgba(138, 111, 85, 0.14) 0%, transparent 72%),
+        radial-gradient(ellipse 400px 380px at 68% 52%,  rgba(216, 165, 108, 0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 380px at 18% 6%,   rgba(240, 202, 162, 0.05) 0%, transparent 70%),
+        radial-gradient(ellipse 350px 300px at 45% 95%,  rgba(216, 165, 108, 0.04) 0%, transparent 70%),
+        linear-gradient(135deg, #1B1510 0%, #1F1812 50%, #171310 100%);
+}
+
+[data-theme="dark"] nav {
+    background: rgba(26, 20, 15, 0.90);
+    box-shadow:
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06),
+        0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .nav-links::before {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .nav-pill {
+    box-shadow: 0 -2px 8px 3px rgba(240, 202, 162, 0.25);
+}
+
+[data-theme="dark"] .nav-tooltip {
+    background: linear-gradient(0deg, var(--brown-dark), rgba(216, 165, 108, 0.80));
+}
+
+[data-theme="dark"] footer {
+    background: #14100C;
+    color: var(--warm-gray);
+}
+
+[data-theme="dark"] .info-item,
+[data-theme="dark"] .skill-card,
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .cv-box,
+[data-theme="dark"] .contact-info,
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+    background: var(--surface);
+}
+
+/* Ondas em dark */
+[data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.14); }
+[data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.18); }
+[data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.06); }
+[data-theme="dark"] .raw-1 { color: rgba(240, 202, 162, 0.06); }
+[data-theme="dark"] .raw-2 { color: rgba(240, 202, 162, 0.05); }
+[data-theme="dark"] .raw-3 { color: rgba(216, 165, 108, 0.04); }
+[data-theme="dark"] .raw-4 { color: rgba(216, 165, 108, 0.03); }
+
+@media (max-width: 640px) {
+    [data-theme="dark"] body[data-section="home"] nav,
+    [data-theme="dark"] .nav-links {
+        background: rgba(26, 20, 15, 0.92);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 -8px 32px rgba(0, 0, 0, 0.45);
+    }
+    [data-theme="dark"] .wave-1 .bg-wave-inner { color: rgba(216, 165, 108, 0.16); }
+    [data-theme="dark"] .wave-2 .bg-wave-inner { color: rgba(138, 111, 85, 0.16); }
+    [data-theme="dark"] .wave-3 .bg-wave-inner { color: rgba(216, 165, 108, 0.06); }
+}
+
+/* ================================
+   14. NAV CONTROLS (tema + idioma)
+=============================== */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.nav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--sand);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.nav-btn:hover {
+    color: var(--brown-dark);
+    border-color: var(--tan);
+}
+
+.nav-btn:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+}
+
+.nav-btn-icon {
+    width: 16px;
+    height: 16px;
+}
+
+[data-theme="light"] .icon-moon,
+[data-theme="dark"] .icon-sun {
+    display: none;
+}
+
+.nav-btn--lang {
+    width: auto;
+    padding: 0 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.lang-label {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+}
+
+.lang-part {
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+}
+
+html[data-lang="pt"] .lang-pt,
+html[data-lang="en"] .lang-en {
+    opacity: 1;
+    color: var(--brown-dark);
+}
+
+@media (max-width: 640px) {
+    .nav-controls {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: auto;
+    }
+    .nav-btn {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* ================================
+   15. ACESSIBILIDADE
+=============================== */
+.skip-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 1000;
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+}
+
+/* ================================
+   16. PARTÍCULAS + EFEITOS
+=============================== */
+.particles-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.project-card-inner {
+    transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1);
+    will-change: transform;
+}
+
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* ================================
+   17. MOVIMENTO REDUZIDO
+=============================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

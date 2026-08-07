@@ -1,23 +1,27 @@
 ---
 import Icon from './Icon.astro';
 import type { Project } from '../data/projects';
+import type { Lang } from '../lib/i18n';
 
-interface Props extends Project {}
+interface Props {
+  project: Project;
+  lang?: Lang;
+}
 
-const { name, desc, stack, href, ariaLabel } = Astro.props;
+const { project, lang = 'pt' } = Astro.props;
 ---
 
 <div class="project-card reveal">
-  <div>
-    <div class="project-name">{name}</div>
-    <div class="project-desc">{desc}</div>
+  <div class="project-card-inner">
+    <div class="project-name">{project.name[lang]}</div>
+    <div class="project-desc">{project.desc[lang]}</div>
     <div class="project-stack">
-      {stack.map((tag) => <span class="stack-tag">{tag}</span>)}
+      {project.stack.map((tag) => <span class="stack-tag">{tag}</span>)}
     </div>
   </div>
-  <a href={href} target="_blank" rel="noopener noreferrer" class="project-link" aria-label={ariaLabel}>
+  <a href={project.href} target="_blank" rel="noopener noreferrer" class="project-link" aria-label={project.ariaLabel[lang]}>
     <Icon name="github" size={14} />
-    GitHub
+    <span data-i18n="projects.github">GitHub</span>
     <Icon name="external" size={11} strokeWidth={2.5} />
   </a>
 </div>

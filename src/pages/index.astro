@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Waves from '../components/Waves.astro';
+import Particles from '../components/Particles.astro';
 import Nav from '../components/Nav.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import SkillCard from '../components/SkillCard.astro';
@@ -10,15 +11,24 @@ import CopyButton from '../components/CopyButton.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { skillGroups } from '../data/skills';
 import { projects } from '../data/projects';
+import { translations, type Lang } from '../lib/i18n';
 import foto from '../assets/foto-perfil.jpeg';
+
+const lang: Lang = 'pt';
+const dict = translations[lang] as Record<string, string>;
 
 const base = import.meta.env.BASE_URL;
 const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
 ---
 
-<BaseLayout title="Miguel — Engenharia de Software" description="Portfólio de Miguel Zager Gobbo — estudante de Engenharia de Software com foco em backend, sistemas e infraestrutura.">
+<BaseLayout
+  lang={lang}
+  title={dict['meta.title']}
+  description={dict['meta.description']}
+>
   <Waves />
-  <Nav />
+  <Particles />
+  <Nav lang={lang} />
 
   <main class="scroll-container">
 
@@ -26,14 +36,15 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <section class="snap-section" id="home">
       <div class="section-inner hero-inner">
         <div class="hero-text">
-          <div class="hero-tag reveal">Engenharia de Software</div>
-          <h1 class="hero-title reveal">Olá, sou <em>Miguel</em><br>Foco em Backend<br>e Sistemas</h1>
-          <p class="hero-sub reveal">Estudante de Engenharia de Software apaixonado por construir sistemas robustos e escaláveis — onde lógica, arquitetura e boas soluções se encontram.</p>
+          <div class="hero-tag reveal" data-i18n="hero.tag">{dict['hero.tag']}</div>
+          <h1 class="hero-title reveal" data-i18n-html="hero.title">{dict['hero.title']}</h1>
+          <p class="hero-sub reveal" data-i18n="hero.sub">{dict['hero.sub']}</p>
         </div>
         <div class="hero-photo reveal">
           <Image
             src={foto}
-            alt="Foto de perfil de Miguel Zager Gobbo"
+            alt={dict['img.profile.alt']}
+            data-i18n-alt="img.profile.alt"
             class="profile-photo"
             fetchpriority="high"
             loading="eager"
@@ -48,24 +59,24 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <!-- SOBRE -->
     <section class="snap-section" id="sobre">
       <div class="section-inner">
-        <SectionTitle label="Quem sou eu" title="Sobre mim" icon="user" />
+        <SectionTitle lang={lang} labelKey="sobre.label" titleKey="sobre.title" icon="user" />
         <div class="about-grid">
           <div class="about-text">
-            <p class="reveal">Sempre tive afinidade com exatas e com problemas que exigem raciocínio lógico estruturado — o que me levou à Engenharia de Software e mantém meu interesse voltado a backend, sistemas e infraestrutura. No ensino médio me formei em Técnico em Comércio, onde adquiri uma visão estratégica de negócios, vendas e gestão.</p>
-            <p class="reveal">Atualmente, conto com experiência prática em backend, front-end e banco de dados, e busco oportunidades para aplicar e expandir esse conhecimento no mercado de trabalho.</p>
+            <p class="reveal" data-i18n="sobre.p1">{dict['sobre.p1']}</p>
+            <p class="reveal" data-i18n="sobre.p2">{dict['sobre.p2']}</p>
           </div>
           <div class="about-info reveal">
             <div class="info-item reveal">
-              <div class="label">Formação</div>
-              <div class="value">Engenharia de Software — Em andamento<br>Técnico em Comércio — Completo</div>
+              <div class="label" data-i18n="sobre.formacao">{dict['sobre.formacao']}</div>
+              <div class="value" data-i18n-html="sobre.formacao.val">{dict['sobre.formacao.val']}</div>
             </div>
             <div class="info-item reveal">
-              <div class="label">Foco</div>
-              <div class="value">Backend · Sistemas · Infraestrutura</div>
+              <div class="label" data-i18n="sobre.foco">{dict['sobre.foco']}</div>
+              <div class="value" data-i18n="sobre.foco.val">{dict['sobre.foco.val']}</div>
             </div>
             <div class="info-item reveal">
-              <div class="label">Status</div>
-              <div class="value">Aberto a estágios e oportunidades</div>
+              <div class="label" data-i18n="sobre.status">{dict['sobre.status']}</div>
+              <div class="value" data-i18n="sobre.status.val">{dict['sobre.status.val']}</div>
             </div>
           </div>
         </div>
@@ -75,9 +86,9 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <!-- HABILIDADES -->
     <section class="snap-section" id="habilidades" data-stagger="120">
       <div class="section-inner">
-        <SectionTitle label="O que sei fazer" title="Habilidades" icon="code" />
-        <div class="skills-grid">
-          {skillGroups.map((group) => <SkillCard cat={group.cat} tags={group.tags} />)}
+        <SectionTitle lang={lang} labelKey="skills.label" titleKey="skills.title" icon="code" />
+        <div class="skills-grid" id="skills-grid">
+          {skillGroups.map((group) => <SkillCard group={group} lang={lang} />)}
         </div>
       </div>
     </section>
@@ -85,9 +96,9 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <!-- PROJETOS -->
     <section class="snap-section" id="projetos" data-stagger="120">
       <div class="section-inner">
-        <SectionTitle label="O que construí" title="Projetos" icon="folder" />
-        <div class="projects-list">
-          {projects.map((project) => <ProjectCard {...project} />)}
+        <SectionTitle lang={lang} labelKey="projects.label" titleKey="projects.title" icon="folder" />
+        <div class="projects-list" id="projects-list">
+          {projects.map((project) => <ProjectCard project={project} lang={lang} />)}
         </div>
       </div>
     </section>
@@ -95,27 +106,27 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <!-- CURRÍCULO -->
     <section class="snap-section" id="cv">
       <div class="section-inner">
-        <SectionTitle label="Meu currículo" title="Currículo" icon="file" />
+        <SectionTitle lang={lang} labelKey="cv.label" titleKey="cv.title" icon="file" />
         <div class="cv-box reveal">
           <div class="cv-info">
-            <div class="cv-title">Currículo completo em PDF</div>
-            <div class="cv-sub">Visualize direto no navegador ou faça o download</div>
+            <div class="cv-title" data-i18n="cv.boxTitle">{dict['cv.boxTitle']}</div>
+            <div class="cv-sub" data-i18n="cv.boxSub">{dict['cv.boxSub']}</div>
           </div>
           <div class="cv-actions">
-            <a href={cvUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" aria-label="Visualizar currículo em PDF em nova aba">
+            <a href={cvUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" data-i18n-aria="cv.viewAria" aria-label={dict['cv.viewAria']}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
-              Visualizar
+              <span data-i18n="cv.view">{dict['cv.view']}</span>
             </a>
-            <a href={cvUrl} download="MiguelZagerGobbo-CV.pdf" class="btn reveal" aria-label="Baixar currículo em PDF">
+            <a href={cvUrl} download="MiguelZagerGobbo-CV.pdf" class="btn reveal" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              Baixar Currículo
+              <span data-i18n="cv.download">{dict['cv.download']}</span>
             </a>
           </div>
         </div>
@@ -125,45 +136,45 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
     <!-- CONTATO -->
     <section class="snap-section" id="contato">
       <div class="section-inner">
-        <SectionTitle label="Fale comigo" title="Contato" icon="mail" />
+        <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" icon="mail" />
         <div class="contact-grid">
-          <ContactForm />
+          <ContactForm lang={lang} />
           <div class="contact-info reveal">
             <div class="contact-group">
               <div class="contact-item reveal">
-                <div class="label">LinkedIn</div>
+                <div class="label" data-i18n="contact.linkedin">{dict['contact.linkedin']}</div>
                 <div class="val-row">
                   <a href="https://www.linkedin.com/in/miguel-zager-gobbo" target="_blank" rel="noopener noreferrer" class="val-link">linkedin.com/in/miguel-zg</a>
-                  <CopyButton text="https://www.linkedin.com/in/miguel-zager-gobbo" title="Copiar link do LinkedIn" ariaLabel="Copiar link do LinkedIn" />
+                  <CopyButton text="https://www.linkedin.com/in/miguel-zager-gobbo" title="LinkedIn" ariaLabel={dict['copy.linkedin']} i18nKey="copy.linkedin" />
                 </div>
               </div>
               <div class="contact-item reveal">
-                <div class="label">GitHub</div>
+                <div class="label" data-i18n="contact.github">{dict['contact.github']}</div>
                 <div class="val-row">
                   <a href="https://github.com/MiguelZGobbo" target="_blank" rel="noopener noreferrer" class="val-link">github.com/MiguelZGobbo</a>
-                  <CopyButton text="https://github.com/MiguelZGobbo" title="Copiar link do GitHub" ariaLabel="Copiar link do GitHub" />
+                  <CopyButton text="https://github.com/MiguelZGobbo" title="GitHub" ariaLabel={dict['copy.github']} i18nKey="copy.github" />
                 </div>
               </div>
             </div>
             <div class="contact-group contact-group--muted">
               <div class="contact-item reveal">
-                <div class="label">E-mail</div>
+                <div class="label" data-i18n="contact.email">{dict['contact.email']}</div>
                 <div class="val-row">
                   <span class="val">miguelzgobbo@gmail.com</span>
-                  <CopyButton text="miguelzgobbo@gmail.com" title="Copiar e-mail" ariaLabel="Copiar endereço de e-mail" />
+                  <CopyButton text="miguelzgobbo@gmail.com" title="E-mail" ariaLabel={dict['copy.email']} i18nKey="copy.email" />
                 </div>
               </div>
               <div class="contact-item">
-                <div class="label">Localização</div>
+                <div class="label" data-i18n="contact.location">{dict['contact.location']}</div>
                 <div class="val-row">
-                  <span class="val">Espírito Santo, Brasil</span>
+                  <span class="val" data-i18n="contact.location.val">{dict['contact.location.val']}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <footer>© 2025 Miguel — Engenharia de Software</footer>
+      <footer data-i18n="contact.footer">{dict['contact.footer']}</footer>
     </section>
 
   </main>

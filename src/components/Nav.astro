@@ -1,31 +1,48 @@
 ---
 import Icon from './Icon.astro';
+import ThemeToggle from './ThemeToggle.astro';
+import LangToggle from './LangToggle.astro';
+import { translations, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: 'home', label: 'Início', aria: 'Ir para a seção Início', icon: 'home' },
-  { id: 'sobre', label: 'Sobre', aria: 'Ir para a seção Sobre mim', icon: 'user' },
-  { id: 'habilidades', label: 'Habilidades', aria: 'Ir para a seção Habilidades', icon: 'code' },
-  { id: 'projetos', label: 'Projetos', aria: 'Ir para a seção Projetos', icon: 'folder' },
-  { id: 'cv', label: 'Currículo', aria: 'Ir para a seção Currículo', icon: 'file' },
-  { id: 'contato', label: 'Contato', aria: 'Ir para a seção Contato', icon: 'mail' },
+  { id: 'home', icon: 'home' },
+  { id: 'sobre', icon: 'user' },
+  { id: 'habilidades', icon: 'code' },
+  { id: 'projetos', icon: 'folder' },
+  { id: 'cv', icon: 'file' },
+  { id: 'contato', icon: 'mail' },
 ] as const;
 ---
 
-<nav aria-label="Navegação principal">
-  <div class="logo">MIGUEL ZAGER GOBBO</div>
-  <div class="nav-links">
-    {
-      links.map((link) => (
-        <a
-          href={`#${link.id}`}
-          aria-label={link.aria}
-          aria-current={link.id === 'home' ? 'page' : undefined}
-        >
-          <span class="nav-text">{link.label}</span>
-          <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />
-          <span class="nav-tooltip">{link.label}</span>
-        </a>
-      ))
-    }
+<nav aria-label={dict['a11y.nav']}>
+  <div class="logo">{dict['nav.logo']}</div>
+  <div class="nav-right">
+    <div class="nav-links">
+      {
+        links.map((link) => (
+          <a
+            href={`#${link.id}`}
+            data-i18n-aria={`nav.${link.id}.aria`}
+            aria-label={dict[`nav.${link.id}.aria`]}
+            aria-current={link.id === 'home' ? 'page' : undefined}
+          >
+            <span class="nav-text" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+            <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />
+            <span class="nav-tooltip" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+          </a>
+        ))
+      }
+    </div>
+    <div class="nav-controls">
+      <LangToggle />
+      <ThemeToggle />
+    </div>
   </div>
 </nav>

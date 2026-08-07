@@ -1,8 +1,16 @@
 ---
+import { translate, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+
 const fields = [
-  { type: 'text', id: 'campo-nome', label: 'Nome', placeholder: 'Seu nome' },
-  { type: 'email', id: 'campo-email', label: 'E-mail', placeholder: 'seu@email.com' },
-  { type: 'textarea', id: 'campo-mensagem', label: 'Mensagem', placeholder: 'Como posso ajudar?' },
+  { type: 'text', id: 'campo-nome', labelKey: 'form.name', phKey: 'form.name.ph' },
+  { type: 'email', id: 'campo-email', labelKey: 'form.email', phKey: 'form.email.ph' },
+  { type: 'textarea', id: 'campo-mensagem', labelKey: 'form.message', phKey: 'form.message.ph' },
 ] as const;
 ---
 
@@ -11,16 +19,20 @@ const fields = [
     {
       fields.map((field) => (
         <div class="form-group reveal">
-          <label for={field.id}>{field.label}</label>
+          <label for={field.id} data-i18n={field.labelKey}>{translate(lang, field.labelKey)}</label>
           {
             field.type === 'textarea'
-              ? <textarea id={field.id} placeholder={field.placeholder}></textarea>
-              : <input type={field.type} id={field.id} placeholder={field.placeholder} />
+              ? <textarea id={field.id} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey}></textarea>
+              : <input type={field.type} id={field.id} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey} />
           }
         </div>
       ))
     }
-    <button class="btn reveal" type="submit" id="btn-enviar">Enviar mensagem</button>
+    <div class="hp-field" aria-hidden="true">
+      <label for="campo-site">Website</label>
+      <input type="text" id="campo-site" name="website" tabindex="-1" autocomplete="off" />
+    </div>
+    <button class="btn reveal" type="submit" id="btn-enviar" data-i18n="form.submit">{translate(lang, 'form.submit')}</button>
     <span id="form-aviso"></span>
   </form>
 </div>

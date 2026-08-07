@@ -5,12 +5,13 @@ interface Props {
   text: string;
   title: string;
   ariaLabel: string;
+  i18nKey: string;
 }
 
-const { text, title, ariaLabel } = Astro.props;
+const { text, title, ariaLabel, i18nKey } = Astro.props;
 ---
 
-<button class="copy-btn" data-text={text} title={title} aria-label={ariaLabel}>
+<button class="copy-btn" data-text={text} title={title} aria-label={ariaLabel} data-i18n-aria={i18nKey}>
   <Icon name="copy" size={13} strokeWidth={2} class="icon-copy" />
   <Icon name="check" size={13} strokeWidth={2.5} class="icon-check" style="display:none" />
 </button>
