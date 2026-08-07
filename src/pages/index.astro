@@ -1,0 +1,161 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Waves from '../components/Waves.astro';
+import Nav from '../components/Nav.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import SkillCard from '../components/SkillCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CopyButton from '../components/CopyButton.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { skillGroups } from '../data/skills';
+import { projects } from '../data/projects';
+import foto from '../assets/foto-perfil.jpeg';
+
+const base = import.meta.env.BASE_URL;
+const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
+---
+
+<BaseLayout title="Miguel — Engenharia de Software" description="Portfólio de Miguel Zager Gobbo — estudante de Engenharia de Software com foco em backend, sistemas e infraestrutura.">
+  <Waves />
+  <Nav />
+
+  <main class="scroll-container">
+
+    <!-- HERO -->
+    <section class="snap-section" id="home">
+      <div class="section-inner hero-inner">
+        <div class="hero-text">
+          <div class="hero-tag reveal">Engenharia de Software</div>
+          <h1 class="hero-title reveal">Olá, sou <em>Miguel</em><br>Foco em Backend<br>e Sistemas</h1>
+          <p class="hero-sub reveal">Estudante de Engenharia de Software apaixonado por construir sistemas robustos e escaláveis — onde lógica, arquitetura e boas soluções se encontram.</p>
+        </div>
+        <div class="hero-photo reveal">
+          <Image src={foto} alt="Foto de perfil de Miguel Zager Gobbo" width={280} height={340} class="profile-photo" fetchpriority="high" loading="eager" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section class="snap-section" id="sobre">
+      <div class="section-inner">
+        <SectionTitle label="Quem sou eu" title="Sobre mim" icon="user" />
+        <div class="about-grid">
+          <div class="about-text">
+            <p class="reveal">Sempre tive afinidade com exatas e com problemas que exigem raciocínio lógico estruturado — o que me levou à Engenharia de Software e mantém meu interesse voltado a backend, sistemas e infraestrutura. No ensino médio me formei em Técnico em Comércio, onde adquiri uma visão estratégica de negócios, vendas e gestão.</p>
+            <p class="reveal">Atualmente, conto com experiência prática em backend, front-end e banco de dados, e busco oportunidades para aplicar e expandir esse conhecimento no mercado de trabalho.</p>
+          </div>
+          <div class="about-info reveal">
+            <div class="info-item reveal">
+              <div class="label">Formação</div>
+              <div class="value">Engenharia de Software — Em andamento<br>Técnico em Comércio — Completo</div>
+            </div>
+            <div class="info-item reveal">
+              <div class="label">Foco</div>
+              <div class="value">Backend · Sistemas · Infraestrutura</div>
+            </div>
+            <div class="info-item reveal">
+              <div class="label">Status</div>
+              <div class="value">Aberto a estágios e oportunidades</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HABILIDADES -->
+    <section class="snap-section" id="habilidades" data-stagger="120">
+      <div class="section-inner">
+        <SectionTitle label="O que sei fazer" title="Habilidades" icon="code" />
+        <div class="skills-grid">
+          {skillGroups.map((group) => <SkillCard cat={group.cat} tags={group.tags} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJETOS -->
+    <section class="snap-section" id="projetos" data-stagger="120">
+      <div class="section-inner">
+        <SectionTitle label="O que construí" title="Projetos" icon="folder" />
+        <div class="projects-list">
+          {projects.map((project) => <ProjectCard {...project} />)}
+        </div>
+      </div>
+    </section>
+
+    <!-- CURRÍCULO -->
+    <section class="snap-section" id="cv">
+      <div class="section-inner">
+        <SectionTitle label="Meu currículo" title="Currículo" icon="file" />
+        <div class="cv-box reveal">
+          <div class="cv-info">
+            <div class="cv-title">Currículo completo em PDF</div>
+            <div class="cv-sub">Visualize direto no navegador ou faça o download</div>
+          </div>
+          <div class="cv-actions">
+            <a href={cvUrl} target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" aria-label="Visualizar currículo em PDF em nova aba">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              Visualizar
+            </a>
+            <a href={cvUrl} download="MiguelZagerGobbo-CV.pdf" class="btn reveal" aria-label="Baixar currículo em PDF">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Baixar Currículo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section class="snap-section" id="contato">
+      <div class="section-inner">
+        <SectionTitle label="Fale comigo" title="Contato" icon="mail" />
+        <div class="contact-grid">
+          <ContactForm />
+          <div class="contact-info reveal">
+            <div class="contact-group">
+              <div class="contact-item reveal">
+                <div class="label">LinkedIn</div>
+                <div class="val-row">
+                  <a href="https://www.linkedin.com/in/miguel-zager-gobbo" target="_blank" rel="noopener noreferrer" class="val-link">linkedin.com/in/miguel-zg</a>
+                  <CopyButton text="https://www.linkedin.com/in/miguel-zager-gobbo" title="Copiar link do LinkedIn" ariaLabel="Copiar link do LinkedIn" />
+                </div>
+              </div>
+              <div class="contact-item reveal">
+                <div class="label">GitHub</div>
+                <div class="val-row">
+                  <a href="https://github.com/MiguelZGobbo" target="_blank" rel="noopener noreferrer" class="val-link">github.com/MiguelZGobbo</a>
+                  <CopyButton text="https://github.com/MiguelZGobbo" title="Copiar link do GitHub" ariaLabel="Copiar link do GitHub" />
+                </div>
+              </div>
+            </div>
+            <div class="contact-group contact-group--muted">
+              <div class="contact-item reveal">
+                <div class="label">E-mail</div>
+                <div class="val-row">
+                  <span class="val">miguelzgobbo@gmail.com</span>
+                  <CopyButton text="miguelzgobbo@gmail.com" title="Copiar e-mail" ariaLabel="Copiar endereço de e-mail" />
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="label">Localização</div>
+                <div class="val-row">
+                  <span class="val">Espírito Santo, Brasil</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer>© 2025 Miguel — Engenharia de Software</footer>
+    </section>
+
+  </main>
+</BaseLayout>

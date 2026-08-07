@@ -1,0 +1,17 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  label: string;
+  title: string;
+  icon: Parameters<typeof Icon>[0]['name'];
+}
+
+const { label, title, icon } = Astro.props;
+---
+
+<div class="section-label reveal">{label}</div>
+<div class="section-title reveal">
+  <Icon name={icon} size={22} strokeWidth={1.8} />
+  {title}
+</div>

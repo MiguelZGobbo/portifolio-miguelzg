@@ -294,6 +294,10 @@ requestAnimationFrame(() => {
 // ── Copiar para clipboard ────────────────────────────────
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => copyText(btn.dataset.text, btn));
+});
+
 async function copyText(text, btn) {
   try {
     await navigator.clipboard.writeText(text);
@@ -390,3 +394,8 @@ function enviarMensagem() {
       resetFormBtn(btn, aviso, 'Erro ao enviar. Tente novamente.', 'erro');
     });
 }
+
+document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  enviarMensagem();
+});

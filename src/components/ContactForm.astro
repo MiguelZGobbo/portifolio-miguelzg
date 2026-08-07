@@ -1,0 +1,26 @@
+---
+const fields = [
+  { type: 'text', id: 'campo-nome', label: 'Nome', placeholder: 'Seu nome' },
+  { type: 'email', id: 'campo-email', label: 'E-mail', placeholder: 'seu@email.com' },
+  { type: 'textarea', id: 'campo-mensagem', label: 'Mensagem', placeholder: 'Como posso ajudar?' },
+] as const;
+---
+
+<div class="contact-form reveal">
+  <form id="contact-form">
+    {
+      fields.map((field) => (
+        <div class="form-group reveal">
+          <label for={field.id}>{field.label}</label>
+          {
+            field.type === 'textarea'
+              ? <textarea id={field.id} placeholder={field.placeholder}></textarea>
+              : <input type={field.type} id={field.id} placeholder={field.placeholder} />
+          }
+        </div>
+      ))
+    }
+    <button class="btn reveal" type="submit" id="btn-enviar">Enviar mensagem</button>
+    <span id="form-aviso"></span>
+  </form>
+</div>

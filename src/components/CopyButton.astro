@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  text: string;
+  title: string;
+  ariaLabel: string;
+}
+
+const { text, title, ariaLabel } = Astro.props;
+---
+
+<button class="copy-btn" data-text={text} title={title} aria-label={ariaLabel}>
+  <Icon name="copy" size={13} strokeWidth={2} class="icon-copy" />
+  <Icon name="check" size={13} strokeWidth={2.5} class="icon-check" style="display:none" />
+</button>

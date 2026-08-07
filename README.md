@@ -1,8 +1,8 @@
 # 👨‍💻 Portfólio Miguel Zager Gobbo
 
-Site pessoal desenvolvido com **HTML**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, scroll-snap e animações de reveal.
+Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, scroll-snap e animações de reveal.
 
-![HTML](https://img.shields.io/badge/HTML-5-E34F26?logo=html5)
+![Astro](https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript)
 
@@ -23,11 +23,12 @@ Site pessoal desenvolvido com **HTML**, **CSS** e **JavaScript**. Apresenta minh
 
 ## 🛠️ Tecnologias
 
-- **HTML5** — Estrutura e semântica
+- **Astro** — Framework estático com componentes e otimização automática de imagens (WebP)
 - **CSS3** — Estilização, layout responsivo e ondas decorativas em SVG
 - **JavaScript** — Navegação com scroll-snap, animações de reveal e interações
 - **EmailJS** — Envio de mensagens pelo formulário de contato
 - **Google Fonts** — Tipografia (Playfair Display e DM Sans)
+- **GitHub Actions** — Build e deploy automático no GitHub Pages
 
 ---
 
@@ -35,8 +36,7 @@ Site pessoal desenvolvido com **HTML**, **CSS** e **JavaScript**. Apresenta minh
 
 ### Pré-requisitos
 
-- Navegador moderno
-- (Opcional) Python 3+ para servir localmente
+- Node.js 22+
 
 ### Passos
 
@@ -46,13 +46,22 @@ Site pessoal desenvolvido com **HTML**, **CSS** e **JavaScript**. Apresenta minh
    cd portifolio-miguelzg
    ```
 
-2. **Abra o site**
-
-   Abra o arquivo `index.html` diretamente no navegador ou sirva com um servidor local:
+2. **Instale as dependências**
    ```bash
-   python3 -m http.server 8080
+   npm install
    ```
-   Acesse **http://localhost:8080**.
+
+3. **Rode em modo desenvolvimento**
+   ```bash
+   npm run dev
+   ```
+   Acesse **http://localhost:4321**.
+
+4. **Build de produção**
+   ```bash
+   npm run build
+   npm run preview
+   ```
 
 ---
 
@@ -60,18 +69,42 @@ Site pessoal desenvolvido com **HTML**, **CSS** e **JavaScript**. Apresenta minh
 
 ```
 portifolio-miguelzg/
-├── assets/                  # Recursos do site
-│   ├── css/
-│   │   └── style.css        # Estilos
+├── public/                   # Recursos estáticos
 │   ├── files/
 │   │   └── MiguelZagerGobbo-CV.pdf
-│   ├── img/
-│   │   ├── favicon.svg
-│   │   └── foto-perfil.jpeg
-│   └── js/
-│       └── main.js          # Interações e animações
-└── index.html               # Página principal
+│   └── img/
+│       ├── favicon.svg
+│       └── foto-perfil.jpeg  # Imagem para compartilhamento (OG)
+└── src/
+    ├── assets/
+    │   └── foto-perfil.jpeg  # Foto otimizada pelo Astro
+    ├── components/
+    │   ├── ContactForm.astro
+    │   ├── CopyButton.astro
+    │   ├── Icon.astro        # Ícones SVG centralizados
+    │   ├── Nav.astro
+    │   ├── ProjectCard.astro
+    │   ├── SectionTitle.astro
+    │   ├── SkillCard.astro
+    │   └── Waves.astro       # Ondas de fundo animadas
+    ├── data/
+    │   ├── projects.ts       # Projetos (adicionar = 3 linhas)
+    │   └── skills.ts
+    ├── layouts/
+    │   └── BaseLayout.astro  # Head, SEO, fontes e scripts
+    ├── pages/
+    │   └── index.astro
+    ├── scripts/
+    │   └── main.js           # Interações e animações
+    └── styles/
+        └── global.css        # Estilos globais
 ```
+
+---
+
+## 🚢 Deploy
+
+O deploy é automático via **GitHub Actions** (`.github/workflows/deploy.yml`): a cada push na branch `main`, o site é construído e publicado no GitHub Pages em `https://miguelzgobbo.github.io/portifolio-miguelzg/`.
 
 ---
 
