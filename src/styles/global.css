@@ -229,13 +229,18 @@ nav {
 }
 
 .reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+html.js .reveal {
     opacity: 0;
     transform: translateY(24px);
     transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
                 transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.reveal.visible {
+html.js .reveal.visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1548,7 +1553,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 0 1.2rem;
     }
 
-    .reveal {
+    html.js .reveal {
         transition: none;
     }
 
@@ -1908,10 +1913,32 @@ html[data-lang="en"] .lang-en {
         top: 50%;
         transform: translateY(-50%);
         pointer-events: auto;
+        gap: 0.2rem;
+        padding: 0.25rem;
+        background: rgba(248, 240, 229, 0.92);
+        border: 1px solid rgba(44, 34, 24, 0.06);
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(44, 34, 24, 0.05);
     }
     .nav-btn {
         width: 30px;
         height: 30px;
+    }
+    nav .logo {
+        max-width: calc(100% - 130px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 1rem;
+        padding: 0 0.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    [data-theme="dark"] .nav-controls {
+        background: rgba(38, 30, 22, 0.92);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 }
 

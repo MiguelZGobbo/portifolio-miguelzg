@@ -66,9 +66,19 @@ function movePill(link) {
 // ── Scroll suave ──────────────────────────────────────────
 let scrollWaiter = null;
 
-function waitForScrollEnd(targetSection, callback) {
+function scrollToSection(section, smooth = false) {
+  const max = container.scrollHeight - container.clientHeight;
+  const target = Math.min(section.offsetTop, Math.max(0, max));
+  try {
+    container.scrollTo({ top: target, behavior: smooth ? 'smooth' : 'auto' });
+  } catch (e) {
+    container.scrollTop = target;
+  }
+  return target;
+}
+
+function waitForScrollEnd(targetPos, callback) {
   if (scrollWaiter) scrollWaiter();
-  const targetPos = targetSection.offsetTop;
   let attempts = 0;
   const check = setInterval(() => {
     const arrived = Math.abs(container.scrollTop - targetPos) < 5;
@@ -306,16 +316,31 @@ langToggle?.addEventListener('click', () => {
 
 // ── Navegação principal ──────────────────────────────────
 
+function cancelRevealAnimations(el) {
+  if (typeof el.getAnimations !== 'function') return;
+  try { el.getAnimations().forEach(anim => anim.cancel()); } catch (e) {}
+}
+
+function playRevealAnimation(el, from, to, duration, easing) {
+  if (typeof el.animate !== 'function') return;
+  try {
+    el.animate([from, to], { duration, easing, fill: 'forwards' });
+  } catch (e) {}
+}
+
 function resetSectionReveals(section) {
   if (!section) return;
   section.querySelectorAll('.reveal').forEach(el => {
     if (isMobileWidth()) {
-      el.getAnimations().forEach(anim => anim.cancel());
+      cancelRevealAnimations(el);
       if (el.classList.contains('visible')) {
-        el.animate([
+        playRevealAnimation(
+          el,
           { opacity: 1, transform: 'translateY(0)' },
-          { opacity: 0, transform: 'translateY(8px)' }
-        ], { duration: 200, easing: 'ease-in', fill: 'forwards' });
+          { opacity: 0, transform: 'translateY(8px)' },
+          200,
+          'ease-in'
+        );
       }
     }
     el.classList.remove('visible');
@@ -328,16 +353,27 @@ function revealSection(section) {
   if (isMobileWidth()) {
     const els = Array.from(section.querySelectorAll('.reveal'));
     els.forEach(el => {
-      el.getAnimations().forEach(anim => anim.cancel());
+      cancelRevealAnimations(el);
       el.classList.add('visible');
-      el.animate([
+      playRevealAnimation(
+        el,
         { opacity: 0, transform: 'translateY(20px)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 600, easing: 'ease', fill: 'forwards' });
+        { opacity: 1, transform: 'translateY(0)' },
+        600,
+        'ease'
+      );
     });
   } else {
     triggerReveals(section);
   }
+}
+
+function forceRevealSection(section) {
+  if (!section) return;
+  section.querySelectorAll('.reveal').forEach(el => {
+    cancelRevealAnimations(el);
+    el.classList.add('visible');
+  });
 }
 
 function triggerReveals(section) {
@@ -399,16 +435,13 @@ function goTo(index, skipWait = false) {
   isRevealing = isMobileWidth() && !isInitializing;
   current = index;
 
-  const scrollOpts = isMobileWidth()
-    ? { block: 'start' }
-    : { behavior: 'smooth', block: 'start' };
-  sections[index].scrollIntoView(scrollOpts);
+  const target = scrollToSection(sections[index], !isMobileWidth());
   setActiveNav(index);
 
   if (skipWait) {
     finalizeSection(index);
   } else {
-    waitForScrollEnd(sections[index], () => finalizeSection(index));
+    waitForScrollEnd(target, () => finalizeSection(index));
   }
 }
 
@@ -432,11 +465,8 @@ const observer = new IntersectionObserver((entries) => {
         if (isMobileWidth()) isRevealing = true;
         current = index;
         setActiveNav(index);
-        entry.target.scrollIntoView(isMobileWidth()
-          ? { block: 'start' }
-          : { behavior: 'smooth', block: 'start' }
-        );
-        waitForScrollEnd(sections[index], () => finalizeSection(index));
+        const target = scrollToSection(sections[index], !isMobileWidth());
+        waitForScrollEnd(target, () => finalizeSection(index));
       }
     }
   });
@@ -504,7 +534,12 @@ function setupTilt() {
 }
 
 // ── Inicialização ────────────────────────────────────────
-goTo(0, true);
+try {
+  goTo(0, true);
+} catch (err) {
+  document.body.dataset.section = 'home';
+  forceRevealSection(sections[0]);
+}
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
