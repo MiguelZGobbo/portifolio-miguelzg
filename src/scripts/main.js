@@ -30,7 +30,6 @@ function isMobileWidth() {
   return window.matchMedia('(max-width: 640px)').matches;
 }
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
 function lockScroll() {
@@ -409,6 +408,8 @@ function triggerReveals(section) {
 }
 
 function finalizeSection(index) {
+  sectionWheelLock = false;
+  sectionWheelReadyAt = Date.now() + 150;
   isScrolling = false;
   revealSection(sections[index]);
   if (isRevealing) {
@@ -446,27 +447,49 @@ function goTo(index, skipWait = false) {
 }
 
 // ── Intersection Observer para Scroll Nativo ──────────────
+function sectionFullyRevealed(section) {
+  return !section || section.querySelectorAll('.reveal:not(.visible)').length === 0;
+}
+
 const observerOptions = {
   root: container,
-  rootMargin: '0px 0px -20% 0px',
-  threshold: 0.35
+  threshold: [0, 0.6]
 };
 
 const observer = new IntersectionObserver((entries) => {
-  if (isScrolling || isInitializing) return;
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const index = sections.indexOf(entry.target);
-      if (index !== -1 && index !== current) {
+    const index = sections.indexOf(entry.target);
+    if (index === -1) return;
+
+    if (!entry.isIntersecting) {
+      resetSectionReveals(entry.target);
+      return;
+    }
+
+    if (isScrolling || isInitializing) return;
+
+    if (isMobileWidth()) {
+      if (index !== current) {
         if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
         isRevealing = false;
         if (current >= 0) resetSectionReveals(sections[current]);
         isScrolling = true;
-        if (isMobileWidth()) isRevealing = true;
+        isRevealing = true;
         current = index;
         setActiveNav(index);
-        const target = scrollToSection(sections[index], !isMobileWidth());
+        const target = scrollToSection(sections[index], false);
         waitForScrollEnd(target, () => finalizeSection(index));
+      }
+      return;
+    }
+
+    if (entry.intersectionRatio >= 0.6) {
+      if (index !== current) {
+        current = index;
+        setActiveNav(index);
+      }
+      if (!sectionFullyRevealed(entry.target)) {
+        finalizeSection(index);
       }
     }
   });
@@ -483,6 +506,95 @@ navLinks.forEach(link => {
     goTo(index);
   });
 });
+
+// ── Scroll por seção (desktop): seções de 1 tela trocam a cada gesto;
+//    seções com conteúdo maior que a tela rolam o conteúdo e só trocam na borda ──
+let sectionWheelLock = false;
+let sectionWheelReadyAt = 0;
+
+function sectionContentBottom(sec) {
+  let bottom = sec.offsetTop;
+  sec.querySelectorAll('.section-inner').forEach(inner => {
+    bottom = Math.max(bottom, inner.offsetTop + inner.offsetHeight);
+  });
+  return bottom;
+}
+
+function fitsViewport(sec) {
+  return sectionContentBottom(sec) - sec.offsetTop <= container.clientHeight + 2;
+}
+
+function sectionRange(i) {
+  const sec = sections[i];
+  return {
+    top: sec.offsetTop,
+    bottom: Math.min(
+      sec.offsetTop + sec.offsetHeight - container.clientHeight,
+      sectionContentBottom(sec) - container.clientHeight
+    ),
+  };
+}
+
+function advanceSection(dir) {
+  const next = Math.max(0, Math.min(sections.length - 1, current + dir));
+  if (next === current || sectionWheelLock || isScrolling) return;
+  sectionWheelLock = true;
+  goTo(next);
+}
+
+function scrollSectionContent(dir, step) {
+  const range = sectionRange(current);
+  if (dir > 0) {
+    if (container.scrollTop < range.bottom - 2) {
+      container.scrollTop = Math.min(range.bottom, container.scrollTop + step);
+      return;
+    }
+    advanceSection(1);
+  } else {
+    if (container.scrollTop > range.top + 2) {
+      container.scrollTop = Math.max(range.top, container.scrollTop - step);
+      return;
+    }
+    advanceSection(-1);
+  }
+}
+
+function handleScrollInput(dir, step) {
+  if (sectionWheelLock || isScrolling) return;
+  const sec = sections[current];
+  if (!sec) return;
+  if (fitsViewport(sec)) {
+    advanceSection(dir);
+    return;
+  }
+  scrollSectionContent(dir, step);
+}
+
+if (!isMobileWidth()) {
+  window.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (isInitializing || e.ctrlKey || e.metaKey) return;
+    if (Date.now() < sectionWheelReadyAt) return;
+    const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (Math.abs(delta) < 1) return;
+    handleScrollInput(delta > 0 ? 1 : -1, Math.abs(delta));
+  }, { passive: false });
+
+  window.addEventListener('keydown', (e) => {
+    if (isInitializing) return;
+    const el = e.target;
+    if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable)) return;
+    let dir = 0;
+    let isBig = false;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { dir = 1; isBig = e.key !== 'ArrowDown'; }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { dir = -1; isBig = e.key !== 'ArrowUp'; }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); return; }
+    else if (e.key === 'End') { e.preventDefault(); goTo(sections.length - 1); return; }
+    if (dir === 0) return;
+    e.preventDefault();
+    handleScrollInput(dir, isBig ? Math.round(container.clientHeight * 0.85) : 48);
+  });
+}
 
 // ── Redimensionamento da Janela ───────────────────────────
 window.addEventListener('resize', () => {
@@ -501,7 +613,7 @@ const heroPhoto = document.querySelector('.hero-photo');
 let rafParallax = null;
 
 function updateParallax() {
-  if (reducedMotion.matches || !heroPhoto) return;
+  if (!heroPhoto) return;
   heroPhoto.style.translate = `0 ${Math.round(-container.scrollTop * 0.08)}px`;
 }
 
@@ -515,7 +627,7 @@ container.addEventListener('scroll', () => {
 
 // ── Tilt 3D nos cards de projeto ─────────────────────────
 function setupTilt() {
-  if (reducedMotion.matches || isTouchDevice()) return;
+  if (isTouchDevice()) return;
   document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('pointermove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -545,6 +657,20 @@ requestAnimationFrame(() => {
   if (activeLink) movePill(activeLink);
   isInitializing = false;
 });
+
+// ── Rede de segurança: seção com parte visível nunca fica vazia ──
+setInterval(() => {
+  const pos = container.scrollTop;
+  const viewBottom = pos + container.clientHeight;
+  sections.forEach((section, i) => {
+    if (section.offsetTop < viewBottom && section.offsetTop + section.offsetHeight > pos) {
+      if (!sectionFullyRevealed(section)) {
+        if (i === current) finalizeSection(i);
+        else forceRevealSection(section);
+      }
+    }
+  });
+}, 2000);
 
 applyTheme(currentTheme(), false);
 const initLang = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';

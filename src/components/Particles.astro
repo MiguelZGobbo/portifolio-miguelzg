@@ -6,7 +6,6 @@
 <script>
   const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement | null;
   const ctx = canvas?.getContext('2d');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
   const COUNT = 30;
@@ -68,7 +67,7 @@
   }
 
   function start() {
-    if (running || reducedMotion.matches || document.hidden) return;
+    if (running || document.hidden) return;
     if (!particles.length) {
       resize();
       initParticles();
@@ -105,11 +104,6 @@
     particles.forEach((p) => {
       p.color = Math.random() > 0.45 ? colors.a : colors.b;
     });
-  });
-
-  reducedMotion.addEventListener('change', () => {
-    if (reducedMotion.matches) stop();
-    else if (heroVisible) start();
   });
 
   if (isTouch) stop();
