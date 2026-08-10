@@ -68,11 +68,23 @@ let scrollWaiter = null;
 function scrollToSection(section, smooth = false) {
   const max = container.scrollHeight - container.clientHeight;
   const target = Math.min(section.offsetTop, Math.max(0, max));
+  if (smooth) {
+    try {
+      container.scrollTo({ top: target, behavior: 'smooth' });
+    } catch (e) {
+      container.scrollTop = target;
+    }
+    return target;
+  }
+  const prevBehavior = container.style.scrollBehavior;
+  container.style.scrollBehavior = 'auto';
   try {
-    container.scrollTo({ top: target, behavior: smooth ? 'smooth' : 'auto' });
+    container.scrollTo({ top: target, behavior: 'auto' });
   } catch (e) {
     container.scrollTop = target;
   }
+  if (prevBehavior === '') container.style.removeProperty('scroll-behavior');
+  else container.style.scrollBehavior = prevBehavior;
   return target;
 }
 
@@ -320,28 +332,10 @@ function cancelRevealAnimations(el) {
   try { el.getAnimations().forEach(anim => anim.cancel()); } catch (e) {}
 }
 
-function playRevealAnimation(el, from, to, duration, easing) {
-  if (typeof el.animate !== 'function') return;
-  try {
-    el.animate([from, to], { duration, easing, fill: 'forwards' });
-  } catch (e) {}
-}
-
 function resetSectionReveals(section) {
   if (!section) return;
+  if (isMobileWidth()) return;
   section.querySelectorAll('.reveal').forEach(el => {
-    if (isMobileWidth()) {
-      cancelRevealAnimations(el);
-      if (el.classList.contains('visible')) {
-        playRevealAnimation(
-          el,
-          { opacity: 1, transform: 'translateY(0)' },
-          { opacity: 0, transform: 'translateY(8px)' },
-          200,
-          'ease-in'
-        );
-      }
-    }
     el.classList.remove('visible');
     el.style.opacity = '';
     el.style.transform = '';
@@ -350,18 +344,7 @@ function resetSectionReveals(section) {
 
 function revealSection(section) {
   if (isMobileWidth()) {
-    const els = Array.from(section.querySelectorAll('.reveal'));
-    els.forEach(el => {
-      cancelRevealAnimations(el);
-      el.classList.add('visible');
-      playRevealAnimation(
-        el,
-        { opacity: 0, transform: 'translateY(20px)' },
-        { opacity: 1, transform: 'translateY(0)' },
-        600,
-        'ease'
-      );
-    });
+    forceRevealSection(section);
   } else {
     triggerReveals(section);
   }
@@ -462,7 +445,7 @@ const observer = new IntersectionObserver((entries) => {
     if (index === -1) return;
 
     if (!entry.isIntersecting) {
-      resetSectionReveals(entry.target);
+      if (!isMobileWidth()) resetSectionReveals(entry.target);
       return;
     }
 
@@ -470,15 +453,8 @@ const observer = new IntersectionObserver((entries) => {
 
     if (isMobileWidth()) {
       if (index !== current) {
-        if (unlockTimeout) { clearTimeout(unlockTimeout); unlockTimeout = null; }
-        isRevealing = false;
-        if (current >= 0) resetSectionReveals(sections[current]);
-        isScrolling = true;
-        isRevealing = true;
         current = index;
         setActiveNav(index);
-        const target = scrollToSection(sections[index], false);
-        waitForScrollEnd(target, () => finalizeSection(index));
       }
       return;
     }
@@ -651,6 +627,9 @@ try {
 } catch (err) {
   document.body.dataset.section = 'home';
   forceRevealSection(sections[0]);
+}
+if (isMobileWidth()) {
+  sections.forEach(forceRevealSection);
 }
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');

@@ -1382,7 +1382,8 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         stroke-width: 200;
     }
     .wave-1 .wave-blurred {
-        filter: blur(100px);
+        filter: blur(28px);
+        animation: none;
     }
     .wave-2 .bg-wave-inner {
         color: rgba(160, 135, 110, 0.65);
@@ -1391,7 +1392,8 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         stroke-width: 170;
     }
     .wave-2 .wave-blurred {
-        filter: blur(80px);
+        filter: blur(24px);
+        animation: none;
     }
     .wave-3 .bg-wave-inner {
         color: rgba(122, 82, 52, 0.40);
@@ -1400,7 +1402,8 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         stroke-width: 140;
     }
     .wave-3 .wave-blurred {
-        filter: blur(60px);
+        filter: blur(20px);
+        animation: none;
     }
 
     :root {
@@ -1503,7 +1506,11 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         width: 20px;
         height: 20px;
         flex-shrink: 0;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+    }
+
+    .nav-links a {
+        transition: background 0.25s ease, color 0.25s ease, border-radius 0.25s ease, transform 0.25s ease;
     }
 
     .nav-links a.active {
@@ -1511,6 +1518,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         border-radius: 8px;
         color: var(--cream);
         transform: scale(0.95);
+        box-shadow: 0 4px 14px rgba(88, 58, 34, 0.28);
     }
 
     .nav-links a.active .nav-icon {
@@ -1529,6 +1537,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .scroll-container {
         bottom: 0;
         padding-bottom: 86px;
+        scroll-behavior: auto;
     }
 
     .snap-section {
@@ -1548,8 +1557,16 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 0 1.2rem;
     }
 
-    html.js .reveal {
+    /* Mobile: conteúdo sempre visível (sem depender de animação JS) */
+    html.js .reveal,
+    html.js .reveal.visible {
+        opacity: 1;
+        transform: none;
         transition: none;
+    }
+
+    .hero-photo::before {
+        animation: none;
     }
 
     .section-title {
