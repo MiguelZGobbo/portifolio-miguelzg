@@ -444,20 +444,14 @@ const observer = new IntersectionObserver((entries) => {
     const index = sections.indexOf(entry.target);
     if (index === -1) return;
 
+    if (isMobileWidth()) return;
+
     if (!entry.isIntersecting) {
-      if (!isMobileWidth()) resetSectionReveals(entry.target);
+      resetSectionReveals(entry.target);
       return;
     }
 
     if (isScrolling || isInitializing) return;
-
-    if (isMobileWidth()) {
-      if (index !== current) {
-        current = index;
-        setActiveNav(index);
-      }
-      return;
-    }
 
     if (entry.intersectionRatio >= 0.6) {
       if (index !== current) {
@@ -472,6 +466,23 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 sections.forEach(section => observer.observe(section));
+
+// ── Seção ativa no mobile (por posição de scroll) ────────
+function updateActiveSection() {
+  if (!isMobileWidth()) return;
+  const mid = container.scrollTop + container.clientHeight / 2;
+  let next = current;
+  for (let i = 0; i < sections.length; i++) {
+    if (mid >= sections[i].offsetTop && mid < sections[i].offsetTop + sections[i].offsetHeight) {
+      next = i;
+      break;
+    }
+  }
+  if (next !== current && next >= 0) {
+    current = next;
+    setActiveNav(next);
+  }
+}
 
 // ── Cliques na navbar ────────────────────────────────────
 navLinks.forEach(link => {
@@ -574,6 +585,7 @@ if (!isMobileWidth()) {
 
 // ── Redimensionamento da Janela ───────────────────────────
 window.addEventListener('resize', () => {
+  updateActiveSection();
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) {
     navPill.style.transition = 'none';
@@ -597,6 +609,7 @@ container.addEventListener('scroll', () => {
   if (rafParallax) return;
   rafParallax = requestAnimationFrame(() => {
     updateParallax();
+    updateActiveSection();
     rafParallax = null;
   });
 }, { passive: true });
@@ -634,6 +647,7 @@ if (isMobileWidth()) {
 requestAnimationFrame(() => {
   const activeLink = document.querySelector('.nav-links a.active');
   if (activeLink) movePill(activeLink);
+  updateActiveSection();
   isInitializing = false;
 });
 
