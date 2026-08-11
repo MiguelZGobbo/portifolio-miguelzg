@@ -32,14 +32,6 @@ function isMobileWidth() {
 
 const isTouchDevice = () => window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-function lockScroll() {
-  if (isMobileWidth()) container.style.overflow = 'hidden';
-}
-
-function unlockScroll() {
-  if (isMobileWidth()) container.style.overflow = '';
-}
-
 function calcRevealDuration(section) {
   if (isMobileWidth()) return 500;
   const stagger = parseInt(section.dataset.stagger, 10) || 80;
@@ -145,8 +137,6 @@ function setActiveNav(index) {
             }
           }, 350);
         }, 150);
-      } else {
-        movePill(link);
       }
 
     } else {

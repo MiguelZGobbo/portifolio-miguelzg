@@ -4,7 +4,6 @@ export interface Localized {
 }
 
 export interface Project {
-  id: string;
   name: Localized;
   desc: Localized;
   stack: string[];
@@ -14,7 +13,6 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'purchase-orders-api',
     name: { pt: 'Purchase Orders API', en: 'Purchase Orders API' },
     desc: {
       pt: 'API REST para gerenciamento de pedidos de compra, com autenticação JWT, containerização via Docker e documentação interativa via Swagger.',
@@ -28,7 +26,6 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'task-management-api',
     name: { pt: 'API de Gerenciamento de Tarefas', en: 'Task Management API' },
     desc: {
       pt: 'API REST para gerenciamento de tarefas utilizando Java e Spring Boot, com persistência de dados implementada via Spring Data JPA e MySQL, e gerenciamento de dependências e build com Maven.',
@@ -42,7 +39,6 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'retro-car-horizon',
     name: { pt: 'Retro Car Horizon', en: 'Retro Car Horizon' },
     desc: {
       pt: 'Jogo arcade 2D desenvolvido em Pygame, com três níveis de dificuldade e arquitetura baseada em Factory e Mediator para gerenciar entidades e colisões.',
@@ -56,7 +52,6 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'portfolio-miguel-zg',
     name: { pt: 'Portfólio Miguel ZG', en: 'Miguel ZG Portfolio' },
     desc: {
       pt: 'Site pessoal desenvolvido com Astro, apresentando projetos, habilidades e contato, com design responsivo, dark mode, i18n e navegação fluida.',

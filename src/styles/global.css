@@ -28,7 +28,8 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    overflow: hidden;
+    height: 100vh;
 }
 
 body {
@@ -1203,17 +1204,14 @@ footer {
 }
 
 /* ── Posições base (home) ── */
-body[data-section="home"] .wave-1 .bg-wave-inner,
 .wave-1 .bg-wave-inner {
     transform: translate(calc(100vw - clamp(240px, 22vw, 650px)), clamp(-130px, -7vw, -60px));
     opacity: 1;
 }
-body[data-section="home"] .wave-2 .bg-wave-inner,
 .wave-2 .bg-wave-inner {
     transform: translate(clamp(-100px, -6vw, -40px), clamp(80px, 4vw, 40px));
     opacity: 1;
 }
-body[data-section="home"] .wave-3 .bg-wave-inner,
 .wave-3 .bg-wave-inner {
     transform: translate(calc(100vw - clamp(150px, 15vw, 300px)), clamp(30vh, 35vh, 40vh));
     opacity: 0.8;
@@ -1481,10 +1479,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 0.25rem;
     }
 
-    .nav-links a:hover {
-        transform: none;
-    }
-
     .nav-links a:focus-visible {
         outline: 2px solid var(--brown-dark);
         outline-offset: 2px;
@@ -1494,7 +1488,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .btn:focus-visible {
         outline: 2px solid var(--brown-dark);
         outline-offset: 2px;
-        border-radius: 3px;
+        border-radius: 8px;
     }
 
     .nav-links a:focus-visible .nav-text,
