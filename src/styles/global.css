@@ -1703,7 +1703,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     #contato {
         justify-content: center;
-        padding-bottom: 0;
+        padding-bottom: 130px;
     }
     #contato .section-inner {
         justify-content: flex-start;
@@ -1868,6 +1868,10 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 [data-theme="dark"] .raw-4 { color: rgba(216, 165, 108, 0.05); }
 
 @media (max-width: 640px) {
+    [data-theme="dark"] nav {
+        background: transparent;
+        box-shadow: none;
+    }
     [data-theme="dark"] body[data-section="home"] nav,
     [data-theme="dark"] .nav-links {
         background: rgba(38, 30, 22, 0.92);
