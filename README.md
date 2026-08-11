@@ -1,6 +1,6 @@
 # 👨‍💻 Portfólio Miguel Zager Gobbo
 
-Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, scroll-snap, animações de reveal, **dark mode**, **i18n PT/EN**, **PWA** e **SEO**.
+Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta minhas habilidades, projetos e formas de contato, com design responsivo, navegação por seções, animações de reveal, **dark mode**, **i18n PT/EN**, **PWA** e **SEO**.
 
 ![Astro](https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
@@ -26,8 +26,8 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
 - **Dark mode** — automático (`prefers-color-scheme`) com toggle manual persistido
 - **i18n PT/EN** — toggle na página, com detecção do idioma do navegador
 - **Efeitos** — partículas em canvas, parallax no hero e tilt 3D nos cards
-- **Acessibilidade** — skip-link, foco visível e suporte a `prefers-reduced-motion`
-- **PWA** — manifest e ícones instaláveis
+- **Acessibilidade** — skip-link e foco visível
+- **PWA** — manifest e ícones de aplicativo
 - **SEO** — sitemap, robots, canonical, Open Graph e JSON-LD
 
 ---
@@ -36,7 +36,7 @@ Site pessoal desenvolvido com **Astro**, **CSS** e **JavaScript**. Apresenta min
 
 - **Astro** — Framework estático com componentes e otimização automática de imagens (WebP)
 - **CSS3** — Estilização, layout responsivo e ondas decorativas em SVG
-- **JavaScript** — Navegação com scroll-snap, animações de reveal e interações
+- **JavaScript** — Navegação por seções, animações de reveal e interações
 - **EmailJS** — Envio de mensagens pelo formulário de contato (carregado sob demanda)
 - **@fontsource-variable** — Fontes variáveis auto-hospedadas (Playfair Display e DM Sans)
 - **@astrojs/sitemap** — Geração automática do sitemap
@@ -122,9 +122,7 @@ portifolio-miguelzg/
     ├── pages/
     │   └── index.astro
     ├── scripts/
-    │   ├── main.js           # Interações, animações e i18n
-    │   ├── generate-icons.mjs
-    │   └── generate-cv-placeholder.mjs
+    │   └── main.js           # Interações, animações e i18n
     └── styles/
         └── global.css        # Estilos globais
 ```
