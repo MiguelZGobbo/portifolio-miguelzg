@@ -137,6 +137,6 @@ O deploy é automático via **GitHub Actions** (`.github/workflows/deploy.yml`):
 
 ## 👤 Autor
 
-**Miguel Zago Gobbo**
+**Miguel Zager Gobbo**
 
 [![GitHub](https://img.shields.io/badge/GitHub-MiguelZGobbo-181717?logo=github)](https://github.com/MiguelZGobbo)
