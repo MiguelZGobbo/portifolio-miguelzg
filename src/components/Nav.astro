@@ -12,17 +12,15 @@ const { lang = 'pt' } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: 'home', icon: 'home' },
-  { id: 'sobre', icon: 'user' },
-  { id: 'habilidades', icon: 'code' },
   { id: 'projetos', icon: 'folder' },
+  { id: 'sobre', icon: 'user' },
   { id: 'cv', icon: 'file' },
   { id: 'contato', icon: 'mail' },
 ] as const;
 ---
 
 <nav aria-label={dict['a11y.nav']}>
-  <div class="logo">{dict['nav.logo']}</div>
+  <a href="#home" class="logo" data-i18n="nav.logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>{dict['nav.logo']}</a>
   <div class="nav-right">
     <div class="nav-links">
       {
@@ -31,7 +29,6 @@ const links = [
             href={`#${link.id}`}
             data-i18n-aria={`nav.${link.id}.aria`}
             aria-label={dict[`nav.${link.id}.aria`]}
-            aria-current={link.id === 'home' ? 'page' : undefined}
           >
             <span class="nav-text" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
             <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />

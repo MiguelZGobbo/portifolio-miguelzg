@@ -1,0 +1,58 @@
+---
+import Icon from '../Icon.astro';
+import SectionTitle from '../SectionTitle.astro';
+import { translations, type Lang } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+const dict = translations[lang] as Record<string, string>;
+const base = import.meta.env.BASE_URL;
+const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
+---
+
+<section class="snap-section home-section home-section--profile" id="sobre">
+  <div class="section-inner">
+    <SectionTitle lang={lang} labelKey="sobre.label" titleKey="sobre.title" icon="user" />
+    <div class="profile-grid">
+      <div class="about-text">
+        <p class="reveal" data-i18n="sobre.p1">{dict['sobre.p1']}</p>
+        <p class="reveal" data-i18n="sobre.p2">{dict['sobre.p2']}</p>
+        <p class="reveal" data-i18n="sobre.p3">{dict['sobre.p3']}</p>
+      </div>
+      <div class="profile-sidebar reveal">
+        <div class="education-card">
+          <h3 class="education-title" data-i18n="sobre.education">{dict['sobre.education']}</h3>
+          <div class="education-item">
+            <p class="education-degree" data-i18n="sobre.education.primary">{dict['sobre.education.primary']}</p>
+            <p class="education-school" data-i18n="sobre.education.school">{dict['sobre.education.school']}</p>
+            <p class="education-dates" data-i18n="sobre.education.dates">{dict['sobre.education.dates']}</p>
+          </div>
+          <div class="education-item education-item--secondary">
+            <p class="education-degree" data-i18n="sobre.education.secondary">{dict['sobre.education.secondary']}</p>
+            <p class="education-school" data-i18n="sobre.education.secondarySchool">{dict['sobre.education.secondarySchool']}</p>
+            <p class="education-dates" data-i18n="sobre.education.secondaryDates">{dict['sobre.education.secondaryDates']}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="cv-box profile-cv reveal" id="cv" aria-labelledby="cv-title">
+      <div class="cv-info">
+        <h3 class="cv-title" id="cv-title" data-i18n="cv.boxTitle">{dict['cv.boxTitle']}</h3>
+        <p class="cv-sub" data-i18n="cv.boxSub">{dict['cv.boxSub']}</p>
+      </div>
+      <div class="cv-actions">
+        <a href={cvUrl} data-cv target="_blank" rel="noopener noreferrer" class="btn btn-outline" data-i18n-aria="cv.viewAria" aria-label={dict['cv.viewAria']}>
+          <Icon name="eye" size={14} strokeWidth={2.5} />
+          <span data-i18n="cv.view">{dict['cv.view']}</span>
+        </a>
+        <a href={cvUrl} data-cv download="MiguelZagerGobbo-CV.pdf" class="btn" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
+          <Icon name="download" size={14} strokeWidth={2.5} />
+          <span data-i18n="cv.download">{dict['cv.download']}</span>
+        </a>
+      </div>
+    </aside>
+  </div>
+</section>

@@ -1,24 +1,17 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Waves from '../components/Waves.astro';
-import Particles from '../components/Particles.astro';
 import Nav from '../components/Nav.astro';
-import SectionTitle from '../components/SectionTitle.astro';
-import SkillCard from '../components/SkillCard.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import CopyButton from '../components/CopyButton.astro';
-import ContactForm from '../components/ContactForm.astro';
-import { skillGroups } from '../data/skills';
-import { projects } from '../data/projects';
+import Particles from '../components/Particles.astro';
+import Waves from '../components/Waves.astro';
+import ContactSection from '../components/home/ContactSection.astro';
+import HeroSection from '../components/home/HeroSection.astro';
+import ProfileSection from '../components/home/ProfileSection.astro';
+import ProjectsSection from '../components/home/ProjectsSection.astro';
+import SkillsSection from '../components/home/SkillsSection.astro';
 import { translations, type Lang } from '../lib/i18n';
-import foto from '../assets/foto-perfil.jpeg';
 
 const lang: Lang = 'pt';
 const dict = translations[lang] as Record<string, string>;
-
-const base = import.meta.env.BASE_URL;
-const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
 ---
 
 <BaseLayout
@@ -31,151 +24,10 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
   <Nav lang={lang} />
 
   <main class="scroll-container">
-
-    <!-- HERO -->
-    <section class="snap-section" id="home">
-      <div class="section-inner hero-inner">
-        <div class="hero-text">
-          <div class="hero-tag reveal" data-i18n="hero.tag">{dict['hero.tag']}</div>
-          <h1 class="hero-title reveal" data-i18n-html="hero.title" set:html={dict['hero.title']}></h1>
-          <p class="hero-sub reveal" data-i18n="hero.sub">{dict['hero.sub']}</p>
-        </div>
-        <div class="hero-photo reveal">
-          <Image
-            src={foto}
-            alt={dict['img.profile.alt']}
-            data-i18n-alt="img.profile.alt"
-            class="profile-photo"
-            fetchpriority="high"
-            loading="eager"
-            decoding="sync"
-            widths={[120, 150, 180, 240, 280]}
-            sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, min(280px, 22vw)"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- SOBRE -->
-    <section class="snap-section" id="sobre">
-      <div class="section-inner">
-        <SectionTitle lang={lang} labelKey="sobre.label" titleKey="sobre.title" icon="user" />
-        <div class="about-grid">
-          <div class="about-text">
-            <p class="reveal" data-i18n="sobre.p1">{dict['sobre.p1']}</p>
-            <p class="reveal" data-i18n="sobre.p2">{dict['sobre.p2']}</p>
-          </div>
-          <div class="about-info reveal">
-            <div class="info-item reveal">
-              <div class="label" data-i18n="sobre.formacao">{dict['sobre.formacao']}</div>
-              <div class="value" data-i18n-html="sobre.formacao.val" set:html={dict['sobre.formacao.val']}></div>
-            </div>
-            <div class="info-item reveal">
-              <div class="label" data-i18n="sobre.foco">{dict['sobre.foco']}</div>
-              <div class="value" data-i18n="sobre.foco.val">{dict['sobre.foco.val']}</div>
-            </div>
-            <div class="info-item reveal">
-              <div class="label" data-i18n="sobre.status">{dict['sobre.status']}</div>
-              <div class="value" data-i18n="sobre.status.val">{dict['sobre.status.val']}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- HABILIDADES -->
-    <section class="snap-section" id="habilidades" data-stagger="120">
-      <div class="section-inner">
-        <SectionTitle lang={lang} labelKey="skills.label" titleKey="skills.title" icon="code" />
-        <div class="skills-grid" id="skills-grid">
-          {skillGroups.map((group) => <SkillCard group={group} lang={lang} />)}
-        </div>
-      </div>
-    </section>
-
-    <!-- PROJETOS -->
-    <section class="snap-section" id="projetos" data-stagger="120">
-      <div class="section-inner">
-        <SectionTitle lang={lang} labelKey="projects.label" titleKey="projects.title" icon="folder" />
-        <div class="projects-list" id="projects-list">
-          {projects.map((project) => <ProjectCard project={project} lang={lang} />)}
-        </div>
-      </div>
-    </section>
-
-    <!-- CURRÍCULO -->
-    <section class="snap-section" id="cv">
-      <div class="section-inner">
-        <SectionTitle lang={lang} labelKey="cv.label" titleKey="cv.title" icon="file" />
-        <div class="cv-box reveal">
-          <div class="cv-info">
-            <div class="cv-title" data-i18n="cv.boxTitle">{dict['cv.boxTitle']}</div>
-            <div class="cv-sub" data-i18n="cv.boxSub">{dict['cv.boxSub']}</div>
-          </div>
-          <div class="cv-actions">
-            <a href={cvUrl} data-cv target="_blank" rel="noopener noreferrer" class="btn btn-outline reveal" data-i18n-aria="cv.viewAria" aria-label={dict['cv.viewAria']}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <span data-i18n="cv.view">{dict['cv.view']}</span>
-            </a>
-            <a href={cvUrl} data-cv download="MiguelZagerGobbo-CV.pdf" class="btn reveal" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span data-i18n="cv.download">{dict['cv.download']}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTATO -->
-    <section class="snap-section" id="contato">
-      <div class="section-inner">
-        <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" icon="mail" />
-        <div class="contact-grid">
-          <ContactForm lang={lang} />
-          <div class="contact-info reveal">
-            <div class="contact-group">
-              <div class="contact-item reveal">
-                <div class="label" data-i18n="contact.linkedin">{dict['contact.linkedin']}</div>
-                <div class="val-row">
-                  <a href="https://www.linkedin.com/in/miguel-zager-gobbo" target="_blank" rel="noopener noreferrer" class="val-link">linkedin.com/in/miguel-zg</a>
-                  <CopyButton text="https://www.linkedin.com/in/miguel-zager-gobbo" title="LinkedIn" ariaLabel={dict['copy.linkedin']} i18nKey="copy.linkedin" />
-                </div>
-              </div>
-              <div class="contact-item reveal">
-                <div class="label" data-i18n="contact.github">{dict['contact.github']}</div>
-                <div class="val-row">
-                  <a href="https://github.com/MiguelZGobbo" target="_blank" rel="noopener noreferrer" class="val-link">github.com/MiguelZGobbo</a>
-                  <CopyButton text="https://github.com/MiguelZGobbo" title="GitHub" ariaLabel={dict['copy.github']} i18nKey="copy.github" />
-                </div>
-              </div>
-            </div>
-            <div class="contact-group contact-group--muted">
-              <div class="contact-item reveal">
-                <div class="label" data-i18n="contact.email">{dict['contact.email']}</div>
-                <div class="val-row">
-                  <span class="val">miguelzgobbo@gmail.com</span>
-                  <CopyButton text="miguelzgobbo@gmail.com" title="E-mail" ariaLabel={dict['copy.email']} i18nKey="copy.email" />
-                </div>
-              </div>
-              <div class="contact-item">
-                <div class="label" data-i18n="contact.location">{dict['contact.location']}</div>
-                <div class="val-row">
-                  <span class="val" data-i18n="contact.location.val">{dict['contact.location.val']}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer data-i18n="contact.footer">{dict['contact.footer'].replace('{year}', String(new Date().getFullYear()))}</footer>
-    </section>
-
+    <HeroSection lang={lang} />
+    <ProjectsSection lang={lang} />
+    <SkillsSection lang={lang} />
+    <ProfileSection lang={lang} />
+    <ContactSection lang={lang} />
   </main>
 </BaseLayout>

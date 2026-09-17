@@ -1,0 +1,26 @@
+---
+import ProjectCard from '../ProjectCard.astro';
+import SectionTitle from '../SectionTitle.astro';
+import { projects } from '../../data/projects';
+import type { Lang } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+const featuredProjects = projects.filter((project) => !project.compact);
+const compactProjects = projects.filter((project) => project.compact);
+---
+
+<section class="snap-section home-section home-section--projects" id="projetos" data-stagger="120">
+  <div class="section-inner">
+    <SectionTitle lang={lang} labelKey="projects.label" titleKey="projects.title" icon="folder" />
+    <div class="projects-list projects-list--featured" id="projects-list">
+      {featuredProjects.map((project) => <ProjectCard project={project} lang={lang} />)}
+    </div>
+    <div class="projects-compact-list">
+      {compactProjects.map((project) => <ProjectCard project={project} lang={lang} />)}
+    </div>
+  </div>
+</section>
