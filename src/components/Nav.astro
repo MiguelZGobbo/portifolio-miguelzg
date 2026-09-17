@@ -6,9 +6,11 @@ import { translations, type Lang } from '../lib/i18n';
 
 interface Props {
   lang?: Lang;
+  homeHref?: string;
+  showControls?: boolean;
 }
 
-const { lang = 'pt' } = Astro.props;
+const { lang = 'pt', homeHref = '', showControls = true } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
@@ -20,13 +22,13 @@ const links = [
 ---
 
 <nav aria-label={dict['a11y.nav']}>
-  <a href="#home" class="logo" data-i18n="nav.logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>{dict['nav.logo']}</a>
+  <a href={`${homeHref}#home`} class="logo" data-i18n="nav.logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>{dict['nav.logo']}</a>
   <div class="nav-right">
     <div class="nav-links">
       {
         links.map((link) => (
           <a
-            href={`#${link.id}`}
+            href={`${homeHref}#${link.id}`}
             data-i18n-aria={`nav.${link.id}.aria`}
             aria-label={dict[`nav.${link.id}.aria`]}
           >
@@ -37,9 +39,13 @@ const links = [
         ))
       }
     </div>
-    <div class="nav-controls">
-      <LangToggle />
-      <ThemeToggle />
-    </div>
+    {
+      showControls && (
+        <div class="nav-controls">
+          <LangToggle />
+          <ThemeToggle />
+        </div>
+      )
+    }
   </div>
 </nav>

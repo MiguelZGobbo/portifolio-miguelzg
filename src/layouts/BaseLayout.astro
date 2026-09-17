@@ -9,16 +9,26 @@ interface Props {
   title: string;
   description: string;
   lang?: Lang;
+  bodySection?: string;
+  skipTarget?: string;
+  includeHomeScript?: boolean;
 }
 
-const { title, description, lang = 'pt' } = Astro.props;
+const {
+  title,
+  description,
+  lang = 'pt',
+  bodySection = 'home',
+  skipTarget = '#home',
+  includeHomeScript = true,
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dict = translations[lang] as Record<string, string>;
 const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light" data-lang={lang}>
+<html lang={lang} data-theme="light" data-lang={lang} class={bodySection === 'case-study' ? 'case-study-page' : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -69,10 +79,10 @@ const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
         document.documentElement.setAttribute('data-lang', lang);
       })();
     </script>
-    <script src="../scripts/main.js"></script>
+    {includeHomeScript && <script src="../scripts/main.js"></script>}
   </head>
-  <body data-section="home">
-    <a class="skip-link" href="#home" data-i18n="a11y.skip">{dict['a11y.skip']}</a>
+  <body data-section={bodySection}>
+    <a class="skip-link" href={skipTarget} data-i18n="a11y.skip">{dict['a11y.skip']}</a>
     <slot />
   </body>
 </html>

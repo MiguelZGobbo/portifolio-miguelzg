@@ -1,0 +1,34 @@
+---
+import ProjectCaseStudy from '../../components/ProjectCaseStudy.astro';
+import Nav from '../../components/Nav.astro';
+import { caseStudyProjects, type CaseStudyProject } from '../../data/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Lang } from '../../lib/i18n';
+
+export function getStaticPaths() {
+  return caseStudyProjects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CaseStudyProject;
+}
+
+const { project } = Astro.props;
+const lang: Lang = 'pt';
+const homeHref = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${project.name[lang]} | Estudo de caso`}
+  description={project.summary[lang]}
+  bodySection="case-study"
+  skipTarget="#case-study-content"
+  includeHomeScript={false}
+>
+  <Nav lang={lang} homeHref={homeHref} showControls={false} />
+  <ProjectCaseStudy project={project} lang={lang} />
+</BaseLayout>

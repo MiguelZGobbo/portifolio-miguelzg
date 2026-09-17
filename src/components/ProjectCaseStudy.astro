@@ -1,0 +1,115 @@
+---
+import type { CaseStudyProject } from '../data/projects';
+import type { Lang } from '../lib/i18n';
+
+interface Props {
+  project: CaseStudyProject;
+  lang?: Lang;
+}
+
+const { project, lang = 'pt' } = Astro.props;
+const { caseStudy } = project;
+const base = import.meta.env.BASE_URL;
+const labels = {
+  pt: {
+    back: 'Voltar aos projetos',
+    currentState: 'Estado atual',
+    repository: 'Ver repositório no GitHub',
+    overview: 'Visão geral',
+    context: 'Contexto',
+    built: 'O que foi construído',
+    decisions: 'Decisões de engenharia',
+    implementation: 'Implementação observável',
+    validation: 'Validação',
+    result: 'Resultado',
+    limitations: 'Limitações e estado atual',
+    evidence: 'Evidências disponíveis',
+  },
+  en: {
+    back: 'Back to projects',
+    currentState: 'Current state',
+    repository: 'View repository on GitHub',
+    overview: 'Overview',
+    context: 'Context',
+    built: 'What was built',
+    decisions: 'Engineering decisions',
+    implementation: 'Observable implementation',
+    validation: 'Validation',
+    result: 'Result',
+    limitations: 'Limitations and current state',
+    evidence: 'Available evidence',
+  },
+}[lang];
+---
+
+<main id="case-study-content" class="case-study-main">
+  <article class="case-study" data-case-study={project.slug}>
+    <a class="case-study-back-link" href={`${base}#projetos`}>{labels.back}</a>
+
+    <header class="case-study-header">
+      <p class="case-study-current-state">
+        <span>{labels.currentState}</span>
+        {project.state[lang]}
+      </p>
+      <h1>{project.name[lang]}</h1>
+      <p class="case-study-summary">{project.summary[lang]}</p>
+      <a
+        class="case-study-repository-link"
+        href={project.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {labels.repository}
+      </a>
+    </header>
+
+    <section class="case-study-section" data-case-study-section="overview" aria-labelledby="case-study-overview">
+      <h2 id="case-study-overview">{labels.overview}</h2>
+      <p>{caseStudy.overview[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="context" aria-labelledby="case-study-context">
+      <h2 id="case-study-context">{labels.context}</h2>
+      <p>{caseStudy.context[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="built" aria-labelledby="case-study-built">
+      <h2 id="case-study-built">{labels.built}</h2>
+      <p>{caseStudy.built[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="decisions" aria-labelledby="case-study-decisions">
+      <h2 id="case-study-decisions">{labels.decisions}</h2>
+      <ul>
+        {caseStudy.decisions.map((decision) => <li>{decision[lang]}</li>)}
+      </ul>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="implementation" aria-labelledby="case-study-implementation">
+      <h2 id="case-study-implementation">{labels.implementation}</h2>
+      <p>{caseStudy.implementation[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="validation" aria-labelledby="case-study-validation">
+      <h2 id="case-study-validation">{labels.validation}</h2>
+      <p>{caseStudy.validation[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="result" aria-labelledby="case-study-result">
+      <h2 id="case-study-result">{labels.result}</h2>
+      <p>{caseStudy.result[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="limitations" aria-labelledby="case-study-limitations">
+      <h2 id="case-study-limitations">{labels.limitations}</h2>
+      <p>{caseStudy.limitations[lang]}</p>
+    </section>
+
+    <section class="case-study-section" data-case-study-section="evidence" aria-labelledby="case-study-evidence">
+      <h2 id="case-study-evidence">{labels.evidence}</h2>
+      <ul>
+        {caseStudy.evidence.map((item) => <li>{item[lang]}</li>)}
+      </ul>
+    </section>
+  </article>
+</main>
