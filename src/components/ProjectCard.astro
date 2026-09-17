@@ -35,15 +35,19 @@ const caseStudyAria = {
         <p class="project-level" data-i18n={`projects.level.${project.hierarchy}`}>{dict[`projects.level.${project.hierarchy}`]}</p>
         <h3 class="project-name" data-project-localized data-project-pt={project.name.pt} data-project-en={project.name.en}>{project.name[lang]}</h3>
       </div>
-      <p
-        class:list={['project-state', `project-state--${project.stateKey}`]}
-        data-project-state={project.stateKey}
-        data-project-localized
-        data-project-pt={project.state.pt}
-        data-project-en={project.state.en}
-      >
-        {project.state[lang]}
-      </p>
+      {
+        project.stateKey === 'in-development' && (
+          <p
+            class:list={['project-state', `project-state--${project.stateKey}`]}
+            data-project-state={project.stateKey}
+            data-project-localized
+            data-project-pt={project.state.pt}
+            data-project-en={project.state.en}
+          >
+            {project.state[lang]}
+          </p>
+        )
+      }
     </header>
     <p class="project-desc project-summary" data-project-localized data-project-pt={project.summary.pt} data-project-en={project.summary.en}>{project.summary[lang]}</p>
     {

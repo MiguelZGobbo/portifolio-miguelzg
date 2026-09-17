@@ -56,6 +56,19 @@ test('renders all project levels with their available depth and visible state', 
   assert.doesNotMatch(taskApi, /project-case-study-link/);
 });
 
+test('renders a public state badge only for the in-development project', () => {
+  const purchaseOrders = projectMarkup('purchase-orders-api');
+  const beadWise = projectMarkup('beadwise');
+  const portfolio = projectMarkup('portfolio');
+  const taskApi = projectMarkup('task-management-api');
+
+  assert.match(beadWise, /class="project-state project-state--in-development"/);
+  assert.match(beadWise, />em desenvolvimento</);
+  assert.doesNotMatch(purchaseOrders, /\bproject-state\b/);
+  assert.doesNotMatch(portfolio, /\bproject-state\b/);
+  assert.doesNotMatch(taskApi, /\bproject-state\b/);
+});
+
 test('keeps global navigation focused on home, projects, profile, résumé, and contact', () => {
   const nav = page.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';
   const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
