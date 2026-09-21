@@ -64,10 +64,41 @@ test('contains decorative overflow and protects anchor and focus destinations fr
   assert.doesNotMatch(raw, /width:\s*100vw;/);
   assert.match(wave, /overflow:\s*clip;/);
   assert.match(raw, /overflow:\s*clip;/);
+  assert.match(wave, /contain:\s*paint;/);
+  assert.match(raw, /contain:\s*paint;/);
+  for (const variant of ['.raw-1', '.raw-2', '.raw-3', '.raw-4']) {
+    assert.doesNotMatch(ruleFor(variant), /animation:/, `${variant} must remain a stationary clipping container`);
+    assert.match(ruleFor(`${variant} svg`), /animation:/, `${variant} should animate only its clipped SVG child`);
+  }
   assert.match(stylesheet, /\.snap-section,[\s\S]*?scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
   assert.match(stylesheet, /#case-study-content\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
   assert.doesNotMatch(stylesheet, /main:focus/);
   assert.match(stylesheet, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brown-dark\);/);
+});
+
+test('clips the rotating profile border inside its own layout box', () => {
+  const heroPhoto = ruleFor('.hero-photo');
+  const heroBorder = ruleFor('.hero-photo::before');
+
+  assert.match(heroPhoto, /overflow:\s*clip;/);
+  assert.match(heroPhoto, /padding:\s*5px;/);
+  assert.match(heroBorder, /inset:\s*0;/);
+  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*\.hero-photo\s*\{[^}]*padding:\s*0;/);
+});
+
+test('keeps keyboard focus scrolling immediate and case-study grid items shrinkable', () => {
+  assert.match(ruleFor('html'), /scroll-behavior:\s*auto;/);
+  assert.doesNotMatch(ruleFor('html'), /scroll-behavior:\s*smooth;/);
+  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*html\s*\{[^}]*scroll-padding-bottom:\s*152px;/);
+  assert.match(ruleFor('.case-study > *'), /min-width:\s*0;/);
+  assert.match(ruleFor('.case-study-maturity-list > *'), /min-width:\s*0;/);
+  assert.match(ruleFor('.case-study-maturity-list dd'), /overflow-wrap:\s*anywhere;/);
+});
+
+test('uses an intentional compact brand instead of clipping the full mobile logo', () => {
+  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*nav \.logo-full\s*\{[^}]*display:\s*none;/);
+  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*nav \.logo-mobile\s*\{[^}]*display:\s*inline;/);
+  assert.doesNotMatch(stylesheet, /nav \.logo\s*\{[^}]*overflow:\s*hidden;/);
 });
 
 test('allows long project card and evidence content to wrap within the grid track', () => {

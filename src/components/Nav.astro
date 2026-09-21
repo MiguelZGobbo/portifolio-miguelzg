@@ -22,7 +22,10 @@ const links = [
 ---
 
 <nav aria-label={dict['a11y.nav']}>
-  <a href={`${homeHref}#home`} class="logo" data-i18n="nav.logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>{dict['nav.logo']}</a>
+  <a href={`${homeHref}#home`} class="logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>
+    <span class="logo-full">{dict['nav.logo']}</span>
+    <span class="logo-mobile">Miguel</span>
+  </a>
   <div class="nav-right">
     <div class="nav-links">
       {

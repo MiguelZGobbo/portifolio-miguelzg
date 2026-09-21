@@ -100,6 +100,8 @@ test('renders named utility controls and preserves ordered in-page destinations'
   const links = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
   assert.deepEqual(destinations, ['#projetos', '#sobre', '#cv', '#contato']);
+  assert.match(page, /<span class="logo-full">MIGUEL ZAGER GOBBO<\/span>/);
+  assert.match(page, /<span class="logo-mobile">Miguel<\/span>/);
 });
 
 test('renders native contact semantics with linked field errors and a polite status region', () => {
@@ -123,4 +125,8 @@ test('renders native contact semantics with linked field errors and a polite sta
   assert.equal(new Set(errorIds).size, errorIds.length, 'field error IDs should be unique');
 
   assert.match(contact, /id="form-aviso"[^>]*role="status"[^>]*aria-live="polite"/);
+
+  const honeypot = contact.match(/<div class="hp-field"[\s\S]*?<\/div>/)?.[0] ?? '';
+  assert.match(honeypot, /<div class="hp-field"[^>]*aria-hidden="true"[^>]*\binert\b/);
+  assert.doesNotMatch(honeypot, /\btabindex=/);
 });

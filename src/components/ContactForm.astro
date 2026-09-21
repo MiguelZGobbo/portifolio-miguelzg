@@ -29,9 +29,9 @@ const fields = [
         </div>
       ))
     }
-    <div class="hp-field" aria-hidden="true">
+    <div class="hp-field" aria-hidden="true" inert>
       <label for="campo-site">Website</label>
-      <input type="text" id="campo-site" name="website" tabindex="-1" autocomplete="off" />
+      <input type="text" id="campo-site" name="website" autocomplete="off" />
     </div>
     <button class="btn reveal" type="submit" id="btn-enviar" data-i18n="form.submit">{translate(lang, 'form.submit')}</button>
     <p id="form-aviso" role="status" aria-live="polite" aria-atomic="true"></p>
