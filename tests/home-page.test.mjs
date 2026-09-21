@@ -53,6 +53,9 @@ test('builds both localized homepages with their own visible content and fragmen
   }
   assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/purchase-orders-api\/"/);
   assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/beadwise\/"/);
+  assert.doesNotMatch(englishPage, /localStorage\.getItem\('lang'\)/);
+  assert.doesNotMatch(englishPage, /navigator\.language/);
+  assert.doesNotMatch(englishPage, /setAttribute\('data-lang'/);
 });
 
 test('renders all project levels with their available depth and visible state', () => {

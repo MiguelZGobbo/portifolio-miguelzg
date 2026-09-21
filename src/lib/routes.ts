@@ -48,7 +48,9 @@ export function homePath(base: string, lang: Lang, section?: RouteSection): stri
 }
 
 export function caseStudyPath(base: string, lang: Lang, slug: string): string {
-  if (!validSlug(slug)) throw new TypeError('Case-study slug must be a non-empty URL-safe identifier.');
+  if (typeof slug !== 'string' || !validSlug(slug)) {
+    throw new TypeError('Case-study slug must be a non-empty URL-safe identifier.');
+  }
   return pathFor(base, `${routeConfig[lang].caseStudySegment}/${slug}`);
 }
 

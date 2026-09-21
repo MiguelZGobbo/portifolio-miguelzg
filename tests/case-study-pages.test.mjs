@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
-import { access } from 'node:fs/promises';
-import { readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
 
@@ -48,6 +47,19 @@ test('builds exactly the six localized public HTML routes', async () => {
   ];
 
   await Promise.all(routes.map((route) => access(resolve('dist', ...route))));
+
+  const generatedRoutes = (await readdir(resolve('dist'), { recursive: true }))
+    .filter((entry) => entry.endsWith('index.html'))
+    .map((entry) => entry.replaceAll('\\', '/'))
+    .sort();
+  assert.deepEqual(generatedRoutes, [
+    'en/index.html',
+    'en/projects/beadwise/index.html',
+    'en/projects/purchase-orders-api/index.html',
+    'index.html',
+    'projetos/beadwise/index.html',
+    'projetos/purchase-orders-api/index.html',
+  ]);
 });
 
 test('renders English case studies with English evidence and return routes', async () => {

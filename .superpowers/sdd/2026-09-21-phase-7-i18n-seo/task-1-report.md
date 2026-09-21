@@ -45,3 +45,35 @@ After the implementation, the same focused command passed 20/20 tests. It covers
 ## Concerns
 
 Task 2 remains responsible for replacing the existing browser language toggle and preference-driven client localization with route-based language navigation. This task renders the static URL identity correctly but deliberately does not implement that follow-on browser behavior.
+
+## Fix round 1/5
+
+### Findings addressed
+
+- **Critical:** The shared browser entry ran `initLanguage`, while `BaseLayout` also read `lang` from local storage and `navigator.language`. Together, those independent client paths could rewrite statically rendered language, visible content, and metadata after direct entry to an explicit localized URL.
+- **Important:** `caseStudyPath` passed non-string values directly to `RegExp.test`, which coerced values such as `true` and `42` into valid-looking slugs.
+- **Minor:** The generated-route test now asserts the complete `dist/**/index.html` set, so unexpected static HTML routes cannot silently pass the six-route check.
+
+### RED
+
+`node --test --experimental-strip-types tests/routes.test.mjs tests/architecture.test.mjs tests/home-page.test.mjs tests/case-study-pages.test.mjs` failed as intended: the shared entry still imported and called `initLanguage`, the generated English page still contained saved/browser-language mutation, and non-string slugs were not all rejected.
+
+### Fix and GREEN
+
+- Removed `initLanguage` from the shared browser entry, preserving theme, navigation, reveal, clipboard, and contact initialization.
+- Removed the layout’s saved-language and browser-language mutation; the statically rendered URL language remains authoritative.
+- Guarded `caseStudyPath` with a runtime string check before regex validation.
+- Added architecture/generated-page regressions for the absence of browser language ownership, non-string slug tests, and an exact six-route generated-output assertion.
+
+The focused suite passed 23/23 after rebuilding.
+
+### Full verification
+
+- `npm test` — 62 passed, 0 failed.
+- `npm run check` — 0 errors, 0 warnings, 0 hints.
+- `npm run build` — 6 static pages built.
+- `git diff --check` — no whitespace errors.
+
+### Remaining concern
+
+The existing language control remains temporarily inert by design; Task 2 will replace it with a real route-based alternate-language link.

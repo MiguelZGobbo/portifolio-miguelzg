@@ -74,12 +74,6 @@ const pageUrl = canonicalUrl ?? siteUrl;
           ? savedTheme === 'dark'
           : window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-
-        var savedLang = null;
-        try { savedLang = localStorage.getItem('lang'); } catch (e) {}
-        var lang = savedLang
-          || (navigator.language && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en');
-        document.documentElement.setAttribute('data-lang', lang);
       })();
     </script>
     {includeHomeScript && <script src="../scripts/main.js"></script>}

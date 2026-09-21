@@ -52,7 +52,7 @@ test('composes absolute page URLs from a site origin and a normalized path', () 
 });
 
 test('rejects empty and unsafe case-study slugs', () => {
-  for (const slug of ['', ' ', '../beadwise', 'beadwise/extra', 'bead wise']) {
+  for (const slug of ['', ' ', '../beadwise', 'beadwise/extra', 'bead wise', undefined, null, true, 42]) {
     assert.throws(() => caseStudyPath('/portifolio-miguelzg/', 'en', slug), /slug/i);
   }
 });

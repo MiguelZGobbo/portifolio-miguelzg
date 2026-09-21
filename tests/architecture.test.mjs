@@ -2,19 +2,19 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [main, home, styles, language, skillCard, caseStudy] = await Promise.all([
+const [main, home, styles, language, skillCard, caseStudy, baseLayout] = await Promise.all([
   readFile(new URL('../src/scripts/main.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8'),
   readFile(new URL('../src/scripts/language.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/components/SkillCard.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/components/ProjectCaseStudy.astro', import.meta.url), 'utf8'),
+  readFile(new URL('../src/layouts/BaseLayout.astro', import.meta.url), 'utf8'),
 ]);
 
 test('main delegates browser behavior to focused initializers only', () => {
   const expectedInitializers = [
     ['theme', 'initTheme'],
-    ['language', 'initLanguage'],
     ['navigation', 'initNavigation'],
     ['reveals', 'initReveals'],
     ['clipboard', 'initClipboard'],
@@ -31,6 +31,13 @@ test('main delegates browser behavior to focused initializers only', () => {
   }
 
   assert.doesNotMatch(main, /\b(document|window|translations|projects|skillGroups)\b/);
+});
+
+test('keeps route language static instead of letting browser preferences own it', () => {
+  assert.doesNotMatch(main, /initLanguage|['"]\.\/language\.js['"]/);
+  assert.doesNotMatch(baseLayout, /localStorage\.getItem\('lang'\)/);
+  assert.doesNotMatch(baseLayout, /navigator\.language/);
+  assert.doesNotMatch(baseLayout, /setAttribute\('data-lang'/);
 });
 
 test('the homepage relies on the document scrollport and static localized content', () => {
