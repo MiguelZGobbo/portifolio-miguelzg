@@ -11,16 +11,6 @@ export function findActiveSection(sections, scrollTop, viewportHeight) {
   if (!sections.length) return null;
 
   const midpoint = scrollTop + viewportHeight / 2;
-  const containingSections = sections.filter((section) => (
-    midpoint >= section.top && midpoint < section.top + section.height
- ));
-
-  if (containingSections.length) {
-    return containingSections.reduce((nearest, section) => (
-      section.top > nearest.top ? section : nearest
-    )).id;
-  }
-
   return sections.reduce((nearest, section) => (
     Math.abs(sectionCenter(section) - midpoint) < Math.abs(sectionCenter(nearest) - midpoint)
       ? section
@@ -102,7 +92,7 @@ function navigationGeometry(sections) {
 }
 
 export function initNavigation() {
-  const sections = Array.from(document.querySelectorAll('main > section[id], main #cv'));
+  const sections = Array.from(document.querySelectorAll('main > section[id], main #cv, main #resume'));
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!sections.length) return;
 

@@ -197,6 +197,11 @@ test('publishes exactly the six canonical routes through generated sitemap files
     assert.equal(parsedUrl.origin, new URL(siteUrl).origin);
     const relativePath = parsedUrl.pathname.replace('/portifolio-miguelzg/', '');
     const sitemap = await readFile(resolve('dist', relativePath), 'utf8');
+    assert.doesNotMatch(
+      sitemap,
+      /<xhtml:link\b|hreflang=/i,
+      'HTML head links are the only hreflang mechanism; sitemap alternates must stay disabled',
+    );
     discovered.push(...[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, url]) => url));
   }
 
