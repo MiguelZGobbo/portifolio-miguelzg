@@ -72,7 +72,7 @@ Para testar a saída estática localmente:
 
 | Script | Uso |
 | --- | --- |
-| npm test | Executa os testes de modelo, páginas construídas, navegação e arquitetura. |
+| npm test | Gera a saída estática e executa os testes de modelo, páginas construídas, navegação e arquitetura. |
 | npm run check | Executa as verificações e diagnósticos do Astro. |
 | npm run build | Gera as três páginas estáticas e os assets em dist/. |
 | npm run dev | Inicia o servidor de desenvolvimento do Astro. |

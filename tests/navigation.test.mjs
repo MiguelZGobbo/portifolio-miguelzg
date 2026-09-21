@@ -82,3 +82,101 @@ test('hides the section indicator when the observed home section has no matching
 
   assert.equal(pill.hidden, true);
 });
+
+test('repositions the active navigation pill after a language change updates link geometry', () => {
+  assert.equal(typeof navigation.initNavigation, 'function');
+
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const documentListeners = new Map();
+  const animationFrames = [];
+  let linkWidth = 84;
+  let pill;
+
+  const navigationElement = {
+    querySelector() {
+      return null;
+    },
+    appendChild(element) {
+      pill = element;
+      element.parentElement = this;
+    },
+    getBoundingClientRect() {
+      return { left: 16, bottom: 64 };
+    },
+  };
+  const attributes = new Map([['href', '#sobre']]);
+  const activeLink = {
+    parentElement: navigationElement,
+    classList: {
+      toggle() {},
+    },
+    getAttribute(name) {
+      return attributes.get(name) ?? null;
+    },
+    removeAttribute(name) {
+      attributes.delete(name);
+    },
+    setAttribute(name, value) {
+      attributes.set(name, value);
+    },
+    getBoundingClientRect() {
+      return { left: 40, width: linkWidth, bottom: 58 };
+    },
+  };
+  const section = {
+    id: 'sobre',
+    getBoundingClientRect() {
+      return { top: 0, height: 1200 };
+    },
+  };
+
+  globalThis.document = {
+    body: { dataset: {} },
+    querySelectorAll(selector) {
+      if (selector === 'main > section[id]') return [section];
+      if (selector === '.nav-links a[href^="#"]') return [activeLink];
+      return [];
+    },
+    querySelector(selector) {
+      return selector === '.nav-links' ? navigationElement : null;
+    },
+    createElement() {
+      return { hidden: false, style: {} };
+    },
+    addEventListener(type, listener) {
+      documentListeners.set(type, listener);
+    },
+  };
+  globalThis.window = {
+    scrollY: 0,
+    innerHeight: 800,
+    addEventListener() {},
+    matchMedia() {
+      return { matches: false };
+    },
+    requestAnimationFrame(callback) {
+      animationFrames.push(callback);
+      return animationFrames.length;
+    },
+  };
+
+  const flushAnimationFrames = () => {
+    while (animationFrames.length) animationFrames.shift()();
+  };
+
+  try {
+    navigation.initNavigation();
+    flushAnimationFrames();
+    assert.equal(pill.style.width, '84px');
+
+    linkWidth = 126;
+    documentListeners.get('languagechange')?.();
+    flushAnimationFrames();
+
+    assert.equal(pill.style.width, '126px');
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.window = originalWindow;
+  }
+});

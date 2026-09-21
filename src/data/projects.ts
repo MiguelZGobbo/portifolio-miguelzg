@@ -32,8 +32,6 @@ export interface Project {
   slug: string;
   name: Localized;
   summary: Localized;
-  /** Kept as a compatibility alias for existing card consumers. */
-  desc: Localized;
   origin?: Localized;
   contribution?: Localized;
   state: Localized;
@@ -156,8 +154,8 @@ const beadWiseCaseStudy: CaseStudyContent = {
     },
   },
   overview: {
-    pt: 'Projeto em desenvolvimento com evidência de engenharia real. O estado atual separa o que foi especificado, prototipado e comprovado do que ainda não é produto final.',
-    en: 'Project in development with real engineering evidence. The current state separates what has been specified, prototyped, and proven from what is not yet a final product.',
+    pt: 'Projeto em desenvolvimento com evidência de engenharia real. O estado atual documenta estrutura observada da solution, especificações registradas e validação técnica controlada; esses elementos são distintos de funcionalidades finais de produto, que não foram promovidas.',
+    en: 'Project in development with real engineering evidence. The current state documents observed solution structure, recorded specifications, and controlled technical validation; these are distinct from final product functionality, which has not been promoted.',
   },
   context: {
     pt: 'O repositório organiza discovery, feature specs, prototypes, src e tests para investigar um problema complexo de software Windows antes de promover hipóteses a implementação final.',
@@ -243,7 +241,6 @@ export const projects: Project[] = [
     slug: 'purchase-orders-api',
     name: { pt: 'Purchase Orders API', en: 'Purchase Orders API' },
     summary: purchaseOrdersSummary,
-    desc: purchaseOrdersSummary,
     origin: { pt: 'Projeto individual desenvolvido durante um curso', en: 'Individual project developed as part of a course' },
     contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'concluído', en: 'completed' },
@@ -264,7 +261,6 @@ export const projects: Project[] = [
     slug: 'beadwise',
     name: { pt: 'BeadWise', en: 'BeadWise' },
     summary: beadWiseSummary,
-    desc: beadWiseSummary,
     state: { pt: 'em desenvolvimento', en: 'in development' },
     stateKey: 'in-development',
     hierarchy: 'H2',
@@ -283,7 +279,6 @@ export const projects: Project[] = [
     slug: 'portfolio',
     name: { pt: 'Portfólio Miguel ZG', en: 'Miguel ZG Portfolio' },
     summary: portfolioSummary,
-    desc: portfolioSummary,
     origin: { pt: 'pessoal', en: 'personal' },
     contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'ativo / em evolução', en: 'active / evolving' },
@@ -303,7 +298,6 @@ export const projects: Project[] = [
     slug: 'task-management-api',
     name: { pt: 'API de Gerenciamento de Tarefas', en: 'Task Management API' },
     summary: taskApiSummary,
-    desc: taskApiSummary,
     origin: { pt: 'acadêmico', en: 'academic' },
     contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'concluído', en: 'completed' },

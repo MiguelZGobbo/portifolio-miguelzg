@@ -37,7 +37,6 @@ export function initTheme() {
     document.documentElement.setAttribute('data-theme', theme);
     setMetaContent('theme-color', theme === 'dark' ? '#241C14' : '#F8F0E5');
     updateControlAria();
-    document.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
     if (persist) savePreference('theme', theme);
   };
 

@@ -226,12 +226,6 @@ nav {
     transition: clip-path 0.4s ease;
 }
 
-/* Tooltip aparece dentro do botão ativo ao passar o mouse (que mostra ícone em vez de texto) */
-.nav-links a.active.can-hover:hover .nav-tooltip,
-.nav-links a.active.can-hover:focus-visible .nav-tooltip {
-    clip-path: inset(0 0 0 0);
-}
-
 .reveal {
     opacity: 1;
     transform: translateY(0);
@@ -465,53 +459,11 @@ nav a,
 /* ================================
    6. SEÇÃO — SOBRE
 ================================ */
-.about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    align-items: start;
-}
-
 .about-text p {
     font-size: clamp(0.85rem, 1.1vw, 0.95rem);
     line-height: 1.8;
     color: var(--text-muted);
     margin-bottom: 1rem;
-}
-
-.about-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-}
-
-.info-item {
-    padding: 0.9rem 1.1rem;
-    background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
-    border-left: 4px solid var(--brown);
-    border-radius: 12px;
-    box-shadow: 0 4px 18px rgba(44, 34, 24, 0.07);
-    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.info-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(44, 34, 24, 0.15);
-}
-
-.info-item .label {
-    font-size: 0.68rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--brown);
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-}
-
-.info-item .value {
-    font-size: 0.9rem;
-    color: var(--dark);
 }
 
 /* ================================
@@ -1133,9 +1085,6 @@ footer {
     .skill-card {
         flex: 0 0 calc((100% - 1rem) / 2);
     }
-    .about-grid {
-        gap: 1.5rem;
-    }
     .contact-grid {
         gap: 1.5rem;
     }
@@ -1260,17 +1209,6 @@ body[data-section="projetos"] .wave-2 .bg-wave-inner {
 }
 body[data-section="projetos"] .wave-3 .bg-wave-inner {
     transform: translate(calc(100vw - clamp(150px, 15vw, 350px)), clamp(25vh, 30vh, 35vh));
-}
-
-/* ── Currículo ── */
-body[data-section="cv"] .wave-1 .bg-wave-inner {
-    transform: translate(clamp(15vw, 25vw, 35vw), clamp(-100px, -5vw, -45px));
-}
-body[data-section="cv"] .wave-2 .bg-wave-inner {
-    transform: translate(clamp(15vw, 25vw, 35vw), clamp(40px, 2vw, 20px));
-}
-body[data-section="cv"] .wave-3 .bg-wave-inner {
-    transform: translate(clamp(35vw, 40vw, 45vw), clamp(30vh, 35vh, 40vh));
 }
 
 /* ── Contato ── */
@@ -1630,7 +1568,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     /* Cards com cantos arredondados e sombra suave */
     .skill-card,
     .project-card,
-    .info-item,
     .cv-box,
     .contact-info {
         border-radius: 14px;
@@ -1644,11 +1581,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .project-card {
         padding: 1.15rem;
     }
-    .info-item {
-        padding: 0.9rem 1.05rem;
-    }
-
-    .about-grid,
     .contact-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -1780,7 +1712,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         color: var(--tan) !important;
     }
 
-    .info-item:hover,
     .skill-card:hover,
     .project-card:hover {
         transform: none !important;
@@ -1807,8 +1738,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     --text:       #F0E4CF;
     --text-muted: #C6B8A3;
     --surface:    #372D20;
-    --particle-a: rgba(223, 176, 120, 0.55);
-    --particle-b: rgba(243, 205, 165, 0.35);
 }
 
 [data-theme="dark"] body {
@@ -1845,7 +1774,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     color: var(--warm-gray);
 }
 
-[data-theme="dark"] .info-item,
 [data-theme="dark"] .skill-card,
 [data-theme="dark"] .project-card,
 [data-theme="dark"] .cv-box,
@@ -1857,7 +1785,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
 [data-theme="dark"] .skill-card,
 [data-theme="dark"] .project-card,
-[data-theme="dark"] .info-item,
 [data-theme="dark"] .cv-box,
 [data-theme="dark"] .contact-info {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 6px 18px rgba(0, 0, 0, 0.25);

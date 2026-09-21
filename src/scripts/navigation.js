@@ -106,6 +106,7 @@ export function initNavigation() {
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate);
   window.addEventListener('hashchange', scheduleUpdate);
+  document.addEventListener('languagechange', scheduleUpdate);
   update();
   scheduleUpdate();
 }

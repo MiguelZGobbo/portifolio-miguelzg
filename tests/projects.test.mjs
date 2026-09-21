@@ -41,6 +41,20 @@ test('models BeadWise maturity without promoting unproven or unapproved work', (
   assert.match(maturity.approved.pt, /APPROVED = 0[\s\S]*backend final, UI, DI, IPC ou contratos finais/);
 });
 
+test('distinguishes BeadWise engineering evidence from final product functionality', () => {
+  const overview = model.getProjectBySlug('beadwise')?.caseStudy?.overview;
+
+  assert.ok(overview, 'BeadWise should provide a localized case-study overview');
+  assert.match(
+    overview.pt,
+    /estrutura observada[\s\S]*especificações registradas[\s\S]*validação técnica controlada[\s\S]*funcionalidades finais de produto/,
+  );
+  assert.match(
+    overview.en,
+    /observed solution structure[\s\S]*recorded specifications[\s\S]*controlled technical validation[\s\S]*final product functionality/,
+  );
+});
+
 test('exposes only H1 and H2 projects as case studies', () => {
   assert.deepEqual(
     model.caseStudyProjects.map(({ slug, hierarchy }) => [slug, hierarchy]),

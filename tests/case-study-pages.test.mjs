@@ -61,7 +61,7 @@ test('keeps BeadWise current state and prototype caveat near the beginning', asy
     page.indexOf('em desenvolvimento') < overviewStart,
     'BeadWise should state that it is in development before the case-study sections',
   );
-  assert.match(initialContent, /não é produto final/);
+  assert.match(initialContent, /funcionalidades finais de produto[\s\S]*não foram promovidas/);
   assert.match(page, /prototypes ainda não equivalem a backend final/);
 });
 
