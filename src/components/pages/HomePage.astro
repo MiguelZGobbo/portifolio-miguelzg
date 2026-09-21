@@ -8,7 +8,7 @@ import Nav from '../Nav.astro';
 import Waves from '../Waves.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { caseStudyProjects } from '../../data/projects';
-import { caseStudyPath, routeConfig } from '../../lib/routes';
+import { caseStudyPath, homePath, routeConfig, type RouteSection } from '../../lib/routes';
 import { translations, type Lang } from '../../lib/i18n';
 
 interface Props {
@@ -19,6 +19,14 @@ const { lang } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 const base = import.meta.env.BASE_URL;
 const sections = routeConfig[lang].sections;
+const alternateLang: Lang = lang === 'pt' ? 'en' : 'pt';
+const alternateHomeHref = homePath(base, alternateLang);
+const alternateSectionHrefs = Object.fromEntries(
+  (['projects', 'about', 'resume', 'contact'] as const).map((section) => [
+    section,
+    homePath(base, alternateLang, section),
+  ]),
+) as Partial<Record<RouteSection, string>>;
 const caseStudyHrefs = Object.fromEntries(
   caseStudyProjects.map((project) => [project.slug, caseStudyPath(base, lang, project.slug)]),
 );
@@ -26,7 +34,12 @@ const caseStudyHrefs = Object.fromEntries(
 
 <BaseLayout lang={lang} title={dict['meta.title']} description={dict['meta.description']}>
   <Waves />
-  <Nav lang={lang} sectionIds={sections} />
+  <Nav
+    lang={lang}
+    sectionIds={sections}
+    alternateHref={alternateHomeHref}
+    alternateSectionHrefs={alternateSectionHrefs}
+  />
 
   <main class="home-main">
     <HeroSection lang={lang} sectionIds={sections} />

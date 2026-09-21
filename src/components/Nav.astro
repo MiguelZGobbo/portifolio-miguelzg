@@ -3,11 +3,13 @@ import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
 import { translations, type Lang } from '../lib/i18n';
+import type { RouteSection } from '../lib/routes';
 
 interface Props {
   lang?: Lang;
   homeHref?: string;
-  showControls?: boolean;
+  alternateHref: string;
+  alternateSectionHrefs?: Partial<Record<RouteSection, string>>;
   sectionIds: {
     home: string;
     projects: string;
@@ -21,16 +23,17 @@ interface Props {
 const {
   lang = 'pt',
   homeHref = '',
-  showControls = true,
+  alternateHref,
+  alternateSectionHrefs,
   sectionIds,
 } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: sectionIds.projects, translationId: 'projetos', icon: 'folder' },
-  { id: sectionIds.about, translationId: 'sobre', icon: 'user' },
-  { id: sectionIds.resume, translationId: 'cv', icon: 'file' },
-  { id: sectionIds.contact, translationId: 'contato', icon: 'mail' },
+  { id: sectionIds.projects, section: 'projects', translationId: 'projetos', icon: 'folder' },
+  { id: sectionIds.about, section: 'about', translationId: 'sobre', icon: 'user' },
+  { id: sectionIds.resume, section: 'resume', translationId: 'cv', icon: 'file' },
+  { id: sectionIds.contact, section: 'contact', translationId: 'contato', icon: 'mail' },
 ] as const;
 ---
 
@@ -45,6 +48,7 @@ const links = [
         links.map((link) => (
           <a
             href={`${homeHref}#${link.id}`}
+            data-language-alternate={alternateSectionHrefs?.[link.section]}
             data-i18n-aria={`nav.${link.translationId}.aria`}
             aria-label={dict[`nav.${link.translationId}.aria`]}
           >
@@ -55,13 +59,9 @@ const links = [
         ))
       }
     </div>
-    {
-      showControls && (
-        <div class="nav-controls">
-          <LangToggle lang={lang} />
-          <ThemeToggle lang={lang} />
-        </div>
-      )
-    }
+    <div class="nav-controls">
+      <LangToggle lang={lang} alternateHref={alternateHref} />
+      <ThemeToggle lang={lang} />
+    </div>
   </div>
 </nav>

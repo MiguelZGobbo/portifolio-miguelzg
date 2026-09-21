@@ -1,12 +1,11 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [main, home, styles, language, skillCard, caseStudy, baseLayout] = await Promise.all([
+const [main, home, styles, skillCard, caseStudy, baseLayout] = await Promise.all([
   readFile(new URL('../src/scripts/main.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8'),
-  readFile(new URL('../src/scripts/language.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/components/SkillCard.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/components/ProjectCaseStudy.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/layouts/BaseLayout.astro', import.meta.url), 'utf8'),
@@ -40,13 +39,16 @@ test('keeps route language static instead of letting browser preferences own it'
   assert.doesNotMatch(baseLayout, /setAttribute\('data-lang'/);
 });
 
+test('removes the generic client language module', async () => {
+  await assert.rejects(access(new URL('../src/scripts/language.js', import.meta.url)));
+});
+
 test('the homepage relies on the document scrollport and static localized content', () => {
   assert.doesNotMatch(home, /Particles/);
   assert.doesNotMatch(home, /scroll-container/);
   assert.doesNotMatch(styles, /\.scroll-container/);
   assert.doesNotMatch(styles, /html\s*\{[^}]*overflow:\s*hidden/s);
   assert.doesNotMatch(styles, /body\s*\{[^}]*overflow-x:\s*hidden/s);
-  assert.doesNotMatch(language, /\b(innerHTML|renderProjects|renderSkills)\b/);
   assert.match(skillCard, /data-skill-localized/);
   assert.match(skillCard, /data-skill-pt=/);
   assert.match(skillCard, /data-skill-en=/);

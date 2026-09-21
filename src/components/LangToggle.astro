@@ -3,15 +3,24 @@ import { translate, type Lang } from '../lib/i18n';
 
 interface Props {
   lang?: Lang;
+  alternateHref: string;
 }
 
-const { lang = 'pt' } = Astro.props;
+const { lang = 'pt', alternateHref } = Astro.props;
+const alternateHreflang = lang === 'pt' ? 'en' : 'pt-BR';
 ---
 
-<button id="lang-toggle" class="nav-btn nav-btn--lang" type="button" aria-label={translate(lang, 'lang.switch')}>
+<a
+  id="lang-toggle"
+  class="nav-btn nav-btn--lang"
+  href={alternateHref}
+  data-language-default={alternateHref}
+  hreflang={alternateHreflang}
+  aria-label={translate(lang, 'lang.switch')}
+>
   <span class="lang-label">
     <span class="lang-part lang-pt">PT</span>
     <span class="lang-sep">/</span>
     <span class="lang-part lang-en">EN</span>
   </span>
-</button>
+</a>

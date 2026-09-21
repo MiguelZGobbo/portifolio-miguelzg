@@ -71,6 +71,37 @@ test('renders English case studies with English evidence and return routes', asy
   assert.doesNotMatch(beadWise, /href="\/portifolio-miguelzg\/en\/#projetos"/);
 });
 
+test('renders reciprocal case-study language links and both utilities on every route', async () => {
+  const routes = [
+    ['index.html'],
+    ['projetos', 'purchase-orders-api', 'index.html'],
+    ['projetos', 'beadwise', 'index.html'],
+    ['en', 'index.html'],
+    ['en', 'projects', 'purchase-orders-api', 'index.html'],
+    ['en', 'projects', 'beadwise', 'index.html'],
+  ];
+  const pages = await Promise.all(routes.map((route) => readFile(resolve('dist', ...route), 'utf8')));
+
+  for (const page of pages) {
+    assert.match(page, /<button id="theme-toggle"/);
+    assert.match(page, /<a id="lang-toggle"/);
+  }
+
+  for (const { slug } of caseStudies) {
+    const portuguese = await readBuiltCaseStudy(slug);
+    const english = await readBuiltEnglishCaseStudy(slug);
+
+    assert.match(
+      portuguese,
+      new RegExp(`<a id="lang-toggle"[^>]*href="/portifolio-miguelzg/en/projects/${slug}/"[^>]*hreflang="en"`),
+    );
+    assert.match(
+      english,
+      new RegExp(`<a id="lang-toggle"[^>]*href="/portifolio-miguelzg/projetos/${slug}/"[^>]*hreflang="pt-BR"`),
+    );
+  }
+});
+
 test('builds each case-study route with ordered sections and its repository evidence', async () => {
   for (const { slug, repository } of caseStudies) {
     const page = await readBuiltCaseStudy(slug);

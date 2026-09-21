@@ -60,10 +60,21 @@ export function updateNavigationState(links, sectionId) {
   return activeLink;
 }
 
+export function updateLanguageDestination(toggle, activeLink) {
+  if (!toggle) return;
+
+  const alternateHref = activeLink?.getAttribute('data-language-alternate');
+  const defaultHref = toggle.getAttribute('data-language-default');
+  const destination = alternateHref || defaultHref;
+
+  if (destination) toggle.setAttribute('href', destination);
+}
+
 function setActiveNavigation(sectionId, links, pill) {
   document.body.dataset.section = sectionId;
   const activeLink = updateNavigationState(links, sectionId);
 
+  updateLanguageDestination(document.getElementById('lang-toggle'), activeLink);
   updateNavigationPill(pill, activeLink);
 }
 

@@ -58,6 +58,27 @@ test('builds both localized homepages with their own visible content and fragmen
   assert.doesNotMatch(englishPage, /setAttribute\('data-lang'/);
 });
 
+test('renders direct reciprocal language links with section-specific alternate destinations', () => {
+  const portugueseToggle = page.match(/<a id="lang-toggle"[^>]*>/)?.[0] ?? '';
+  const englishToggle = englishPage.match(/<a id="lang-toggle"[^>]*>/)?.[0] ?? '';
+
+  assert.match(portugueseToggle, /href="\/portifolio-miguelzg\/en\/"/);
+  assert.match(portugueseToggle, /hreflang="en"/);
+  assert.match(englishToggle, /href="\/portifolio-miguelzg\/"/);
+  assert.match(englishToggle, /hreflang="pt-BR"/);
+
+  const portugueseLinks = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  const englishLinks = englishPage.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  assert.match(portugueseLinks, /href="#projetos"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#projects"/);
+  assert.match(portugueseLinks, /href="#sobre"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#about"/);
+  assert.match(portugueseLinks, /href="#cv"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#resume"/);
+  assert.match(portugueseLinks, /href="#contato"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#contact"/);
+  assert.match(englishLinks, /href="#projects"[^>]*data-language-alternate="\/portifolio-miguelzg\/#projetos"/);
+  assert.match(englishLinks, /href="#about"[^>]*data-language-alternate="\/portifolio-miguelzg\/#sobre"/);
+  assert.match(englishLinks, /href="#resume"[^>]*data-language-alternate="\/portifolio-miguelzg\/#cv"/);
+  assert.match(englishLinks, /href="#contact"[^>]*data-language-alternate="\/portifolio-miguelzg\/#contato"/);
+});
+
 test('renders all project levels with their available depth and visible state', () => {
   const purchaseOrders = projectMarkup('purchase-orders-api');
   const beadWise = projectMarkup('beadwise');
@@ -95,7 +116,14 @@ test('keeps global navigation focused on home, projects, profile, résumé, and 
   const nav = page.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';
   const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
 
-  assert.deepEqual(destinations, ['#home', '#projetos', '#sobre', '#cv', '#contato']);
+  assert.deepEqual(destinations, [
+    '#home',
+    '#projetos',
+    '#sobre',
+    '#cv',
+    '#contato',
+    '/portifolio-miguelzg/en/',
+  ]);
 });
 
 test('renders one page heading and a section heading for each home content section', () => {
@@ -109,7 +137,7 @@ test('renders one page heading and a section heading for each home content secti
 
 test('renders named utility controls and preserves ordered in-page destinations', () => {
   assert.match(page, /<button id="theme-toggle"[^>]*aria-label="Mudar para tema escuro"/);
-  assert.match(page, /<button id="lang-toggle"[^>]*aria-label="Switch to English"/);
+  assert.match(page, /<a id="lang-toggle"[^>]*aria-label="Switch to English"/);
 
   const links = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);

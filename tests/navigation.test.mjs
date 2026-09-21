@@ -74,6 +74,58 @@ test('updates only observed navigation links with aria-current="location"', () =
   assert.equal(cvLink.classList.active, false);
 });
 
+test('updates the language destination from the observed section without changing aria-current', () => {
+  assert.equal(typeof navigation.updateLanguageDestination, 'function');
+
+  const toggleAttributes = new Map([
+    ['href', '/portifolio-miguelzg/en/'],
+    ['data-language-default', '/portifolio-miguelzg/en/'],
+  ]);
+  const linkAttributes = new Map([
+    ['aria-current', 'location'],
+    ['data-language-alternate', '/portifolio-miguelzg/en/#about'],
+  ]);
+  const toggle = {
+    getAttribute(name) {
+      return toggleAttributes.get(name) ?? null;
+    },
+    setAttribute(name, value) {
+      toggleAttributes.set(name, value);
+    },
+  };
+  const activeLink = {
+    getAttribute(name) {
+      return linkAttributes.get(name) ?? null;
+    },
+  };
+
+  navigation.updateLanguageDestination(toggle, activeLink);
+
+  assert.equal(toggleAttributes.get('href'), '/portifolio-miguelzg/en/#about');
+  assert.equal(linkAttributes.get('aria-current'), 'location');
+});
+
+test('restores the language link stable destination when no observed alternate exists', () => {
+  assert.equal(typeof navigation.updateLanguageDestination, 'function');
+
+  const attributes = new Map([
+    ['href', '/portifolio-miguelzg/en/#projects'],
+    ['data-language-default', '/portifolio-miguelzg/en/'],
+  ]);
+  const toggle = {
+    getAttribute(name) {
+      return attributes.get(name) ?? null;
+    },
+    setAttribute(name, value) {
+      attributes.set(name, value);
+    },
+  };
+
+  navigation.updateLanguageDestination(toggle, null);
+
+  assert.equal(attributes.get('href'), '/portifolio-miguelzg/en/');
+});
+
 test('maps the nested Resume anchor to its own active navigation state', () => {
   const originalDocument = globalThis.document;
   const originalWindow = globalThis.window;
@@ -134,6 +186,9 @@ test('maps the nested Resume anchor to its own active navigation state', () => {
 
   globalThis.document = {
     body: { dataset: {} },
+    getElementById() {
+      return null;
+    },
     querySelectorAll(selector) {
       if (selector === 'main > section[id], main #cv') return [about, cv, contact];
       if (selector === '.nav-links a[href^="#"]') return [aboutLink, cvLink, contactLink];
@@ -232,6 +287,9 @@ test('repositions the active navigation pill after a language change updates lin
 
   globalThis.document = {
     body: { dataset: {} },
+    getElementById() {
+      return null;
+    },
     querySelectorAll(selector) {
       if (selector === 'main > section[id], main #cv') return [section];
       if (selector === '.nav-links a[href^="#"]') return [activeLink];

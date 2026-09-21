@@ -15,6 +15,8 @@ const { lang, project } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const homeHref = homePath(base, lang);
 const sections = routeConfig[lang].sections;
+const alternateLang: Lang = lang === 'pt' ? 'en' : 'pt';
+const alternateHref = caseStudyPath(base, alternateLang, project.slug);
 const canonicalUrl = pageUrl('https://miguelzgobbo.github.io', caseStudyPath(base, lang, project.slug));
 ---
 
@@ -24,9 +26,8 @@ const canonicalUrl = pageUrl('https://miguelzgobbo.github.io', caseStudyPath(bas
   description={project.summary[lang]}
   bodySection="case-study"
   skipTarget="#case-study-content"
-  includeHomeScript={false}
   canonicalUrl={canonicalUrl}
 >
-  <Nav lang={lang} homeHref={homeHref} showControls={false} sectionIds={sections} />
+  <Nav lang={lang} homeHref={homeHref} alternateHref={alternateHref} sectionIds={sections} />
   <ProjectCaseStudy project={project} lang={lang} homeHref={homeHref} projectsId={sections.projects} />
 </BaseLayout>
