@@ -33,7 +33,13 @@ const fields = [
       <label for="campo-site">Website</label>
       <input type="text" id="campo-site" name="website" autocomplete="off" />
     </div>
-    <button class="btn reveal" type="submit" id="btn-enviar" data-i18n="form.submit">{translate(lang, 'form.submit')}</button>
+    <button class="btn reveal" type="button" id="btn-enviar" data-i18n="form.submit" disabled>{translate(lang, 'form.submit')}</button>
     <p id="form-aviso" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript>
+      <p class="form-fallback">
+        <span data-i18n="form.nojs">{translate(lang, 'form.nojs')}</span>{' '}
+        <a href="mailto:miguelzgobbo@gmail.com">miguelzgobbo@gmail.com</a>
+      </p>
+    </noscript>
   </form>
 </div>

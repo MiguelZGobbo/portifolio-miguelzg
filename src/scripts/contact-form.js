@@ -31,11 +31,33 @@ function loadEmailJS() {
   return emailjsPromise;
 }
 
-function resetFormButton(button, notice, message, className) {
-  button.textContent = translate('form.submit');
-  button.disabled = false;
-  notice.textContent = message;
+function setTranslatedText(element, key) {
+  if (!key) {
+    delete element.dataset.i18nKey;
+    element.textContent = '';
+    return;
+  }
+
+  element.dataset.i18nKey = key;
+  element.textContent = translate(key);
+}
+
+function setButtonState(button, state) {
+  button.dataset.formState = state;
+  button.textContent = translate(state === 'sending' ? 'form.sending' : 'form.submit');
+}
+
+function setNoticeState(notice, key, className, state) {
+  setTranslatedText(notice, key);
   notice.className = className;
+  if (state) notice.dataset.formState = state;
+  else delete notice.dataset.formState;
+}
+
+function resetFormButton(button, notice, noticeKey, className, state) {
+  setButtonState(button, 'idle');
+  button.disabled = false;
+  setNoticeState(notice, noticeKey, className, state);
 }
 
 function isValidEmail(value) {
@@ -87,23 +109,34 @@ function updateFieldError(field, errorKey) {
   if (!control || !error) return;
 
   control.setAttribute('aria-invalid', String(Boolean(errorKey)));
-  error.textContent = errorKey ? translate(errorKey) : '';
+  setTranslatedText(error, errorKey);
 }
 
 function showValidation(validation, notice) {
   contactFields.forEach((field) => updateFieldError(field, validation.fieldErrors[field.key]));
-  notice.textContent = validation.summaryKey ? translate(validation.summaryKey) : '';
-  notice.className = validation.summaryKey ? 'erro' : '';
-  notice.dataset.formState = 'validation';
+  setNoticeState(
+    notice,
+    validation.summaryKey,
+    validation.summaryKey ? 'erro' : '',
+    validation.summaryKey ? 'validation' : undefined,
+  );
 }
 
 function clearValidation(notice) {
   contactFields.forEach((field) => updateFieldError(field, null));
   if (notice.dataset.formState === 'validation') {
-    notice.textContent = '';
-    notice.className = '';
+    setNoticeState(notice, null, '', undefined);
   }
-  delete notice.dataset.formState;
+}
+
+function rerenderActiveFeedback(button, notice) {
+  contactFields.forEach(({ errorId }) => {
+    const error = document.getElementById(errorId);
+    if (error?.dataset.i18nKey) error.textContent = translate(error.dataset.i18nKey);
+  });
+
+  if (notice.dataset.i18nKey) notice.textContent = translate(notice.dataset.i18nKey);
+  setButtonState(button, button.dataset.formState === 'sending' ? 'sending' : 'idle');
 }
 
 function focusFirstInvalid(fieldErrors) {
@@ -130,10 +163,9 @@ function sendMessage() {
   }
 
   clearValidation(notice);
-  button.textContent = translate('form.sending');
+  setButtonState(button, 'sending');
   button.disabled = true;
-  notice.textContent = translate('form.sending');
-  notice.className = 'sending';
+  setNoticeState(notice, 'form.sending', 'sending', 'sending');
 
   loadEmailJS()
     .then(() => {
@@ -145,25 +177,35 @@ function sendMessage() {
       });
     })
     .then(() => {
-      resetFormButton(button, notice, translate('form.ok'), 'sucesso');
+      resetFormButton(button, notice, 'form.ok', 'sucesso', 'success');
       contactFields.forEach(({ id }) => {
         document.getElementById(id).value = '';
       });
     })
     .catch(() => {
-      resetFormButton(button, notice, translate('form.err'), 'erro');
+      resetFormButton(button, notice, 'form.err', 'erro', 'failure');
     });
 }
 
 export function initContactForm() {
   const form = document.getElementById('contact-form');
-  if (!form) return;
+  const button = document.getElementById('btn-enviar');
+  const notice = document.getElementById('form-aviso');
+  const fieldElements = contactFields.map((field) => ({
+    field,
+    control: document.getElementById(field.id),
+    error: document.getElementById(field.errorId),
+  }));
+  if (!form || !button || !notice || fieldElements.some(({ control, error }) => !control || !error)) {
+    return false;
+  }
+
+  button.type = 'button';
+  button.disabled = true;
 
   form.addEventListener('invalid', (event) => {
     if (!contactFields.some(({ id }) => id === event.target.id)) return;
     event.preventDefault();
-    const notice = document.getElementById('form-aviso');
-    if (!notice) return;
     if (honeypotIsFilled()) {
       clearValidation(notice);
       return;
@@ -174,12 +216,8 @@ export function initContactForm() {
     focusFirstInvalid(validation.fieldErrors);
   }, true);
 
-  contactFields.forEach((field) => {
-    const control = document.getElementById(field.id);
-    control?.addEventListener('input', () => {
-      const notice = document.getElementById('form-aviso');
-      if (!notice) return;
-
+  fieldElements.forEach(({ field, control }) => {
+    control.addEventListener('input', () => {
       const validation = validateFormValues();
       updateFieldError(field, validation.fieldErrors[field.key]);
       if (!validation.summaryKey && notice.dataset.formState === 'validation') clearValidation(notice);
@@ -190,4 +228,11 @@ export function initContactForm() {
     event.preventDefault();
     sendMessage();
   });
+
+  document.addEventListener('languagechange', () => rerenderActiveFeedback(button, notice));
+
+  setButtonState(button, 'idle');
+  button.type = 'submit';
+  button.disabled = false;
+  return true;
 }

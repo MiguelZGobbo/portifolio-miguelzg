@@ -126,6 +126,13 @@ test('renders native contact semantics with linked field errors and a polite sta
 
   assert.match(contact, /id="form-aviso"[^>]*role="status"[^>]*aria-live="polite"/);
 
+  const form = contact.match(/<form\b[\s\S]*?<\/form>/)?.[0] ?? '';
+  const submit = form.match(/<button\b[^>]*id="btn-enviar"[^>]*>/)?.[0] ?? '';
+  assert.match(submit, /\btype="button"/);
+  assert.match(submit, /\bdisabled\b/);
+  assert.doesNotMatch(form, /\bmethod="post"/i);
+  assert.match(form, /<noscript>[\s\S]*href="mailto:miguelzgobbo@gmail\.com"[\s\S]*<\/noscript>/);
+
   const honeypot = contact.match(/<div class="hp-field"[\s\S]*?<\/div>/)?.[0] ?? '';
   assert.match(honeypot, /<div class="hp-field"[^>]*aria-hidden="true"[^>]*\binert\b/);
   assert.doesNotMatch(honeypot, /\btabindex=/);
