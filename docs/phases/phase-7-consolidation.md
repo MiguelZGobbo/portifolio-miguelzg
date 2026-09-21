@@ -54,7 +54,7 @@ Final automated verification on 2026-09-21:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 80 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
+| `npm test` | 84 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
 | `npm run check` | 46 files; 0 errors, 0 warnings, 0 hints |
 | `npm run build` | 6 static pages built; sitemap index generated |
 | `git diff --check` | no whitespace errors |
@@ -85,13 +85,14 @@ At 320 px, a temporary same-origin audit harness applied line height 1.5, paragr
 - Empty, malformed-email, and correction states were exercised in both localized forms. Errors, summary copy, `aria-invalid`, first-invalid focus, and URL stability were correct; correcting the last invalid field cleared the active feedback.
 - An English empty-error state followed by PT navigation produced a fresh Portuguese form with no stale feedback or wrong-language state.
 - Built markup retains the Phase 6 pre-initialization gate: the static submit control is inert until handlers are registered, exposes no GET action, and retains the mail fallback.
+- The fix-round re-audit used synthetic values only after a host guard was in place. On both PT and EN local-preview routes, the URL stayed unchanged, values were retained, the button returned to its enabled idle label, and a visible localized polite status directed the user to the email link. Fresh browser state kept `window.emailjs` undefined, appended no EmailJS SDK, recorded no EmailJS resource, and initiated no EmailJS-bound network request.
 - Eleven rapid theme activations ended in a coherent dark state; navigation to English retained dark mode and updated the theme and language labels. A full return to light also passed.
 - Light and dark passes covered every major homepage region at desktop and mobile sizes. Purchase Orders and BeadWise case-study layouts were each inspected in light and dark modes at desktop/mobile sizes. Long English copy wrapped without clipping, and all five BeadWise maturity distinctions remained explicit.
 - A fresh browser console inspection after route, form, theme, screenshot, and viewport work returned no warnings or errors.
 
 The available browser exposed viewport and visibility controls but no media-preference emulation. Reduced motion therefore retains the Phase 6 limitation: final cascade and behavior regressions prove the contract, but this phase does not claim a manually emulated reduce-preference session.
 
-## Task 4 correction
+## Task 4 corrections
 
 The audit found one user-visible navigation defect with two root causes. Selecting the résumé destination could make the observer treat Contact as active, changing the language link from `#cv`/`#resume` to the Contact equivalent.
 
@@ -102,13 +103,18 @@ The correction followed two strict RED/GREEN cycles:
 
 The focused navigation suite finished 11/11 green. A real-browser PT `#cv` → EN `#resume` → PT `#cv` round trip then retained the correct URL, active link, and alternate destination at every step. Audit corrections are isolated in commit `f9486d4`.
 
+The fix round found that valid submissions had no environment boundary before `loadEmailJS`. A strict RED reproduced an SDK append on `127.0.0.1` and `emailjs.init` on `localhost`; the GREEN correction added a pure hostname policy that rejects `localhost` (including subdomains and case variants), the IPv4 `127/8` loopback range, IPv6 `::1` with or without URL brackets, and IPv4-mapped IPv6 loopback before the loader can run. Non-local deployment hosts continue through the existing delivery path.
+
+The first real-browser recheck then found the polite local-preview text present in the status region but visually hidden by its base opacity. A second RED/GREEN cycle added a neutral visible state. The final PT and EN browser passes used `Local Preview Audit`, `local-preview@example.test`, and `Synthetic local boundary verification only`; both showed the localized message with retained values and an enabled idle button, while DOM, resource, and network evidence remained free of any EmailJS boundary.
+
 ## Limitations and non-claims
 
 - This is engineering evidence, not a formal WCAG certification, legal conformance statement, indexing guarantee, or ranking claim.
 - No human screen-reader session was performed. Evidence covers static semantics, accessibility representation, full keyboard order, focus visibility/clearance, and live form feedback.
 - Reduced-motion preference could not be browser-emulated in the available surface. Automated cascade/behavior coverage remains the evidence.
 - Browser geometry is recorded from the real browser rather than committed as computed-layout automation. The current toolchain has no browser dependency, and adding a heavyweight dependency solely for this audit was not justified.
-- One exploratory form step unintentionally reused synthetic valid values (`Test User`, `test@example.com`, `Local validation only`) after a same-URL navigation and reached the visible `Sending...` state before immediate navigation away. No success or failure state was observed, and `window.emailjs`, script-load, and network state were not captured. This report therefore does not claim that no external request began or that zero delivery occurred. No further valid submission was exercised.
+- One exploratory form step unintentionally reused synthetic valid values (`Test User`, `test@example.com`, `Local validation only`) after a same-URL navigation and reached the visible `Sending...` state before immediate navigation away. No success or failure state was observed, and `window.emailjs`, script-load, and network state were not captured. This report therefore does not claim that no external request began or that zero delivery occurred. No further valid submission was exercised before the local-host guard existed, and the historical event was not investigated by sending again.
+- The final local-preview behavior is structurally isolated before `loadEmailJS` and was verified with new synthetic values. That evidence applies prospectively to the corrected build; it does not retroactively resolve the historical request above.
 - No publishing, deployment, push, merge, search-console submission, robots-control change, or external indexing action was performed.
 - The localized `siteName` expression remains duplicated between the two page-composition components. Centralizing it now would introduce a second metadata abstraction or widen the audit fix, so it is deliberately deferred unless metadata ownership is redesigned.
 

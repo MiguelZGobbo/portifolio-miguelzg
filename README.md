@@ -76,7 +76,7 @@ Para testar a saída estática localmente:
 
 | Script | Uso |
 | --- | --- |
-| npm test | Gera as seis páginas estáticas e executa 80 testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
+| npm test | Gera as seis páginas estáticas e executa 84 testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
 | npm run check | Executa as verificações e diagnósticos do Astro. |
 | npm run build | Gera as seis páginas estáticas, o sitemap e os assets em dist/. |
 | npm run dev | Inicia o servidor de desenvolvimento do Astro. |
@@ -89,7 +89,6 @@ Para testar a saída estática localmente:
     ├── public/
     │   ├── files/                  # Currículos em português e inglês
     │   ├── img/                   # Favicon, foto e imagens públicas
-    │   ├── robots.txt
     │   ├── site.webmanifest
     │   └── ícones de instalação
     ├── src/
@@ -122,7 +121,7 @@ Para testar a saída estática localmente:
 
 ## Estado de escopo
 
-A Fase 7 de localização por rotas e SEO está consolidada em [docs/phases/phase-7-consolidation.md](docs/phases/phase-7-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 80 testes além da auditoria funcional e visual em navegador. O polimento de ritmo visual, tipografia, espaçamento, decoração e decisões finais de motion pertence à Fase 8, sem alterar hierarquia, rotas, metadados ou comportamento de acessibilidade.
+A Fase 7 de localização por rotas e SEO está consolidada em [docs/phases/phase-7-consolidation.md](docs/phases/phase-7-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 84 testes além da auditoria funcional e visual em navegador. O polimento de ritmo visual, tipografia, espaçamento, decoração e decisões finais de motion pertence à Fase 8, sem alterar hierarquia, rotas, metadados ou comportamento de acessibilidade.
 
 ## Autor
 
