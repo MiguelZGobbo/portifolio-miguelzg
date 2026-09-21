@@ -2,7 +2,7 @@
 
 ## Status
 
-Phase 5 is structurally complete. Tasks 1–4 are present in the repository history, and Task 5 records their delivered interfaces, verification evidence, scope boundaries, and the handoff into Phase 6.
+Phase 5 is structurally complete. Tasks 1–4 are present in the repository history, the final review-fix wave is recorded at c598e9e, and Task 5 records their delivered interfaces, verification evidence, scope boundaries, and the handoff into Phase 6.
 
 The following architecture context was already present as an untracked documentation tree when Task 5 began and is included unchanged in the documentation commit:
 
@@ -86,25 +86,34 @@ No production source or test file was modified for this consolidation.
 
 ## Automated verification
 
-The full requested verification was run against the Phase 5 worktree after a fresh build.
+The final verification recorded at c598e9e starts npm test with its pretest build hook. With dist absent before the command, the test lifecycle generated the static pages first and then ran the complete suite.
 
     npm test
 
-Result: 22 tests passed, 0 failed, 0 cancelled, 0 skipped, 0 todo. The test runner completed in 182.9082 ms.
+Result: the build-first lifecycle completed from an absent dist directory, then 24 tests passed with 0 failures, 0 cancellations, 0 skips, and 0 todo items.
 
     npm run check
 
-Result: Astro checked 38 files with 0 errors, 0 warnings, and 0 hints.
+Result: Astro reported 0 errors, 0 warnings, and 0 hints.
 
     npm run build
 
-Result: static build completed successfully in 411 ms. Three pages were built:
+Result: static build completed successfully and generated three routes:
 
 - /index.html
 - /projetos/purchase-orders-api/index.html
 - /projetos/beadwise/index.html
 
 The Astro sitemap integration also generated dist/sitemap-index.xml. All three commands exited with status 0.
+
+## Final review closure
+
+The scoped re-review approved Phase 5 for the Phase 6 handoff. The four review findings were addressed in c598e9e:
+
+- BeadWise wording now distinguishes observed structure, recorded specifications, and controlled validation from final product functionality.
+- Dead remnants, including obsolete compatibility fields and unused style selectors, were removed.
+- The languagechange event now refreshes navigation geometry after localized labels change.
+- The test lifecycle is build-first, so npm test does not depend on a pre-existing dist directory.
 
 ## Browser verification
 
