@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
-import Particles from '../components/Particles.astro';
 import Waves from '../components/Waves.astro';
 import ContactSection from '../components/home/ContactSection.astro';
 import HeroSection from '../components/home/HeroSection.astro';
@@ -20,10 +19,9 @@ const dict = translations[lang] as Record<string, string>;
   description={dict['meta.description']}
 >
   <Waves />
-  <Particles />
   <Nav lang={lang} />
 
-  <main class="scroll-container">
+  <main class="home-main">
     <HeroSection lang={lang} />
     <ProjectsSection lang={lang} />
     <SkillsSection lang={lang} />

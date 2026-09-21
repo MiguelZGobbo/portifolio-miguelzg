@@ -11,8 +11,12 @@ const { group, lang = 'pt' } = Astro.props;
 ---
 
 <div class="skill-card reveal">
-  <div class="skill-cat">{group.cat[lang]}</div>
+  <div class="skill-cat" data-skill-localized data-skill-pt={group.cat.pt} data-skill-en={group.cat.en}>{group.cat[lang]}</div>
   <div class="skill-tags">
-    {group.tags[lang].map((tag) => <span class="tag">{tag}</span>)}
+    {
+      group.tags[lang].map((tag, index) => (
+        <span class="tag" data-skill-localized data-skill-pt={group.tags.pt[index]} data-skill-en={group.tags.en[index]}>{tag}</span>
+      ))
+    }
   </div>
 </div>
