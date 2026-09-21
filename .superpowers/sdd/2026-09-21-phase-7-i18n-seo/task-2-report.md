@@ -58,3 +58,30 @@ The focused command passed 29/29 after implementation and a fresh static build. 
 ## Concerns
 
 None. Browser enhancement is intentionally limited to section-fragment preservation; direct links and browser history remain native.
+
+## Fix round 1/5
+
+### Findings addressed
+
+- Added a regression for an observed active link that has no alternate destination. The language anchor must discard a stale section fragment and return to its server-rendered stable alternate URL.
+- Added a two-part shared-entry regression: built PT/EN homepage and both PT/EN case-study pages must emit the same browser module entry, and that entry must import and call `initTheme`.
+
+### Test-first evidence
+
+The two narrow regressions were added before further changes. They passed immediately because the existing Task 2 implementation already used the stable fallback for missing attributes and already loaded the shared entry on every route; this fix round adds coverage only.
+
+### Verification
+
+- Focused route/navigation tests — 32 passed, 0 failed.
+- `npm test` — 70 passed, 0 failed.
+- `npm run check` — 0 errors, 0 warnings, 0 hints.
+- `npm run build` — 6 static pages built.
+- `git diff --check` — no whitespace errors.
+
+### Commit
+
+`test(i18n): cover route language fallbacks`
+
+### Concerns
+
+None. The built-page assertion discovers the emitted module entry rather than relying on a hashed asset filename.

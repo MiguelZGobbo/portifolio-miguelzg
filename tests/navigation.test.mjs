@@ -126,6 +126,32 @@ test('restores the language link stable destination when no observed alternate e
   assert.equal(attributes.get('href'), '/portifolio-miguelzg/en/');
 });
 
+test('restores the language link stable destination when the active link has no alternate', () => {
+  assert.equal(typeof navigation.updateLanguageDestination, 'function');
+
+  const attributes = new Map([
+    ['href', '/portifolio-miguelzg/en/#projects'],
+    ['data-language-default', '/portifolio-miguelzg/en/'],
+  ]);
+  const toggle = {
+    getAttribute(name) {
+      return attributes.get(name) ?? null;
+    },
+    setAttribute(name, value) {
+      attributes.set(name, value);
+    },
+  };
+  const activeLink = {
+    getAttribute() {
+      return null;
+    },
+  };
+
+  navigation.updateLanguageDestination(toggle, activeLink);
+
+  assert.equal(attributes.get('href'), '/portifolio-miguelzg/en/');
+});
+
 test('maps the nested Resume anchor to its own active navigation state', () => {
   const originalDocument = globalThis.document;
   const originalWindow = globalThis.window;

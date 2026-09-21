@@ -36,6 +36,14 @@ async function readBuiltEnglishCaseStudy(slug) {
   return readFile(resolve('dist', 'en', 'projects', slug, 'index.html'), 'utf8');
 }
 
+function sharedBrowserEntry(page) {
+  const entries = [...page.matchAll(/<script type="module" src="([^"]+)"><\/script>/g)]
+    .map(([, src]) => src);
+
+  assert.equal(entries.length, 1, 'each localized route should emit one shared browser entry');
+  return entries[0];
+}
+
 test('builds exactly the six localized public HTML routes', async () => {
   const routes = [
     ['index.html'],
@@ -100,6 +108,21 @@ test('renders reciprocal case-study language links and both utilities on every r
       new RegExp(`<a id="lang-toggle"[^>]*href="/portifolio-miguelzg/projetos/${slug}/"[^>]*hreflang="pt-BR"`),
     );
   }
+});
+
+test('emits the same shared browser entry on both localized home and case-study routes', async () => {
+  const routes = [
+    ['index.html'],
+    ['en', 'index.html'],
+    ['projetos', 'purchase-orders-api', 'index.html'],
+    ['projetos', 'beadwise', 'index.html'],
+    ['en', 'projects', 'purchase-orders-api', 'index.html'],
+    ['en', 'projects', 'beadwise', 'index.html'],
+  ];
+  const pages = await Promise.all(routes.map((route) => readFile(resolve('dist', ...route), 'utf8')));
+  const [homepageEntry, ...caseStudyEntries] = pages.map(sharedBrowserEntry);
+
+  for (const entry of caseStudyEntries) assert.equal(entry, homepageEntry);
 });
 
 test('builds each case-study route with ordered sections and its repository evidence', async () => {

@@ -32,6 +32,11 @@ test('main delegates browser behavior to focused initializers only', () => {
   assert.doesNotMatch(main, /\b(document|window|translations|projects|skillGroups)\b/);
 });
 
+test('the shared browser entry imports and initializes the theme utility', () => {
+  assert.match(main, /^import \{ initTheme \} from '\.\/theme\.js';$/m);
+  assert.match(main, /\binitTheme\(\);/);
+});
+
 test('keeps route language static instead of letting browser preferences own it', () => {
   assert.doesNotMatch(main, /initLanguage|['"]\.\/language\.js['"]/);
   assert.doesNotMatch(baseLayout, /localStorage\.getItem\('lang'\)/);
