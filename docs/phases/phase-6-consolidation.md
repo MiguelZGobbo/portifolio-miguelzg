@@ -28,7 +28,8 @@ This document records engineering evidence against that target. It is not a cert
 
 - Required and email-format errors are localized, attached to their fields, synchronized through `aria-invalid` and `aria-describedby`, summarized in a persistent polite status region, and focus the first invalid field.
 - Input correction clears the corresponding field error without hiding other outstanding errors.
-- Sending, success, and failure states are announced without an unnecessary focus move. Success clears submitted fields; failure retains them.
+- Active validation messages, the summary, the ordinary submit label, and sending/success/failure status retain translation keys and rerender on `languagechange` without clearing errors or moving focus. Success clears submitted fields; failure retains them.
+- Generated markup keeps the button at `type="button"` and disabled. `initContactForm()` changes it to an enabled submit control only after invalid, input, submit, and language-change listeners are registered; a failed initialization leaves it inert. The no-JavaScript fallback provides the public mailto address instead of exposing a GET submission path.
 - The honeypot stays silent, does not load EmailJS, and is removed from keyboard and accessibility interaction with an inert, `aria-hidden` wrapper. No real contact message was sent during the audit.
 - Light and dark themes use separate error tokens. Independently calculated contrast is 5.75:1 or higher for the light token and 6.68:1 or higher for the dark token against the actual page/form surfaces, meeting the 4.5:1 normal-text and 3:1 meaningful-indicator thresholds covered by the regression.
 
@@ -52,7 +53,7 @@ Final verification on 2026-09-21:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 47 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; its pretest build also completed |
+| `npm test` | 53 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; its pretest build also completed |
 | `npm run check` | 40 files; 0 errors, 0 warnings, 0 hints |
 | `npm run build` | 3 static routes built successfully; sitemap generated |
 | `git diff --check` | no whitespace errors |
@@ -86,7 +87,7 @@ The 641/639 and 320 CSS px checks cover the practical 200% and 400%-equivalent r
 - Keyboard: the desktop homepage completed mirrored 29-control Tab and Shift+Tab sequences. Purchase Orders API and BeadWise each completed mirrored eight-control sequences at 1280 × 800 and 390 × 844. Every pass had logical order, visible/unobscured focus, and no trap. Enter and Space activated theme/language controls.
 - Navigation: activating Projects, About, Resume, and Contact updated `aria-current="location"` to the matching destination.
 - Theme/language: PT → EN → PT and dark → light → dark cycles updated labels, copy, title, theme metadata, and pressed state. Twenty rapid paired toggles returned to a coherent initial state. Both utilities were available at 320 px.
-- Forms: empty, whitespace-only, malformed email, per-field clearing, silent honeypot, sending, success, and failure were exercised in the real UI against a stubbed EmailJS boundary. No external message was transmitted.
+- Forms: empty, whitespace-only, malformed email, per-field clearing, silent honeypot, sending, success, and failure were exercised in the real UI against a stubbed EmailJS boundary. The final browser pass confirmed that initialized markup was enabled in the idle state only after setup, invalid submission did not change the URL, and PT validation feedback rerendered coherently in EN while preserving `aria-invalid`. No external message was transmitted.
 - Semantics: homepage and both case studies had one main landmark, correct titles/language, unique IDs, named controls, and logical heading outlines. The BeadWise route separately exposed all five maturity states.
 - Visual inspection: Hero, Projects, Competencies, About, résumé, and Contact were each inspected in light mode at 1280 × 800 and 390 × 844. Each retained readable hierarchy and contrast, client width equaled scroll width, controls remained available, and fixed top/bottom navigation did not collide with content. Dark invalid-form feedback was separately inspected with the new error token. Both case-study layouts were also inspected at mobile and desktop sizes in their relevant light/dark states. No clipping, missing control, or navigation collision remained.
 - Console: a fresh production-route load produced no new browser warnings or errors. Earlier MutationObserver errors were isolated to temporary audit harness pages with intentionally incomplete shells, not production routes.
@@ -104,6 +105,8 @@ Each correction followed RED → minimal implementation → focused GREEN → af
 - The fixed mobile footer covered the focused submit button. A failing mobile scroll-padding assertion preceded the larger focus-safe bottom inset.
 - The honeypot combined `aria-hidden="true"` with a focusable descendant carrying `tabindex="-1"`. A failing markup assertion preceded the inert wrapper and removal of the descendant tabindex while preserving silent anti-bot behavior.
 - The shared `#AA3333` error color fell below 4.5:1 for text and 3:1 for invalid borders/focus outlines on dark surfaces. A failing theme-token contrast test independently calculated the ratios before the dark token changed to `#FF9B9B`; focused tests then passed, and the real dark empty-form state exposed the new color on messages, borders, and the focused outline.
+- The statically rendered form exposed a native GET path before JavaScript initialization because named controls were paired with an immediately submit-capable button. Failing generated-markup and interaction tests preceded an inert static button, handler-first enablement, a failed-init safety path, and a no-JavaScript mailto fallback.
+- Active PT form validation and asynchronous status copy survived a language switch untranslated. Failing event-driven tests preceded translation-key retention and `languagechange` rerendering for field errors, the summary, idle/sending button text, and sending/success/failure status without focus movement or error clearing.
 
 The deferred Task 3 test-structure minor was already resolved in `c033cee`; review confirmed no further action was needed.
 
@@ -112,6 +115,8 @@ The deferred Task 3 test-structure minor was already resolved in `c033cee`; revi
 - No formal WCAG certification or legal conformance statement is made.
 - No independent session with a human screen-reader user was performed. The evidence covers generated semantics, browser accessibility representation, keyboard operation, and live-region behavior, not the usability of every screen-reader/browser combination.
 - The available browser surface could not emulate reduced motion. Automated cascade/behavior contracts cover the implementation, but a manual reduce-preference session remains a useful future cross-browser check.
+- The available browser surface also could not disable JavaScript. No manual no-JavaScript browser session is claimed: the safety conclusion comes from the built markup (`type="button"`, disabled, no action/method, and a mailto fallback), the failed-initialization interaction regression, and a browser check of the post-initialization state.
+- Browser geometry remains verified by the recorded manual viewport/focus matrix rather than automated computed-layout tests. A heavyweight browser dependency was intentionally not added for this minor; Phase 7 must repeat this browser regression audit and add sustainable computed-geometry coverage if its test infrastructure supports it.
 - Error-state text and indicator contrast now have instrumented token/background regression coverage. Other visual states were inspected for regressions, but this audit did not produce an instrumented color-contrast report for every rendered state.
 - External EmailJS delivery was intentionally stubbed; the audit verifies the local UI boundary and state handling, not third-party network delivery.
 
@@ -124,4 +129,5 @@ Phase 7 should introduce independently addressable PT and EN routes while preser
 - reciprocal `hreflang` declarations and explicit canonical rules;
 - localized structured data;
 - sitemap and robots decisions for every language route;
-- regression coverage ensuring the Phase 6 semantics, keyboard order, form feedback, responsive reflow, target sizing, focus safety, and reduced-motion contract remain intact.
+- regression coverage ensuring the Phase 6 semantics, keyboard order, form feedback, responsive reflow, target sizing, focus safety, and reduced-motion contract remain intact;
+- a repeated real-browser geometry audit for responsive widths and fixed-layer focus clearance, with automated computed-layout coverage if Phase 7 adopts suitable lightweight browser infrastructure.
