@@ -26,7 +26,7 @@ test('findActiveSection retains the nearest observed section outside literal geo
   assert.equal(findActiveSection([], 0, 800), null);
 });
 
-test('updates only observed navigation links with aria-current="page"', () => {
+test('updates only observed navigation links with aria-current="location"', () => {
   assert.equal(typeof navigation.updateNavigationState, 'function');
 
   const attributes = new Map([['href', '#sobre']]);
@@ -69,7 +69,7 @@ test('updates only observed navigation links with aria-current="page"', () => {
   const activeLink = navigation.updateNavigationState([link, cvLink], 'sobre');
 
   assert.equal(activeLink, link);
-  assert.equal(attributes.get('aria-current'), 'page');
+  assert.equal(attributes.get('aria-current'), 'location');
   assert.equal(cvAttributes.has('aria-current'), false);
   assert.equal(cvLink.classList.active, false);
 });

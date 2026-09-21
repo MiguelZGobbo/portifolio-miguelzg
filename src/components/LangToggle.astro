@@ -1,7 +1,14 @@
 ---
+import { translate, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
 ---
 
-<button id="lang-toggle" class="nav-btn nav-btn--lang" type="button">
+<button id="lang-toggle" class="nav-btn nav-btn--lang" type="button" aria-label={translate(lang, 'lang.switch')}>
   <span class="lang-label">
     <span class="lang-part lang-pt">PT</span>
     <span class="lang-sep">/</span>

@@ -13,7 +13,7 @@ const { labelKey, titleKey, icon, lang = 'pt' } = Astro.props;
 ---
 
 <div class="section-label reveal" data-i18n={labelKey}>{translate(lang, labelKey)}</div>
-<div class="section-title reveal">
+<h2 class="section-title reveal">
   <Icon name={icon} size={22} strokeWidth={1.8} />
   <span data-i18n={titleKey}>{translate(lang, titleKey)}</span>
-</div>
+</h2>

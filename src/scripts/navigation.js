@@ -46,7 +46,7 @@ export function updateNavigationState(links, sectionId) {
     const isActive = link.getAttribute('href') === `#${sectionId}`;
     link.classList.toggle('active', isActive);
     if (isActive) {
-      link.setAttribute('aria-current', 'page');
+      link.setAttribute('aria-current', 'location');
       activeLink = link;
     } else {
       link.removeAttribute('aria-current');

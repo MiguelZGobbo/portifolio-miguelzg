@@ -17,6 +17,14 @@ function projectMarkup(slug) {
   return page.slice(start, next === -1 ? undefined : next);
 }
 
+function sectionMarkup(id) {
+  const start = positionOf(id);
+  const next = page.indexOf('<section', start + 1);
+
+  assert.notEqual(start, -1, `expected #${id} to be present`);
+  return page.slice(start, next === -1 ? undefined : next);
+}
+
 test('renders the approved hero copy and canonical homepage hierarchy', () => {
   assert.match(page, />Desenvolvedor de Software<\/h1>/);
   assert.match(
@@ -74,4 +82,22 @@ test('keeps global navigation focused on home, projects, profile, résumé, and 
   const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
 
   assert.deepEqual(destinations, ['#home', '#projetos', '#sobre', '#cv', '#contato']);
+});
+
+test('renders one page heading and a section heading for each home content section', () => {
+  const pageHeadings = [...page.matchAll(/<h1\b/g)];
+  assert.equal(pageHeadings.length, 1, 'the homepage should have one h1');
+
+  for (const id of ['projetos', 'competencias', 'sobre', 'contato']) {
+    assert.match(sectionMarkup(id), /<h2\b/, `#${id} should contain an h2`);
+  }
+});
+
+test('renders named utility controls and preserves ordered in-page destinations', () => {
+  assert.match(page, /<button id="theme-toggle"[^>]*aria-label="Mudar para tema escuro"/);
+  assert.match(page, /<button id="lang-toggle"[^>]*aria-label="Switch to English"/);
+
+  const links = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
+  const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
+  assert.deepEqual(destinations, ['#projetos', '#sobre', '#cv', '#contato']);
 });
