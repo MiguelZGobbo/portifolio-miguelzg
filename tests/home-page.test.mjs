@@ -101,3 +101,22 @@ test('renders named utility controls and preserves ordered in-page destinations'
   const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
   assert.deepEqual(destinations, ['#projetos', '#sobre', '#cv', '#contato']);
 });
+
+test('renders native contact semantics with linked field errors and a polite status region', () => {
+  const contact = sectionMarkup('contato');
+
+  for (const [id, name, autocomplete] of [
+    ['campo-nome', 'name', 'name'],
+    ['campo-email', 'email', 'email'],
+    ['campo-mensagem', 'message', 'off'],
+  ]) {
+    const control = contact.match(new RegExp(`<(?:input|textarea)\\b[^>]*id="${id}"[^>]*>`))?.[0] ?? '';
+    assert.match(control, new RegExp(`\\bname="${name}"`));
+    assert.match(control, new RegExp(`\\bautocomplete="${autocomplete}"`));
+    assert.match(control, /\brequired\b/);
+    assert.match(control, new RegExp(`\\baria-describedby="${id}-error"`));
+    assert.match(contact, new RegExp(`id="${id}-error"`));
+  }
+
+  assert.match(contact, /id="form-aviso"[^>]*role="status"[^>]*aria-live="polite"/);
+});

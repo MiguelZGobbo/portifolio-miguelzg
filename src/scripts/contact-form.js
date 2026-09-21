@@ -2,6 +2,12 @@ import { translations } from '../lib/i18n';
 
 let emailjsPromise;
 
+const contactFields = [
+  { key: 'name', id: 'campo-nome', errorId: 'campo-nome-error' },
+  { key: 'email', id: 'campo-email', errorId: 'campo-email-error' },
+  { key: 'message', id: 'campo-mensagem', errorId: 'campo-mensagem-error' },
+];
+
 function translate(key) {
   const language = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
   return translations[language][key] ?? translations.pt[key] ?? key;
@@ -30,55 +36,105 @@ function resetFormButton(button, notice, message, className) {
   button.disabled = false;
   notice.textContent = message;
   notice.className = className;
-  window.setTimeout(() => {
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+$/.test(value);
+}
+
+export function validateContactValues(values) {
+  const fieldErrors = {};
+  const name = values.name?.trim() ?? '';
+  const email = values.email?.trim() ?? '';
+  const message = values.message?.trim() ?? '';
+
+  if (!name) fieldErrors.name = 'form.name.required';
+  if (!email) fieldErrors.email = 'form.email.required';
+  else if (!isValidEmail(email)) fieldErrors.email = 'form.email.invalid';
+  if (!message) fieldErrors.message = 'form.message.required';
+
+  return {
+    fieldErrors,
+    summaryKey: Object.keys(fieldErrors).length ? 'form.invalid' : null,
+  };
+}
+
+function contactValues() {
+  return Object.fromEntries(
+    contactFields.map(({ key, id }) => [key, document.getElementById(id)?.value ?? '']),
+  );
+}
+
+function updateFieldError(field, errorKey) {
+  const control = document.getElementById(field.id);
+  const error = document.getElementById(field.errorId);
+  if (!control || !error) return;
+
+  control.setAttribute('aria-invalid', String(Boolean(errorKey)));
+  error.textContent = errorKey ? translate(errorKey) : '';
+}
+
+function showValidation(validation, notice) {
+  contactFields.forEach((field) => updateFieldError(field, validation.fieldErrors[field.key]));
+  notice.textContent = validation.summaryKey ? translate(validation.summaryKey) : '';
+  notice.className = validation.summaryKey ? 'erro' : '';
+  notice.dataset.formState = 'validation';
+}
+
+function clearValidation(notice) {
+  contactFields.forEach((field) => updateFieldError(field, null));
+  if (notice.dataset.formState === 'validation') {
     notice.textContent = '';
     notice.className = '';
-  }, 4000);
+  }
+  delete notice.dataset.formState;
+}
+
+function focusFirstInvalid(fieldErrors) {
+  const firstInvalid = contactFields.find(({ key }) => fieldErrors[key]);
+  document.getElementById(firstInvalid?.id)?.focus();
 }
 
 function sendMessage() {
-  const name = document.getElementById('campo-nome');
-  const email = document.getElementById('campo-email');
-  const message = document.getElementById('campo-mensagem');
   const button = document.getElementById('btn-enviar');
   const notice = document.getElementById('form-aviso');
   const website = document.getElementById('campo-site');
-  if (!name || !email || !message || !button || !notice) return;
+  if (!button || !notice) return;
 
-  const nameValue = name.value.trim();
-  const emailValue = email.value.trim();
-  const messageValue = message.value.trim();
-  notice.textContent = '';
-  notice.className = '';
+  const values = contactValues();
 
   if (website?.value.trim()) {
-    button.textContent = translate('form.submit');
+    clearValidation(notice);
     return;
   }
 
-  if (!nameValue || !emailValue || !messageValue) {
-    notice.textContent = translate('form.required');
-    notice.className = 'erro';
+  const validation = validateContactValues(values);
+  if (validation.summaryKey) {
+    showValidation(validation, notice);
+    focusFirstInvalid(validation.fieldErrors);
     return;
   }
 
+  clearValidation(notice);
   button.textContent = translate('form.sending');
   button.disabled = true;
+  notice.textContent = translate('form.sending');
+  notice.className = 'sending';
 
   loadEmailJS()
     .then(() => {
       window.emailjs.init('7cO86VT1CxLbCKh3n');
       return window.emailjs.send('service_5hcdutl', 'template_z8knk7w', {
-        name: nameValue,
-        email: emailValue,
-        message: messageValue,
+        name: values.name.trim(),
+        email: values.email.trim(),
+        message: values.message.trim(),
       });
     })
     .then(() => {
       resetFormButton(button, notice, translate('form.ok'), 'sucesso');
-      name.value = '';
-      email.value = '';
-      message.value = '';
+      contactFields.forEach(({ id }) => {
+        document.getElementById(id).value = '';
+      });
     })
     .catch(() => {
       resetFormButton(button, notice, translate('form.err'), 'erro');
@@ -88,6 +144,29 @@ function sendMessage() {
 export function initContactForm() {
   const form = document.getElementById('contact-form');
   if (!form) return;
+
+  form.addEventListener('invalid', (event) => {
+    if (!contactFields.some(({ id }) => id === event.target.id)) return;
+    event.preventDefault();
+    const notice = document.getElementById('form-aviso');
+    if (!notice) return;
+
+    const validation = validateContactValues(contactValues());
+    showValidation(validation, notice);
+    focusFirstInvalid(validation.fieldErrors);
+  }, true);
+
+  contactFields.forEach((field) => {
+    const control = document.getElementById(field.id);
+    control?.addEventListener('input', () => {
+      const notice = document.getElementById('form-aviso');
+      if (!notice) return;
+
+      const validation = validateContactValues(contactValues());
+      updateFieldError(field, validation.fieldErrors[field.key]);
+      if (!validation.summaryKey && notice.dataset.formState === 'validation') clearValidation(notice);
+    });
+  });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();

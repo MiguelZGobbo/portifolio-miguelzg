@@ -728,6 +728,26 @@ nav a,
     resize: vertical;
 }
 
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+    border-color: #a33;
+}
+
+.form-group input[aria-invalid="true"]:focus-visible,
+.form-group textarea[aria-invalid="true"]:focus-visible {
+    outline-color: #a33;
+}
+
+.field-error {
+    display: block;
+    min-height: 1.2rem;
+    margin-top: 0.35rem;
+    color: #a33;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.35;
+}
+
 .contact-info {
     display: flex;
     flex-direction: column;
@@ -831,12 +851,12 @@ nav a,
     font-weight: 500;
     margin-top: 0.6rem;
     min-height: 1.2rem;
-    transition: opacity 0.2s ease;
     opacity: 0;
 }
 
 #form-aviso.erro  { color: #a33; opacity: 1; }
 #form-aviso.sucesso { color: var(--brown-dark); opacity: 1; }
+#form-aviso.sending { color: var(--text-muted); opacity: 1; }
 
 /* ================================
    11. FOOTER

@@ -8,9 +8,9 @@ interface Props {
 const { lang = 'pt' } = Astro.props;
 
 const fields = [
-  { type: 'text', id: 'campo-nome', labelKey: 'form.name', phKey: 'form.name.ph' },
-  { type: 'email', id: 'campo-email', labelKey: 'form.email', phKey: 'form.email.ph' },
-  { type: 'textarea', id: 'campo-mensagem', labelKey: 'form.message', phKey: 'form.message.ph' },
+  { type: 'text', id: 'campo-nome', name: 'name', autocomplete: 'name', labelKey: 'form.name', phKey: 'form.name.ph' },
+  { type: 'email', id: 'campo-email', name: 'email', autocomplete: 'email', labelKey: 'form.email', phKey: 'form.email.ph' },
+  { type: 'textarea', id: 'campo-mensagem', name: 'message', autocomplete: 'off', labelKey: 'form.message', phKey: 'form.message.ph' },
 ] as const;
 ---
 
@@ -22,9 +22,10 @@ const fields = [
           <label for={field.id} data-i18n={field.labelKey}>{translate(lang, field.labelKey)}</label>
           {
             field.type === 'textarea'
-              ? <textarea id={field.id} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey}></textarea>
-              : <input type={field.type} id={field.id} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey} />
+              ? <textarea id={field.id} name={field.name} autocomplete={field.autocomplete} required aria-invalid="false" aria-describedby={`${field.id}-error`} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey}></textarea>
+              : <input type={field.type} id={field.id} name={field.name} autocomplete={field.autocomplete} required aria-invalid="false" aria-describedby={`${field.id}-error`} placeholder={translate(lang, field.phKey)} data-i18n-ph={field.phKey} />
           }
+          <p class="field-error" id={`${field.id}-error`}></p>
         </div>
       ))
     }
@@ -33,6 +34,6 @@ const fields = [
       <input type="text" id="campo-site" name="website" tabindex="-1" autocomplete="off" />
     </div>
     <button class="btn reveal" type="submit" id="btn-enviar" data-i18n="form.submit">{translate(lang, 'form.submit')}</button>
-    <span id="form-aviso"></span>
+    <p id="form-aviso" role="status" aria-live="polite" aria-atomic="true"></p>
   </form>
 </div>
