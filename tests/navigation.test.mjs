@@ -13,7 +13,7 @@ const sections = [
   { id: 'contato', top: 4000, height: 900 },
 ];
 
-test('findActiveSection selects the top-level section containing the viewport midpoint', () => {
+test('findActiveSection selects the top-level section nearest the viewport center', () => {
   assert.equal(findActiveSection(sections, 0, 800), 'home');
   assert.equal(findActiveSection(sections, 700, 800), 'projetos');
   assert.equal(findActiveSection(sections, 1700, 800), 'competencias');

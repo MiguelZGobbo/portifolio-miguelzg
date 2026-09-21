@@ -76,6 +76,13 @@ test('uses theme-specific error tokens with compliant text and indicator contras
   assert.match(ruleFor('#form-aviso.erro'), /color:\s*var\(--error\);/);
 });
 
+test('keeps the local-preview contact status visibly neutral', () => {
+  const localPreviewStatus = ruleFor('#form-aviso.local-preview');
+
+  assert.match(localPreviewStatus, /color:\s*var\(--text-muted\);/);
+  assert.match(localPreviewStatus, /opacity:\s*1;/);
+});
+
 test('keeps the reduced-motion contract after component motion and disables decorative movement', () => {
   const reducedMotionStart = stylesheet.lastIndexOf('@media (prefers-reduced-motion: reduce)');
 

@@ -64,6 +64,18 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+$/.test(value);
 }
 
+export function isContactDeliveryHostEligible(hostname) {
+  const normalizedHostname = typeof hostname === 'string'
+    ? hostname.trim().toLowerCase().replace(/^\[(.*)\]$/, '$1')
+    : '';
+
+  if (!normalizedHostname) return false;
+  if (normalizedHostname === 'localhost' || normalizedHostname.endsWith('.localhost')) return false;
+  if (normalizedHostname === '::1' || normalizedHostname.startsWith('::ffff:127.')) return false;
+  if (/^127(?:\.\d{1,3}){3}$/.test(normalizedHostname)) return false;
+  return true;
+}
+
 export function validateContactValues(values) {
   const fieldErrors = {};
   const name = values.name?.trim() ?? '';
@@ -159,6 +171,12 @@ function sendMessage() {
   if (validation.summaryKey) {
     showValidation(validation, notice);
     focusFirstInvalid(validation.fieldErrors);
+    return;
+  }
+
+  if (!isContactDeliveryHostEligible(window.location?.hostname)) {
+    clearValidation(notice);
+    resetFormButton(button, notice, 'form.local.disabled', 'local-preview', 'local-disabled');
     return;
   }
 

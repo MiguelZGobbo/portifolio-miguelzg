@@ -875,6 +875,7 @@ nav a,
 #form-aviso.erro  { color: var(--error); opacity: 1; }
 #form-aviso.sucesso { color: var(--brown-dark); opacity: 1; }
 #form-aviso.sending { color: var(--text-muted); opacity: 1; }
+#form-aviso.local-preview { color: var(--text-muted); opacity: 1; }
 
 /* ================================
    11. FOOTER

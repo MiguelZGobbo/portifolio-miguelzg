@@ -11,7 +11,14 @@ const testableSource = contactFormSource.replace(
 );
 const contactFormModule = await import(`data:text/javascript;base64,${Buffer.from(testableSource).toString('base64')}`);
 
-function createContactDom({ lang = 'en', values = {}, validity = {}, missing = [], emailjs } = {}) {
+function createContactDom({
+  lang = 'en',
+  hostname = 'miguelzgobbo.github.io',
+  values = {},
+  validity = {},
+  missing = [],
+  emailjs,
+} = {}) {
   const previousDocument = globalThis.document;
   const previousWindow = globalThis.window;
   const lifecycle = [];
@@ -111,6 +118,8 @@ function createContactDom({ lang = 'en', values = {}, validity = {}, missing = [
 
   const documentListeners = new Map();
 
+  const appendedScripts = [];
+
   globalThis.document = {
     documentElement: { dataset: { lang } },
     getElementById(id) {
@@ -128,10 +137,14 @@ function createContactDom({ lang = 'en', values = {}, validity = {}, missing = [
     createElement() {
       return {};
     },
-    head: { appendChild() {} },
+    head: {
+      appendChild(script) {
+        appendedScripts.push(script);
+      },
+    },
   };
   globalThis.window = {
-    location: { href: 'http://localhost/portifolio-miguelzg/#contato' },
+    location: { hostname, href: 'http://localhost/portifolio-miguelzg/#contato' },
     ...(emailjs ? { emailjs } : {}),
   };
 
@@ -143,6 +156,7 @@ function createContactDom({ lang = 'en', values = {}, validity = {}, missing = [
     button,
     notice,
     errors,
+    appendedScripts,
     lifecycle,
     clickButton() {
       const initialUrl = globalThis.window.location.href;
@@ -177,6 +191,93 @@ function createContactDom({ lang = 'en', values = {}, validity = {}, missing = [
     },
   };
 }
+
+test('allows contact delivery only on non-local hostnames', () => {
+  assert.equal(typeof contactFormModule.isContactDeliveryHostEligible, 'function');
+
+  for (const hostname of ['localhost', 'LOCALHOST', '127.0.0.1', '127.8.9.10', '[::1]', '::1']) {
+    assert.equal(contactFormModule.isContactDeliveryHostEligible(hostname), false, hostname);
+  }
+
+  assert.equal(contactFormModule.isContactDeliveryHostEligible('miguelzgobbo.github.io'), true);
+});
+
+test('does not append the EmailJS SDK for a valid local-preview submission', () => {
+  const dom = createContactDom({
+    hostname: '127.0.0.1',
+    values: { name: 'Local Preview', email: 'preview@example.test', message: 'Boundary check' },
+  });
+
+  try {
+    contactFormModule.initContactForm();
+    const result = dom.clickButton();
+
+    assert.equal(result.prevented, true);
+    assert.equal(result.url, 'http://localhost/portifolio-miguelzg/#contato');
+    assert.equal(dom.appendedScripts.length, 0);
+    assert.equal(dom.button.disabled, false);
+    assert.equal(dom.button.textContent, 'Send message');
+    assert.equal(dom.name.value, 'Local Preview');
+    assert.equal(dom.email.value, 'preview@example.test');
+    assert.equal(dom.message.value, 'Boundary check');
+  } finally {
+    dom.restore();
+  }
+});
+
+test('keeps localized local-preview submissions idle without calling EmailJS', async () => {
+  const cases = [
+    {
+      lang: 'pt',
+      hostname: 'localhost',
+      button: 'Enviar mensagem',
+      notice: 'O envio está desativado na visualização local. Use o link de e-mail visível nesta seção.',
+    },
+    {
+      lang: 'en',
+      hostname: '[::1]',
+      button: 'Send message',
+      notice: 'Sending is disabled in local preview. Use the visible email link in this section.',
+    },
+  ];
+
+  for (const expected of cases) {
+    let initCalls = 0;
+    let sendCalls = 0;
+    const dom = createContactDom({
+      lang: expected.lang,
+      hostname: expected.hostname,
+      values: { name: 'Local Preview', email: 'preview@example.test', message: 'Boundary check' },
+      emailjs: {
+        init() { initCalls += 1; },
+        send() {
+          sendCalls += 1;
+          return Promise.resolve();
+        },
+      },
+    });
+
+    try {
+      contactFormModule.initContactForm();
+      dom.clickButton();
+      await Promise.resolve();
+
+      assert.equal(initCalls, 0, expected.hostname);
+      assert.equal(sendCalls, 0, expected.hostname);
+      assert.equal(dom.appendedScripts.length, 0, expected.hostname);
+      assert.equal(dom.button.disabled, false, expected.hostname);
+      assert.equal(dom.button.textContent, expected.button, expected.hostname);
+      assert.equal(dom.notice.textContent, expected.notice, expected.hostname);
+      assert.equal(dom.notice.className, 'local-preview', expected.hostname);
+      assert.equal(dom.notice.dataset.formState, 'local-disabled', expected.hostname);
+      assert.equal(dom.name.value, 'Local Preview', expected.hostname);
+      assert.equal(dom.email.value, 'preview@example.test', expected.hostname);
+      assert.equal(dom.message.value, 'Boundary check', expected.hostname);
+    } finally {
+      dom.restore();
+    }
+  }
+});
 
 test('validates complete contact values without errors', () => {
   assert.equal(typeof contactFormModule.validateContactValues, 'function');
@@ -521,7 +622,7 @@ test('announces the sending state without moving focus', () => {
     },
     addEventListener() {},
   };
-  globalThis.window = {};
+  globalThis.window = { location: { hostname: 'miguelzgobbo.github.io' } };
 
   try {
     contactFormModule.initContactForm();
