@@ -2,12 +2,13 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [main, home, styles, language, skillCard] = await Promise.all([
+const [main, home, styles, language, skillCard, caseStudy] = await Promise.all([
   readFile(new URL('../src/scripts/main.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8'),
   readFile(new URL('../src/scripts/language.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/components/SkillCard.astro', import.meta.url), 'utf8'),
+  readFile(new URL('../src/components/ProjectCaseStudy.astro', import.meta.url), 'utf8'),
 ]);
 
 test('main delegates browser behavior to focused initializers only', () => {
@@ -42,4 +43,5 @@ test('the homepage relies on the document scrollport and static localized conten
   assert.match(skillCard, /data-skill-localized/);
   assert.match(skillCard, /data-skill-pt=/);
   assert.match(skillCard, /data-skill-en=/);
+  assert.match(caseStudy, /<main id="case-study-content" class="case-study-main">/);
 });

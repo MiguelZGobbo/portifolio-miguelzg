@@ -26,14 +26,9 @@ test('uses the dark navigation surface for mobile utility controls and their foc
 test('keeps the reduced-motion contract after component motion and disables decorative movement', () => {
   const reducedMotionStart = stylesheet.lastIndexOf('@media (prefers-reduced-motion: reduce)');
 
-  assert.equal(
-    [...stylesheet.matchAll(/@media \(prefers-reduced-motion: reduce\)/g)].length,
-    1,
-  );
-  assert.match(
-    stylesheet,
-    /@media \(prefers-reduced-motion: reduce\) \{[\s\S]*\}\s*$/,
-  );
+  assert.ok(reducedMotionStart > stylesheet.indexOf('nav .logo'));
+  assert.ok(reducedMotionStart > stylesheet.indexOf('.cv-actions .btn'));
+  assert.ok(reducedMotionStart > stylesheet.indexOf('#contato footer'));
 
   const reducedMotionStyles = stylesheet.slice(reducedMotionStart);
   assert.match(reducedMotionStyles, /html\s*\{[^}]*scroll-behavior:\s*auto;/);
@@ -44,6 +39,7 @@ test('keeps the reduced-motion contract after component motion and disables deco
   assert.match(reducedMotionStyles, /\.bg-wave,\s*\.bg-raw\s*\{[^}]*display:\s*none;/);
   assert.match(reducedMotionStyles, /\.nav-pill[\s\S]*?transition:\s*none;/);
   assert.match(reducedMotionStyles, /\.btn:hover[\s\S]*?transform:\s*none;/);
+  assert.match(reducedMotionStyles, /nav \.logo[\s\S]*?\.cv-actions \.btn[\s\S]*?#contato footer[\s\S]*?transition:\s*none;/);
 });
 
 test('sizes direct interactive controls and preserves mobile utility targets', () => {
@@ -69,6 +65,19 @@ test('contains decorative overflow and protects anchor and focus destinations fr
   assert.match(wave, /overflow:\s*clip;/);
   assert.match(raw, /overflow:\s*clip;/);
   assert.match(stylesheet, /\.snap-section,[\s\S]*?scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
-  assert.match(stylesheet, /main:focus[\s\S]*?scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
+  assert.match(stylesheet, /#case-study-content\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
+  assert.doesNotMatch(stylesheet, /main:focus/);
   assert.match(stylesheet, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brown-dark\);/);
+});
+
+test('allows long project card and evidence content to wrap within the grid track', () => {
+  const projectCard = ruleFor('.project-card');
+  const projectCardInner = ruleFor('.project-card-inner');
+  const projectEvidenceItem = ruleFor('.project-evidence li');
+  const projectState = ruleFor('.project-state');
+
+  assert.match(projectCard, /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto;/);
+  assert.match(projectCardInner, /min-width:\s*0;/);
+  assert.match(projectEvidenceItem, /overflow-wrap:\s*anywhere;/);
+  assert.match(projectState, /overflow-wrap:\s*anywhere;/);
 });

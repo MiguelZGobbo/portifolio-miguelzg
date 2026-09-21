@@ -193,7 +193,7 @@ nav {
 }
 
 #cv,
-main:focus {
+#case-study-content {
     scroll-margin-top: calc(var(--nav-top) + var(--nav-height) + 1rem);
     scroll-margin-bottom: 104px;
 }
@@ -538,11 +538,15 @@ nav a,
     box-shadow: 0 4px 18px rgba(44, 34, 24, 0.07);
     padding: 1.4rem;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 1rem;
     align-items: center;
     min-width: 0;
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+}
+
+.project-card-inner {
+    min-width: 0;
 }
 
 .project-name {
@@ -2138,6 +2142,7 @@ html[data-lang="en"] .lang-en {
     font-size: 0.72rem;
     font-weight: 600;
     line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
 .project-state--in-development {
@@ -2181,6 +2186,7 @@ html[data-lang="en"] .lang-en {
     border-radius: 6px;
     padding: 0.2rem 0.45rem;
     font-size: 0.68rem;
+    overflow-wrap: anywhere;
 }
 
 .project-actions {
@@ -2520,6 +2526,7 @@ body[data-section="case-study"] {
 
     nav,
     .logo,
+    nav .logo,
     .nav-pill,
     .nav-text,
     .nav-links a,
@@ -2535,6 +2542,7 @@ body[data-section="case-study"] {
     .profile-photo,
     .skill-card,
     .project-card,
+    .cv-actions .btn,
     .cv-actions .btn-outline,
     .form-group input,
     .form-group textarea,
@@ -2542,6 +2550,7 @@ body[data-section="case-study"] {
     .copy-btn,
     .copy-tooltip,
     .skip-link,
+    #contato footer,
     .lang-part {
         transition: none;
     }
