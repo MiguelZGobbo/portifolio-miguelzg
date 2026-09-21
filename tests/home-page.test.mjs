@@ -118,5 +118,9 @@ test('renders native contact semantics with linked field errors and a polite sta
     assert.match(contact, new RegExp(`id="${id}-error"`));
   }
 
+  const errorIds = [...contact.matchAll(/<p class="field-error" id="([^"]+)"/g)].map(([, id]) => id);
+  assert.deepEqual(errorIds, ['campo-nome-error', 'campo-email-error', 'campo-mensagem-error']);
+  assert.equal(new Set(errorIds).size, errorIds.length, 'field error IDs should be unique');
+
   assert.match(contact, /id="form-aviso"[^>]*role="status"[^>]*aria-live="polite"/);
 });

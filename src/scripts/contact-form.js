@@ -65,6 +65,22 @@ function contactValues() {
   );
 }
 
+function validateFormValues() {
+  const validation = validateContactValues(contactValues());
+  const email = document.getElementById('campo-email');
+
+  if (email?.validity?.typeMismatch) {
+    validation.fieldErrors.email = 'form.email.invalid';
+    validation.summaryKey = 'form.invalid';
+  }
+
+  return validation;
+}
+
+function honeypotIsFilled() {
+  return Boolean(document.getElementById('campo-site')?.value.trim());
+}
+
 function updateFieldError(field, errorKey) {
   const control = document.getElementById(field.id);
   const error = document.getElementById(field.errorId);
@@ -98,17 +114,15 @@ function focusFirstInvalid(fieldErrors) {
 function sendMessage() {
   const button = document.getElementById('btn-enviar');
   const notice = document.getElementById('form-aviso');
-  const website = document.getElementById('campo-site');
   if (!button || !notice) return;
 
-  const values = contactValues();
-
-  if (website?.value.trim()) {
+  if (honeypotIsFilled()) {
     clearValidation(notice);
     return;
   }
 
-  const validation = validateContactValues(values);
+  const values = contactValues();
+  const validation = validateFormValues();
   if (validation.summaryKey) {
     showValidation(validation, notice);
     focusFirstInvalid(validation.fieldErrors);
@@ -150,8 +164,12 @@ export function initContactForm() {
     event.preventDefault();
     const notice = document.getElementById('form-aviso');
     if (!notice) return;
+    if (honeypotIsFilled()) {
+      clearValidation(notice);
+      return;
+    }
 
-    const validation = validateContactValues(contactValues());
+    const validation = validateFormValues();
     showValidation(validation, notice);
     focusFirstInvalid(validation.fieldErrors);
   }, true);
@@ -162,7 +180,7 @@ export function initContactForm() {
       const notice = document.getElementById('form-aviso');
       if (!notice) return;
 
-      const validation = validateContactValues(contactValues());
+      const validation = validateFormValues();
       updateFieldError(field, validation.fieldErrors[field.key]);
       if (!validation.summaryKey && notice.dataset.formState === 'validation') clearValidation(notice);
     });
