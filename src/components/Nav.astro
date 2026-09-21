@@ -35,6 +35,13 @@ const links = [
   { id: sectionIds.resume, section: 'resume', translationId: 'cv', icon: 'file' },
   { id: sectionIds.contact, section: 'contact', translationId: 'contato', icon: 'mail' },
 ] as const;
+const observedSectionHrefs = alternateSectionHrefs && Object.fromEntries(
+  (Object.entries(sectionIds) as [RouteSection, string][])
+    .flatMap(([section, id]) => {
+      const alternateSectionHref = alternateSectionHrefs[section];
+      return alternateSectionHref ? [[id, alternateSectionHref] as const] : [];
+    }),
+);
 ---
 
 <nav aria-label={dict['a11y.nav']}>
@@ -60,7 +67,11 @@ const links = [
       }
     </div>
     <div class="nav-controls">
-      <LangToggle lang={lang} alternateHref={alternateHref} />
+      <LangToggle
+        lang={lang}
+        alternateHref={alternateHref}
+        alternateSectionHrefs={observedSectionHrefs}
+      />
       <ThemeToggle lang={lang} />
     </div>
   </div>

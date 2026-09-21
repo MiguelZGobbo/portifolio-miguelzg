@@ -115,6 +115,91 @@ test('updates the language destination from the observed section without changin
   assert.equal(linkAttributes.get('aria-current'), 'location');
 });
 
+test('uses the observed Skills destination without adding a navigation link', () => {
+  const attributes = new Map([
+    ['href', '/portifolio-miguelzg/en/'],
+    ['data-language-default', '/portifolio-miguelzg/en/'],
+    ['data-language-sections', JSON.stringify({
+      competencias: '/portifolio-miguelzg/en/#skills',
+    })],
+  ]);
+  const toggle = {
+    getAttribute(name) {
+      return attributes.get(name) ?? null;
+    },
+    setAttribute(name, value) {
+      attributes.set(name, value);
+    },
+  };
+
+  navigation.updateLanguageDestination(toggle, null, 'competencias');
+
+  assert.equal(attributes.get('href'), '/portifolio-miguelzg/en/#skills');
+});
+
+test('wires the observed Competências section to the English Skills destination', () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const toggleAttributes = new Map([
+    ['href', '/portifolio-miguelzg/en/'],
+    ['data-language-default', '/portifolio-miguelzg/en/'],
+    ['data-language-sections', JSON.stringify({
+      competencias: '/portifolio-miguelzg/en/#skills',
+    })],
+  ]);
+  const toggle = {
+    getAttribute(name) {
+      return toggleAttributes.get(name) ?? null;
+    },
+    setAttribute(name, value) {
+      toggleAttributes.set(name, value);
+    },
+  };
+  const section = {
+    id: 'competencias',
+    getBoundingClientRect() {
+      return { top: 0, height: 1000 };
+    },
+  };
+
+  globalThis.document = {
+    body: { dataset: {} },
+    getElementById(id) {
+      return id === 'lang-toggle' ? toggle : null;
+    },
+    querySelectorAll(selector) {
+      if (selector === 'main > section[id], main #cv, main #resume') return [section];
+      if (selector === '.nav-links a[href^="#"]') return [];
+      return [];
+    },
+    querySelector() {
+      return null;
+    },
+    createElement() {
+      return { hidden: false, style: {} };
+    },
+    addEventListener() {},
+  };
+  globalThis.window = {
+    scrollY: 0,
+    innerHeight: 800,
+    addEventListener() {},
+    requestAnimationFrame() {
+      return 1;
+    },
+  };
+
+  try {
+    navigation.initNavigation();
+
+    assert.equal(toggleAttributes.get('href'), '/portifolio-miguelzg/en/#skills');
+    assert.equal(globalThis.document.body.dataset.section, 'competencias');
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.window = originalWindow;
+  }
+});
+
 test('restores the language link stable destination when no observed alternate exists', () => {
   assert.equal(typeof navigation.updateLanguageDestination, 'function');
 

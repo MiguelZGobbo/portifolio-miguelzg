@@ -4,9 +4,10 @@ import { translate, type Lang } from '../lib/i18n';
 interface Props {
   lang?: Lang;
   alternateHref: string;
+  alternateSectionHrefs?: Record<string, string>;
 }
 
-const { lang = 'pt', alternateHref } = Astro.props;
+const { lang = 'pt', alternateHref, alternateSectionHrefs } = Astro.props;
 const alternateHreflang = lang === 'pt' ? 'en' : 'pt-BR';
 ---
 
@@ -15,6 +16,7 @@ const alternateHreflang = lang === 'pt' ? 'en' : 'pt-BR';
   class="nav-btn nav-btn--lang"
   href={alternateHref}
   data-language-default={alternateHref}
+  data-language-sections={alternateSectionHrefs ? JSON.stringify(alternateSectionHrefs) : undefined}
   hreflang={alternateHreflang}
   aria-label={translate(lang, 'lang.switch')}
 >

@@ -50,10 +50,23 @@ export function updateNavigationState(links, sectionId) {
   return activeLink;
 }
 
-export function updateLanguageDestination(toggle, activeLink) {
+function observedSectionDestination(toggle, sectionId) {
+  const serializedDestinations = toggle.getAttribute('data-language-sections');
+  if (!serializedDestinations || !sectionId) return null;
+
+  try {
+    const destinations = JSON.parse(serializedDestinations);
+    return typeof destinations[sectionId] === 'string' ? destinations[sectionId] : null;
+  } catch {
+    return null;
+  }
+}
+
+export function updateLanguageDestination(toggle, activeLink, sectionId) {
   if (!toggle) return;
 
-  const alternateHref = activeLink?.getAttribute('data-language-alternate');
+  const alternateHref = activeLink?.getAttribute('data-language-alternate')
+    || observedSectionDestination(toggle, sectionId);
   const defaultHref = toggle.getAttribute('data-language-default');
   const destination = alternateHref || defaultHref;
 
@@ -64,7 +77,7 @@ function setActiveNavigation(sectionId, links, pill) {
   document.body.dataset.section = sectionId;
   const activeLink = updateNavigationState(links, sectionId);
 
-  updateLanguageDestination(document.getElementById('lang-toggle'), activeLink);
+  updateLanguageDestination(document.getElementById('lang-toggle'), activeLink, sectionId);
   updateNavigationPill(pill, activeLink);
 }
 

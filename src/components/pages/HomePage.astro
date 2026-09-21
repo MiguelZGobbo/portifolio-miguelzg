@@ -23,10 +23,9 @@ const sections = routeConfig[lang].sections;
 const alternateLang: Lang = lang === 'pt' ? 'en' : 'pt';
 const alternateHomeHref = homePath(base, alternateLang);
 const alternateSectionHrefs = Object.fromEntries(
-  (['projects', 'about', 'resume', 'contact'] as const).map((section) => [
-    section,
-    homePath(base, alternateLang, section),
-  ]),
+  (Object.keys(sections) as RouteSection[])
+    .filter((section) => section !== 'home')
+    .map((section) => [section, homePath(base, alternateLang, section)]),
 ) as Partial<Record<RouteSection, string>>;
 const caseStudyHrefs = Object.fromEntries(
   caseStudyProjects.map((project) => [project.slug, caseStudyPath(base, lang, project.slug)]),

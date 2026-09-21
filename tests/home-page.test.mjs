@@ -66,8 +66,10 @@ test('renders direct reciprocal language links with section-specific alternate d
 
   assert.match(portugueseToggle, /href="\/portifolio-miguelzg\/en\/"/);
   assert.match(portugueseToggle, /hreflang="en"/);
+  assert.match(portugueseToggle, /data-language-sections="[^"]*&quot;competencias&quot;:&quot;\/portifolio-miguelzg\/en\/#skills&quot;[^"]*"/);
   assert.match(englishToggle, /href="\/portifolio-miguelzg\/"/);
   assert.match(englishToggle, /hreflang="pt-BR"/);
+  assert.match(englishToggle, /data-language-sections="[^"]*&quot;skills&quot;:&quot;\/portifolio-miguelzg\/#competencias&quot;[^"]*"/);
 
   const portugueseLinks = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const englishLinks = englishPage.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
