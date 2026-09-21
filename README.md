@@ -112,11 +112,12 @@ Para testar a saída estática localmente:
     │       └── global.css
     ├── tests/                     # Testes de modelo, build, arquitetura e navegação
     ├── docs/adr/                  # Decisões arquiteturais aceitas
-    └── docs/superpowers/plans/    # Plano de implementação da Fase 5
+    ├── docs/phases/               # Consolidações das fases concluídas
+    └── docs/superpowers/plans/    # Planos de implementação por fase
 
 ## Estado de escopo
 
-Esta consolidação documenta a Fase 5 estrutural. A auditoria completa de acessibilidade, a localização por rota e a conclusão de SEO por página pertencem à Fase 6–7. O polimento visual e as decisões finais de motion pertencem à Fase 8.
+A Fase 6 de UX e acessibilidade está consolidada em [docs/phases/phase-6-consolidation.md](docs/phases/phase-6-consolidation.md), com alvo WCAG 2.2 AA, evidências automatizadas e auditoria funcional/visual em navegador. A localização por rotas PT/EN e a conclusão de SEO por página pertencem à Fase 7. O polimento visual além das correções de acessibilidade e as decisões finais de motion pertencem à Fase 8.
 
 ## Autor
 
