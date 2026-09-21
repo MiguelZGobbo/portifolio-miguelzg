@@ -30,11 +30,12 @@ This document records engineering evidence against that target. It is not a cert
 - Input correction clears the corresponding field error without hiding other outstanding errors.
 - Sending, success, and failure states are announced without an unnecessary focus move. Success clears submitted fields; failure retains them.
 - The honeypot stays silent, does not load EmailJS, and is removed from keyboard and accessibility interaction with an inert, `aria-hidden` wrapper. No real contact message was sent during the audit.
+- Light and dark themes use separate error tokens. Independently calculated contrast is 5.75:1 or higher for the light token and 6.68:1 or higher for the dark token against the actual page/form surfaces, meeting the 4.5:1 normal-text and 3:1 meaningful-indicator thresholds covered by the regression.
 
 ### Reflow, focus, and targets
 
 - Interactive targets have explicit minimum sizing, with 44 CSS px mobile utility targets.
-- Fixed navigation and the mobile contact footer have focus-safe scroll offsets. The complete forward and reverse keyboard passes left every focused control visible and unobscured.
+- Fixed navigation and the mobile contact footer have focus-safe scroll offsets. Complete forward and reverse keyboard passes on the desktop homepage and on both named case studies at desktop and mobile widths left every focused control visible and unobscured.
 - Decorative waves, raw-line layers, and the rotating profile border clip and paint within their owning boxes instead of expanding the document scroll area.
 - Project/card tracks and the BeadWise maturity list can shrink and wrap long content at 320 CSS px.
 - Root scrolling is immediate, preventing smooth-scroll animation from leaving newly focused elements temporarily off-screen.
@@ -43,7 +44,7 @@ This document records engineering evidence against that target. It is not a cert
 
 - One final `prefers-reduced-motion: reduce` block wins the cascade after component rules.
 - It disables smooth scrolling, decorative wave/raw motion, reveal transitions, navigation-indicator movement, and non-essential hover transforms; reveal initialization exposes content immediately.
-- The available in-app Chromium surface did not advertise a media-emulation capability, so the reduce preference could not be manually toggled in that surface. Source-order and computed-contract assertions cover the fallback, but this phase does not claim a manually emulated reduced-motion session.
+- The available Chromium browser surfaces did not advertise a media-emulation capability, so the reduce preference could not be manually toggled. Source/cascade contract assertions cover the fallback, but this phase does not claim a manually emulated reduced-motion session.
 
 ## Automated verification
 
@@ -51,7 +52,7 @@ Final verification on 2026-09-21:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 46 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; its pretest build also completed |
+| `npm test` | 47 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; its pretest build also completed |
 | `npm run check` | 40 files; 0 errors, 0 warnings, 0 hints |
 | `npm run build` | 3 static routes built successfully; sitemap generated |
 | `git diff --check` | no whitespace errors |
@@ -82,12 +83,12 @@ The 641/639 and 320 CSS px checks cover the practical 200% and 400%-equivalent r
 
 ### Functional and visual evidence
 
-- Homepage: complete Tab and Shift+Tab sequences covered 29 interactive elements on mobile and the corresponding desktop order. Enter and Space activated theme/language controls. There was no keyboard trap and no fixed layer obscured focus after correction.
+- Keyboard: the desktop homepage completed mirrored 29-control Tab and Shift+Tab sequences. Purchase Orders API and BeadWise each completed mirrored eight-control sequences at 1280 × 800 and 390 × 844. Every pass had logical order, visible/unobscured focus, and no trap. Enter and Space activated theme/language controls.
 - Navigation: activating Projects, About, Resume, and Contact updated `aria-current="location"` to the matching destination.
 - Theme/language: PT → EN → PT and dark → light → dark cycles updated labels, copy, title, theme metadata, and pressed state. Twenty rapid paired toggles returned to a coherent initial state. Both utilities were available at 320 px.
 - Forms: empty, whitespace-only, malformed email, per-field clearing, silent honeypot, sending, success, and failure were exercised in the real UI against a stubbed EmailJS boundary. No external message was transmitted.
 - Semantics: homepage and both case studies had one main landmark, correct titles/language, unique IDs, named controls, and logical heading outlines. The BeadWise route separately exposed all five maturity states.
-- Visual inspection: every major homepage region and both case-study layouts were inspected at mobile and desktop sizes. Light and dark homepage states and both case studies in the persisted light state were inspected; dark mobile case-study states were also inspected. No clipping, missing controls, unreadable hierarchy, or navigation collision remained.
+- Visual inspection: Hero, Projects, Competencies, About, résumé, and Contact were each inspected in light mode at 1280 × 800 and 390 × 844. Each retained readable hierarchy and contrast, client width equaled scroll width, controls remained available, and fixed top/bottom navigation did not collide with content. Dark invalid-form feedback was separately inspected with the new error token. Both case-study layouts were also inspected at mobile and desktop sizes in their relevant light/dark states. No clipping, missing control, or navigation collision remained.
 - Console: a fresh production-route load produced no new browser warnings or errors. Earlier MutationObserver errors were isolated to temporary audit harness pages with intentionally incomplete shells, not production routes.
 
 Screenshots were inspected interactively and were not retained as repository artifacts.
@@ -102,6 +103,7 @@ Each correction followed RED → minimal implementation → focused GREEN → af
 - BeadWise maturity rows could enforce their min-content width at 320 px. Failing shrink/wrap assertions preceded `min-width: 0` and safe wrapping.
 - The fixed mobile footer covered the focused submit button. A failing mobile scroll-padding assertion preceded the larger focus-safe bottom inset.
 - The honeypot combined `aria-hidden="true"` with a focusable descendant carrying `tabindex="-1"`. A failing markup assertion preceded the inert wrapper and removal of the descendant tabindex while preserving silent anti-bot behavior.
+- The shared `#AA3333` error color fell below 4.5:1 for text and 3:1 for invalid borders/focus outlines on dark surfaces. A failing theme-token contrast test independently calculated the ratios before the dark token changed to `#FF9B9B`; focused tests then passed, and the real dark empty-form state exposed the new color on messages, borders, and the focused outline.
 
 The deferred Task 3 test-structure minor was already resolved in `c033cee`; review confirmed no further action was needed.
 
@@ -110,7 +112,7 @@ The deferred Task 3 test-structure minor was already resolved in `c033cee`; revi
 - No formal WCAG certification or legal conformance statement is made.
 - No independent session with a human screen-reader user was performed. The evidence covers generated semantics, browser accessibility representation, keyboard operation, and live-region behavior, not the usability of every screen-reader/browser combination.
 - The available browser surface could not emulate reduced motion. Automated cascade/behavior contracts cover the implementation, but a manual reduce-preference session remains a useful future cross-browser check.
-- Visual contrast was inspected for regressions in the supported themes, but this audit did not produce a separate instrumented color-contrast report for every rendered state.
+- Error-state text and indicator contrast now have instrumented token/background regression coverage. Other visual states were inspected for regressions, but this audit did not produce an instrumented color-contrast report for every rendered state.
 - External EmailJS delivery was intentionally stubbed; the audit verifies the local UI boundary and state handling, not third-party network delivery.
 
 ## Phase 7 handoff
