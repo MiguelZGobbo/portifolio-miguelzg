@@ -64,15 +64,26 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+$/.test(value);
 }
 
+const ipv4LoopbackPattern = /^127(?:\.\d{1,3}){3}$/;
+const ipv4MappedPrefixPattern = /^(?:::ffff:|(?:0{1,4}:){5}ffff:)(.+)$/;
+
+function isMappedIpv4Loopback(hostname) {
+  const embeddedAddress = hostname.match(ipv4MappedPrefixPattern)?.[1];
+  return Boolean(
+    embeddedAddress
+    && (ipv4LoopbackPattern.test(embeddedAddress) || /^7f[0-9a-f]{2}:[0-9a-f]{1,4}$/.test(embeddedAddress)),
+  );
+}
+
 export function isContactDeliveryHostEligible(hostname) {
   const normalizedHostname = typeof hostname === 'string'
-    ? hostname.trim().toLowerCase().replace(/^\[(.*)\]$/, '$1')
+    ? hostname.trim().toLowerCase().replace(/\.$/, '').replace(/^\[(.*)\]$/, '$1')
     : '';
 
   if (!normalizedHostname) return false;
   if (normalizedHostname === 'localhost' || normalizedHostname.endsWith('.localhost')) return false;
-  if (normalizedHostname === '::1' || normalizedHostname.startsWith('::ffff:127.')) return false;
-  if (/^127(?:\.\d{1,3}){3}$/.test(normalizedHostname)) return false;
+  if (normalizedHostname === '::1' || isMappedIpv4Loopback(normalizedHostname)) return false;
+  if (ipv4LoopbackPattern.test(normalizedHostname)) return false;
   return true;
 }
 

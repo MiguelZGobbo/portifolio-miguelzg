@@ -192,14 +192,46 @@ function createContactDom({
   };
 }
 
-test('allows contact delivery only on non-local hostnames', () => {
+test('normalizes local hostname spelling before blocking contact delivery', () => {
   assert.equal(typeof contactFormModule.isContactDeliveryHostEligible, 'function');
 
-  for (const hostname of ['localhost', 'LOCALHOST', '127.0.0.1', '127.8.9.10', '[::1]', '::1']) {
+  for (const hostname of [
+    'localhost',
+    'localhost.',
+    'LOCALHOST.',
+    'Preview.LocalHost.',
+    '127.0.0.1',
+    '127.8.9.10',
+    '[::1]',
+    '::1',
+  ]) {
     assert.equal(contactFormModule.isContactDeliveryHostEligible(hostname), false, hostname);
   }
+});
 
-  assert.equal(contactFormModule.isContactDeliveryHostEligible('miguelzgobbo.github.io'), true);
+test('blocks IPv4 loopback embedded in mapped IPv6 representations', () => {
+  for (const hostname of [
+    '[::ffff:7f00:1]',
+    '::ffff:7f00:1',
+    '::ffff:127.0.0.1',
+    '0:0:0:0:0:ffff:7f00:1',
+    '0000:0000:0000:0000:0000:ffff:7fff:ffff',
+  ]) {
+    assert.equal(contactFormModule.isContactDeliveryHostEligible(hostname), false, hostname);
+  }
+});
+
+test('allows contact delivery on non-local hostnames and public IPv6 addresses', () => {
+  for (const hostname of [
+    'miguelzgobbo.github.io',
+    'example.com.',
+    '2001:db8::7f00:1',
+    '[2001:db8::ffff:7f00:1]',
+    '::ffff:7eff:ffff',
+    '::ffff:8000:1',
+  ]) {
+    assert.equal(contactFormModule.isContactDeliveryHostEligible(hostname), true, hostname);
+  }
 });
 
 test('does not append the EmailJS SDK for a valid local-preview submission', () => {

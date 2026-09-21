@@ -54,7 +54,7 @@ Final automated verification on 2026-09-21:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 84 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
+| `npm test` | 86 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
 | `npm run check` | 46 files; 0 errors, 0 warnings, 0 hints |
 | `npm run build` | 6 static pages built; sitemap index generated |
 | `git diff --check` | no whitespace errors |
@@ -103,7 +103,7 @@ The correction followed two strict RED/GREEN cycles:
 
 The focused navigation suite finished 11/11 green. A real-browser PT `#cv` → EN `#resume` → PT `#cv` round trip then retained the correct URL, active link, and alternate destination at every step. Audit corrections are isolated in commit `f9486d4`.
 
-The fix round found that valid submissions had no environment boundary before `loadEmailJS`. A strict RED reproduced an SDK append on `127.0.0.1` and `emailjs.init` on `localhost`; the GREEN correction added a pure hostname policy that rejects `localhost` (including subdomains and case variants), the IPv4 `127/8` loopback range, IPv6 `::1` with or without URL brackets, and IPv4-mapped IPv6 loopback before the loader can run. Non-local deployment hosts continue through the existing delivery path.
+The fix round found that valid submissions had no environment boundary before `loadEmailJS`. A strict RED reproduced an SDK append on `127.0.0.1` and `emailjs.init` on `localhost`; the GREEN correction added a pure hostname policy before the loader can run. Its final normalization lowercases the hostname, removes one terminal DNS dot, and unwraps IPv6 brackets. Classification rejects `localhost` and its subdomains, IPv4 `127/8`, IPv6 `::1`, and IPv4-mapped `127/8` in dotted or hexadecimal `7f00`–`7fff` form under compressed `::ffff:` or the accepted fully expanded zero prefix. Tests keep ordinary public hostnames, public IPv6 controls, and mapped addresses outside `127/8` eligible, so non-local deployment behavior remains unchanged.
 
 The first real-browser recheck then found the polite local-preview text present in the status region but visually hidden by its base opacity. A second RED/GREEN cycle added a neutral visible state. The final PT and EN browser passes used `Local Preview Audit`, `local-preview@example.test`, and `Synthetic local boundary verification only`; both showed the localized message with retained values and an enabled idle button, while DOM, resource, and network evidence remained free of any EmailJS boundary.
 
