@@ -12,7 +12,8 @@ interface Props {
 const { lang = 'pt', id, resumeId } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 const base = import.meta.env.BASE_URL;
-const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
+const cvFilename = lang === 'en' ? 'MiguelZagerGobbo-CV-EN.pdf' : 'MiguelZagerGobbo-CV.pdf';
+const cvUrl = `${base}files/${cvFilename}`;
 ---
 
 <section class="snap-section home-section home-section--profile" id={id}>
@@ -50,7 +51,7 @@ const cvUrl = `${base}files/MiguelZagerGobbo-CV.pdf`;
           <Icon name="eye" size={14} strokeWidth={2.5} />
           <span data-i18n="cv.view">{dict['cv.view']}</span>
         </a>
-        <a href={cvUrl} data-cv download="MiguelZagerGobbo-CV.pdf" class="btn" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
+        <a href={cvUrl} data-cv download={cvFilename} class="btn" data-i18n-aria="cv.downloadAria" aria-label={dict['cv.downloadAria']}>
           <Icon name="download" size={14} strokeWidth={2.5} />
           <span data-i18n="cv.download">{dict['cv.download']}</span>
         </a>
