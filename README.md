@@ -17,22 +17,26 @@ A homepage mantém esta ordem de conteúdo:
 5. **Currículo** — visualização e download dos PDFs em português ou inglês.
 6. **Contato** — formulário, e-mail, LinkedIn e GitHub.
 
-Purchase Orders API e BeadWise possuem estudos de caso completos:
+O conteúdo público está disponível em seis rotas canônicas:
 
+- /portifolio-miguelzg/
+- /portifolio-miguelzg/en/
 - /portifolio-miguelzg/projetos/purchase-orders-api/
 - /portifolio-miguelzg/projetos/beadwise/
+- /portifolio-miguelzg/en/projects/purchase-orders-api/
+- /portifolio-miguelzg/en/projects/beadwise/
 
-Os links entre a homepage e suas seções usam âncoras e rolagem nativas do documento. Os links de repositório abrem o GitHub em uma nova aba; as páginas de estudo de caso têm navegação própria de retorno à homepage.
+Português permanece nas rotas públicas originais e inglês usa o prefixo `/en/`. A troca de idioma é uma navegação nativa entre páginas estáticas equivalentes e preserva, quando disponível, a seção da homepage ou o estudo de caso atual. Os links entre a homepage e suas seções usam âncoras e rolagem nativas do documento. Os links de repositório abrem o GitHub em uma nova aba; as páginas de estudo de caso têm navegação própria de retorno à homepage.
 
 ## Funcionalidades atuais
 
 - Tema claro/escuro com preferência persistida no navegador.
-- Alternância PT/EN como aprimoramento na própria página, com conteúdo semântico renderizado estaticamente e links de currículo ajustados para o idioma.
+- Rotas estáticas independentes em PT/EN, com idioma definido pela URL, histórico e links profundos copiáveis.
 - Layout responsivo para desktop e telas pequenas.
 - Animações de reveal progressivo, respeitando prefers-reduced-motion.
 - Skip link, foco visível, rótulos acessíveis e HTML estático disponível antes das melhorias de JavaScript.
-- Módulos de navegador separados para tema, idioma, navegação observada, reveals, clipboard e formulário de contato.
-- Metadados básicos da página, sitemap e manifest estático mantidos no build atual.
+- Módulos de navegador separados para tema, navegação observada, reveals, clipboard e formulário de contato.
+- Títulos, descrições, canonical, hreflang, Open Graph, Twitter e JSON-LD localizados e renderizados no build, com sitemap de seis URLs.
 
 O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêiner de rolagem interno.
 
@@ -72,9 +76,9 @@ Para testar a saída estática localmente:
 
 | Script | Uso |
 | --- | --- |
-| npm test | Gera a saída estática e executa os testes de modelo, páginas construídas, navegação e arquitetura. |
+| npm test | Gera as seis páginas estáticas e executa 80 testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
 | npm run check | Executa as verificações e diagnósticos do Astro. |
-| npm run build | Gera as três páginas estáticas e os assets em dist/. |
+| npm run build | Gera as seis páginas estáticas, o sitemap e os assets em dist/. |
 | npm run dev | Inicia o servidor de desenvolvimento do Astro. |
 | npm run preview | Serve localmente o build produzido. |
 | npm run astro | Expõe a CLI do Astro para comandos adicionais. |
@@ -105,8 +109,9 @@ Para testar a saída estática localmente:
     │   ├── lib/
     │   │   └── i18n.ts            # Dicionários PT/EN
     │   ├── pages/
-    │   │   ├── index.astro        # Homepage
-    │   │   └── projetos/[slug].astro
+    │   │   ├── index.astro        # Homepage em português
+    │   │   ├── projetos/[slug].astro
+    │   │   └── en/                # Homepage e estudos de caso em inglês
     │   ├── scripts/               # Módulos de comportamento do navegador
     │   └── styles/
     │       └── global.css
@@ -117,7 +122,7 @@ Para testar a saída estática localmente:
 
 ## Estado de escopo
 
-A Fase 6 de UX e acessibilidade está consolidada em [docs/phases/phase-6-consolidation.md](docs/phases/phase-6-consolidation.md), com alvo WCAG 2.2 AA, evidências automatizadas e auditoria funcional/visual em navegador. A localização por rotas PT/EN e a conclusão de SEO por página pertencem à Fase 7. O polimento visual além das correções de acessibilidade e as decisões finais de motion pertencem à Fase 8.
+A Fase 7 de localização por rotas e SEO está consolidada em [docs/phases/phase-7-consolidation.md](docs/phases/phase-7-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 80 testes além da auditoria funcional e visual em navegador. O polimento de ritmo visual, tipografia, espaçamento, decoração e decisões finais de motion pertence à Fase 8, sem alterar hierarquia, rotas, metadados ou comportamento de acessibilidade.
 
 ## Autor
 
