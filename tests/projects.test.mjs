@@ -23,6 +23,24 @@ test('communicates BeadWise as in development in both supported languages', () =
   assert.equal(beadWise.state.en, 'in development');
 });
 
+test('models BeadWise maturity without promoting unproven or unapproved work', () => {
+  const beadWise = model.getProjectBySlug('beadwise');
+  const maturity = beadWise?.caseStudy?.maturity;
+
+  assert.ok(maturity, 'BeadWise should include an explicit maturity disclosure');
+  for (const state of ['observed', 'prototyped', 'specified', 'planned', 'approved']) {
+    assert.equal(typeof maturity[state].pt, 'string');
+    assert.ok(maturity[state].pt.length > 0);
+    assert.equal(typeof maturity[state].en, 'string');
+    assert.ok(maturity[state].en.length > 0);
+  }
+
+  assert.match(maturity.prototyped.pt, /40\/40 harnesses[\s\S]*PROVEN = 0/);
+  assert.match(maturity.specified.pt, /234 Feature Specs[\s\S]*90 SPECIFIED[\s\S]*não são funcionalidades implementadas/);
+  assert.match(maturity.planned.pt, /RESEARCH, BLOCKED ou DEFERRED[\s\S]*não constituem funcionalidade de produto/);
+  assert.match(maturity.approved.pt, /APPROVED = 0[\s\S]*backend final, UI, DI, IPC ou contratos finais/);
+});
+
 test('exposes only H1 and H2 projects as case studies', () => {
   assert.deepEqual(
     model.caseStudyProjects.map(({ slug, hierarchy }) => [slug, hierarchy]),

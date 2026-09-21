@@ -2395,6 +2395,33 @@ body[data-section="case-study"] {
     margin: 0.9rem 0 0 1.25rem;
 }
 
+.case-study-maturity {
+    border-left: 4px solid var(--tan);
+}
+
+.case-study-maturity-list {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 0.9rem;
+}
+
+.case-study-maturity-list div + div {
+    border-top: 1px solid var(--sand);
+    padding-top: 0.9rem;
+}
+
+.case-study-maturity-list dt {
+    color: var(--brown);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.case-study-maturity-list dd {
+    color: var(--text);
+    line-height: 1.65;
+    margin-top: 0.3rem;
+}
+
 @media (max-width: 640px) {
     body[data-section="case-study"] nav {
         background: rgba(248, 240, 229, 0.92);

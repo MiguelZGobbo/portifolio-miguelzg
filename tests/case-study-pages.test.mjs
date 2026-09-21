@@ -26,6 +26,8 @@ const canonicalSections = [
   'evidence',
 ];
 
+const siteUrl = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
+
 async function readBuiltCaseStudy(slug) {
   return readFile(resolve('dist', 'projetos', slug, 'index.html'), 'utf8');
 }
@@ -61,6 +63,35 @@ test('keeps BeadWise current state and prototype caveat near the beginning', asy
   );
   assert.match(initialContent, /não é produto final/);
   assert.match(page, /prototypes ainda não equivalem a backend final/);
+});
+
+test('discloses each BeadWise maturity state separately before the overview', async () => {
+  const page = await readBuiltCaseStudy('beadwise');
+  const maturityStart = page.indexOf('data-case-study-maturity');
+  const overviewStart = page.indexOf('data-case-study-section="overview"');
+  const maturity = page.slice(maturityStart, overviewStart);
+
+  assert.notEqual(maturityStart, -1, 'BeadWise should render a maturity disclosure');
+  assert.ok(maturityStart < overviewStart, 'maturity disclosure should appear before the overview');
+  assert.match(maturity, /data-case-study-maturity-state="observed"/);
+  assert.match(maturity, /data-case-study-maturity-state="prototyped"/);
+  assert.match(maturity, /data-case-study-maturity-state="specified"/);
+  assert.match(maturity, /data-case-study-maturity-state="planned"/);
+  assert.match(maturity, /data-case-study-maturity-state="approved"/);
+  assert.match(maturity, /40\/40 harnesses[\s\S]*PROVEN = 0/);
+  assert.match(maturity, /234 Feature Specs[\s\S]*90 SPECIFIED[\s\S]*não são funcionalidades implementadas/);
+  assert.match(maturity, /RESEARCH, BLOCKED ou DEFERRED[\s\S]*não constituem funcionalidade de produto/);
+  assert.match(maturity, /APPROVED = 0[\s\S]*backend final, UI, DI, IPC ou contratos finais/);
+});
+
+test('emits page-specific canonical and Open Graph URLs for each case study', async () => {
+  for (const { slug } of caseStudies) {
+    const page = await readBuiltCaseStudy(slug);
+    const pageUrl = `${siteUrl}projetos/${slug}/`;
+
+    assert.ok(page.includes(`<link rel="canonical" href="${pageUrl}">`));
+    assert.ok(page.includes(`<meta property="og:url" content="${pageUrl}">`));
+  }
 });
 
 test('uses shared navigation links that return to homepage anchors through the configured base URL', async () => {

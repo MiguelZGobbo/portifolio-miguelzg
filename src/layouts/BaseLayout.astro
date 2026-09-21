@@ -12,6 +12,7 @@ interface Props {
   bodySection?: string;
   skipTarget?: string;
   includeHomeScript?: boolean;
+  canonicalUrl?: string;
 }
 
 const {
@@ -21,10 +22,12 @@ const {
   bodySection = 'home',
   skipTarget = '#home',
   includeHomeScript = true,
+  canonicalUrl,
 } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dict = translations[lang] as Record<string, string>;
-const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
+const siteUrl = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
+const pageUrl = canonicalUrl ?? siteUrl;
 ---
 
 <!doctype html>
@@ -35,12 +38,12 @@ const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F8F0E5" />
-    <link rel="canonical" href={url} />
+    <link rel="canonical" href={pageUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={url} />
-    <meta property="og:image" content={`${url}img/foto-perfil.jpeg`} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={`${siteUrl}img/foto-perfil.jpeg`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
@@ -53,8 +56,8 @@ const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
       '@type': 'Person',
       name: 'Miguel Zager Gobbo',
       jobTitle: 'Software Engineering Student',
-      url,
-      image: `${url}img/foto-perfil.jpeg`,
+      url: siteUrl,
+      image: `${siteUrl}img/foto-perfil.jpeg`,
       email: 'mailto:miguelzgobbo@gmail.com',
       sameAs: [
         'https://www.linkedin.com/in/miguel-zager-gobbo',

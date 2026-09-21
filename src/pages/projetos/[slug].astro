@@ -19,6 +19,7 @@ interface Props {
 const { project } = Astro.props;
 const lang: Lang = 'pt';
 const homeHref = import.meta.env.BASE_URL;
+const canonicalUrl = new URL(`projetos/${project.slug}/`, `https://miguelzgobbo.github.io${homeHref}`).href;
 ---
 
 <BaseLayout
@@ -28,6 +29,7 @@ const homeHref = import.meta.env.BASE_URL;
   bodySection="case-study"
   skipTarget="#case-study-content"
   includeHomeScript={false}
+  canonicalUrl={canonicalUrl}
 >
   <Nav lang={lang} homeHref={homeHref} showControls={false} />
   <ProjectCaseStudy project={project} lang={lang} />

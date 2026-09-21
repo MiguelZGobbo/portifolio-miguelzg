@@ -7,6 +7,14 @@ export type ProjectHierarchy = 'H1' | 'H2' | 'H3';
 export type ProjectStateKey = 'completed' | 'in-development' | 'active';
 export type ProjectDecision = 'INCLUDE';
 
+export interface CaseStudyMaturity {
+  observed: Localized;
+  prototyped: Localized;
+  specified: Localized;
+  planned: Localized;
+  approved: Localized;
+}
+
 export interface CaseStudyContent {
   overview: Localized;
   context: Localized;
@@ -17,6 +25,7 @@ export interface CaseStudyContent {
   result: Localized;
   limitations: Localized;
   evidence: Localized[];
+  maturity?: CaseStudyMaturity;
 }
 
 export interface Project {
@@ -124,6 +133,28 @@ const beadWiseEvidence: Localized[] = [
 ];
 
 const beadWiseCaseStudy: CaseStudyContent = {
+  maturity: {
+    observed: {
+      pt: 'Observado/implementado: a solução pública contém BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows e projetos de teste. Isso descreve estrutura de solution e testes observáveis, não funcionalidades de produto aprovadas.',
+      en: 'Observed/implemented: the public solution contains BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows, and test projects. This describes observable solution and test structure, not approved product functionality.',
+    },
+    prototyped: {
+      pt: 'Prototipado/evidência técnica: 40/40 harnesses foram executados em validação controlada. Essa evidência técnica não promove nenhuma capability a PROVEN (PROVEN = 0).',
+      en: 'Prototyped/technical evidence: 40/40 harnesses ran in controlled validation. This technical evidence does not promote any capability to PROVEN (PROVEN = 0).',
+    },
+    specified: {
+      pt: 'Especificado: há 234 Feature Specs, com 90 SPECIFIED; essas especificações não são funcionalidades implementadas.',
+      en: 'Specified: there are 234 Feature Specs, with 90 SPECIFIED; these specifications are not implemented features.',
+    },
+    planned: {
+      pt: 'Planejado/pesquisa/bloqueado/adiado: itens em RESEARCH, BLOCKED ou DEFERRED não constituem funcionalidade de produto.',
+      en: 'Planned/research/blocked/deferred: items in RESEARCH, BLOCKED, or DEFERRED are not product functionality.',
+    },
+    approved: {
+      pt: 'Promoção final: APPROVED = 0; nenhum backend final, UI, DI, IPC ou contratos finais foi promovido.',
+      en: 'Final promotion: APPROVED = 0; no final backend, UI, DI, IPC, or final contracts have been promoted.',
+    },
+  },
   overview: {
     pt: 'Projeto em desenvolvimento com evidência de engenharia real. O estado atual separa o que foi especificado, prototipado e comprovado do que ainda não é produto final.',
     en: 'Project in development with real engineering evidence. The current state separates what has been specified, prototyped, and proven from what is not yet a final product.',

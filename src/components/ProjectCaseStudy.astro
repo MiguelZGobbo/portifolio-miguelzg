@@ -10,11 +10,18 @@ interface Props {
 const { project, lang = 'pt' } = Astro.props;
 const { caseStudy } = project;
 const base = import.meta.env.BASE_URL;
+const maturity = caseStudy.maturity;
 const labels = {
   pt: {
     back: 'Voltar aos projetos',
     currentState: 'Estado atual',
     repository: 'Ver repositório no GitHub',
+    maturity: 'Declaração de maturidade',
+    maturityObserved: 'Estrutura observada/implementada',
+    maturityPrototyped: 'Prototipado e evidência técnica',
+    maturitySpecified: 'Trabalho especificado',
+    maturityPlanned: 'Trabalho planejado ou em pesquisa',
+    maturityApproved: 'Promoção para produto final',
     overview: 'Visão geral',
     context: 'Contexto',
     built: 'O que foi construído',
@@ -29,6 +36,12 @@ const labels = {
     back: 'Back to projects',
     currentState: 'Current state',
     repository: 'View repository on GitHub',
+    maturity: 'Maturity disclosure',
+    maturityObserved: 'Observed/implemented structure',
+    maturityPrototyped: 'Prototyped and technical evidence',
+    maturitySpecified: 'Specified work',
+    maturityPlanned: 'Planned or research work',
+    maturityApproved: 'Promotion to final product',
     overview: 'Overview',
     context: 'Context',
     built: 'What was built',
@@ -40,6 +53,15 @@ const labels = {
     evidence: 'Available evidence',
   },
 }[lang];
+const maturityEntries = maturity
+  ? [
+    { state: 'observed', label: labels.maturityObserved, content: maturity.observed[lang] },
+    { state: 'prototyped', label: labels.maturityPrototyped, content: maturity.prototyped[lang] },
+    { state: 'specified', label: labels.maturitySpecified, content: maturity.specified[lang] },
+    { state: 'planned', label: labels.maturityPlanned, content: maturity.planned[lang] },
+    { state: 'approved', label: labels.maturityApproved, content: maturity.approved[lang] },
+  ]
+  : [];
 ---
 
 <main id="case-study-content" class="case-study-main">
@@ -62,6 +84,24 @@ const labels = {
         {labels.repository}
       </a>
     </header>
+
+    {
+      maturityEntries.length > 0 && (
+        <section class="case-study-section case-study-maturity" data-case-study-maturity aria-labelledby="case-study-maturity">
+          <h2 id="case-study-maturity">{labels.maturity}</h2>
+          <dl class="case-study-maturity-list">
+            {
+              maturityEntries.map(({ state, label, content }) => (
+                <div data-case-study-maturity-state={state}>
+                  <dt>{label}</dt>
+                  <dd>{content}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </section>
+      )
+    }
 
     <section class="case-study-section" data-case-study-section="overview" aria-labelledby="case-study-overview">
       <h2 id="case-study-overview">{labels.overview}</h2>
