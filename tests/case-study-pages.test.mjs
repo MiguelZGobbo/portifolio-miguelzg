@@ -72,7 +72,7 @@ test('builds exactly the six localized public HTML routes', async () => {
 
 test('renders English case studies with English evidence and return routes', async () => {
   const beadWise = await readBuiltEnglishCaseStudy('beadwise');
-  assert.match(beadWise, /<html lang="en"/);
+  assert.match(beadWise, /<html lang="en"[^>]*data-lang="en"/);
   assert.match(beadWise, /Project in development/);
   assert.match(beadWise, /40\/40 harnesses[\s\S]*PROVEN = 0/);
   assert.match(beadWise, /href="\/portifolio-miguelzg\/en\/#projects"/);
@@ -179,11 +179,16 @@ test('discloses each BeadWise maturity state separately before the overview', as
 
 test('emits page-specific canonical and Open Graph URLs for each case study', async () => {
   for (const { slug } of caseStudies) {
-    const page = await readBuiltCaseStudy(slug);
-    const pageUrl = `${siteUrl}projetos/${slug}/`;
+    const portuguesePage = await readBuiltCaseStudy(slug);
+    const englishPage = await readBuiltEnglishCaseStudy(slug);
+    const portugueseUrl = `${siteUrl}projetos/${slug}/`;
+    const englishUrl = `${siteUrl}en/projects/${slug}/`;
 
-    assert.ok(page.includes(`<link rel="canonical" href="${pageUrl}">`));
-    assert.ok(page.includes(`<meta property="og:url" content="${pageUrl}">`));
+    assert.match(portuguesePage, /<html lang="pt-BR"[^>]*data-lang="pt"/);
+    assert.ok(portuguesePage.includes(`<link rel="canonical" href="${portugueseUrl}">`));
+    assert.ok(portuguesePage.includes(`<meta property="og:url" content="${portugueseUrl}">`));
+    assert.ok(englishPage.includes(`<link rel="canonical" href="${englishUrl}">`));
+    assert.ok(englishPage.includes(`<meta property="og:url" content="${englishUrl}">`));
   }
 });
 

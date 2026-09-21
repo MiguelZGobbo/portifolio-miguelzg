@@ -46,7 +46,9 @@ test('renders the approved hero copy and canonical homepage hierarchy', () => {
 });
 
 test('builds both localized homepages with their own visible content and fragments', () => {
+  assert.match(page, /<html lang="pt-BR"[^>]*data-lang="pt"/);
   assert.match(englishPage, /<html lang="en"/);
+  assert.match(englishPage, /<html lang="en"[^>]*data-lang="en"/);
   assert.match(englishPage, />Software Developer<\/h1>/);
   for (const id of ['home', 'projects', 'skills', 'about', 'resume', 'contact']) {
     assert.notEqual(englishPage.indexOf(`id="${id}"`), -1, `expected English #${id} to be present`);

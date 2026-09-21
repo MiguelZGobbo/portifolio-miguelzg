@@ -4,7 +4,7 @@ import ProjectCaseStudy from '../ProjectCaseStudy.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import type { CaseStudyProject } from '../../data/projects';
 import { caseStudyPath, homePath, pageUrl, routeConfig } from '../../lib/routes';
-import type { Lang } from '../../lib/i18n';
+import { translations, type Lang } from '../../lib/i18n';
 
 interface Props {
   lang: Lang;
@@ -13,20 +13,46 @@ interface Props {
 
 const { lang, project } = Astro.props;
 const base = import.meta.env.BASE_URL;
+if (!Astro.site) throw new Error('Astro site URL is required to generate canonical metadata.');
 const homeHref = homePath(base, lang);
 const sections = routeConfig[lang].sections;
 const alternateLang: Lang = lang === 'pt' ? 'en' : 'pt';
 const alternateHref = caseStudyPath(base, alternateLang, project.slug);
-const canonicalUrl = pageUrl('https://miguelzgobbo.github.io', caseStudyPath(base, lang, project.slug));
+const canonicalUrl = pageUrl(Astro.site.origin, caseStudyPath(base, lang, project.slug));
+const alternateUrls = {
+  'pt-BR': pageUrl(Astro.site.origin, caseStudyPath(base, 'pt', project.slug)),
+  en: pageUrl(Astro.site.origin, caseStudyPath(base, 'en', project.slug)),
+};
+const dict = translations[lang] as Record<string, string>;
+const title = `${project.name[lang]} | ${lang === 'pt' ? 'Estudo de caso' : 'Case study'}`;
+const description = project.summary[lang];
+const imageUrl = pageUrl(Astro.site.origin, `${base}img/foto-perfil.jpeg`);
+const structuredData = [
+  {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+    url: canonicalUrl,
+    name: title,
+    description,
+    inLanguage: lang === 'pt' ? 'pt-BR' : 'en',
+  },
+];
+const siteName = lang === 'pt' ? 'Portfólio de Miguel Zager Gobbo' : 'Miguel Zager Gobbo Portfolio';
 ---
 
 <BaseLayout
   lang={lang}
-  title={`${project.name[lang]} | ${lang === 'pt' ? 'Estudo de caso' : 'Case study'}`}
-  description={project.summary[lang]}
+  title={title}
+  description={description}
   bodySection="case-study"
   skipTarget="#case-study-content"
   canonicalUrl={canonicalUrl}
+  alternateUrls={alternateUrls}
+  pageKind="article"
+  imageUrl={imageUrl}
+  imageAlt={dict['img.profile.alt']}
+  siteName={siteName}
+  structuredData={structuredData}
 >
   <Nav lang={lang} homeHref={homeHref} alternateHref={alternateHref} sectionIds={sections} />
   <ProjectCaseStudy project={project} lang={lang} homeHref={homeHref} projectsId={sections.projects} />
