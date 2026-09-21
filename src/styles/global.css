@@ -12,6 +12,7 @@
     --text:       #3D3028;
     --text-muted: #5A4B3E;
     --surface:    #FFFFFF;
+    --error:      #AA3333;
     --nav-height: 58px;
     --nav-top: 32px;
     --section-padding-top: calc(var(--nav-top) + var(--nav-height) - 5px);
@@ -745,19 +746,19 @@ nav a,
 
 .form-group input[aria-invalid="true"],
 .form-group textarea[aria-invalid="true"] {
-    border-color: #a33;
+    border-color: var(--error);
 }
 
 .form-group input[aria-invalid="true"]:focus-visible,
 .form-group textarea[aria-invalid="true"]:focus-visible {
-    outline-color: #a33;
+    outline-color: var(--error);
 }
 
 .field-error {
     display: block;
     min-height: 1.2rem;
     margin-top: 0.35rem;
-    color: #a33;
+    color: var(--error);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1.35;
@@ -871,7 +872,7 @@ nav a,
     opacity: 0;
 }
 
-#form-aviso.erro  { color: #a33; opacity: 1; }
+#form-aviso.erro  { color: var(--error); opacity: 1; }
 #form-aviso.sucesso { color: var(--brown-dark); opacity: 1; }
 #form-aviso.sending { color: var(--text-muted); opacity: 1; }
 
@@ -1800,6 +1801,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     --text:       #F0E4CF;
     --text-muted: #C6B8A3;
     --surface:    #372D20;
+    --error:      #FF9B9B;
 }
 
 [data-theme="dark"] body {
