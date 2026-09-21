@@ -8,21 +8,34 @@ interface Props {
   lang?: Lang;
   homeHref?: string;
   showControls?: boolean;
+  sectionIds: {
+    home: string;
+    projects: string;
+    skills: string;
+    about: string;
+    resume: string;
+    contact: string;
+  };
 }
 
-const { lang = 'pt', homeHref = '', showControls = true } = Astro.props;
+const {
+  lang = 'pt',
+  homeHref = '',
+  showControls = true,
+  sectionIds,
+} = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: 'projetos', icon: 'folder' },
-  { id: 'sobre', icon: 'user' },
-  { id: 'cv', icon: 'file' },
-  { id: 'contato', icon: 'mail' },
+  { id: sectionIds.projects, translationId: 'projetos', icon: 'folder' },
+  { id: sectionIds.about, translationId: 'sobre', icon: 'user' },
+  { id: sectionIds.resume, translationId: 'cv', icon: 'file' },
+  { id: sectionIds.contact, translationId: 'contato', icon: 'mail' },
 ] as const;
 ---
 
 <nav aria-label={dict['a11y.nav']}>
-  <a href={`${homeHref}#home`} class="logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>
+  <a href={`${homeHref}#${sectionIds.home}`} class="logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>
     <span class="logo-full">{dict['nav.logo']}</span>
     <span class="logo-mobile">Miguel</span>
   </a>
@@ -32,12 +45,12 @@ const links = [
         links.map((link) => (
           <a
             href={`${homeHref}#${link.id}`}
-            data-i18n-aria={`nav.${link.id}.aria`}
-            aria-label={dict[`nav.${link.id}.aria`]}
+            data-i18n-aria={`nav.${link.translationId}.aria`}
+            aria-label={dict[`nav.${link.translationId}.aria`]}
           >
-            <span class="nav-text" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+            <span class="nav-text" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
             <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />
-            <span class="nav-tooltip" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+            <span class="nav-tooltip" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
           </a>
         ))
       }

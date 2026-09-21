@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { access } from 'node:fs/promises';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
@@ -31,6 +32,32 @@ const siteUrl = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
 async function readBuiltCaseStudy(slug) {
   return readFile(resolve('dist', 'projetos', slug, 'index.html'), 'utf8');
 }
+
+async function readBuiltEnglishCaseStudy(slug) {
+  return readFile(resolve('dist', 'en', 'projects', slug, 'index.html'), 'utf8');
+}
+
+test('builds exactly the six localized public HTML routes', async () => {
+  const routes = [
+    ['index.html'],
+    ['projetos', 'purchase-orders-api', 'index.html'],
+    ['projetos', 'beadwise', 'index.html'],
+    ['en', 'index.html'],
+    ['en', 'projects', 'purchase-orders-api', 'index.html'],
+    ['en', 'projects', 'beadwise', 'index.html'],
+  ];
+
+  await Promise.all(routes.map((route) => access(resolve('dist', ...route))));
+});
+
+test('renders English case studies with English evidence and return routes', async () => {
+  const beadWise = await readBuiltEnglishCaseStudy('beadwise');
+  assert.match(beadWise, /<html lang="en"/);
+  assert.match(beadWise, /Project in development/);
+  assert.match(beadWise, /40\/40 harnesses[\s\S]*PROVEN = 0/);
+  assert.match(beadWise, /href="\/portifolio-miguelzg\/en\/#projects"/);
+  assert.doesNotMatch(beadWise, /href="\/portifolio-miguelzg\/en\/#projetos"/);
+});
 
 test('builds each case-study route with ordered sections and its repository evidence', async () => {
   for (const { slug, repository } of caseStudies) {

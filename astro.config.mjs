@@ -6,6 +6,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://miguelzgobbo.github.io',
   base: '/portifolio-miguelzg/',
+  trailingSlash: 'always',
+  i18n: {
+    defaultLocale: 'pt',
+    locales: ['pt', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   build: {
     inlineStylesheets: 'always',
   },

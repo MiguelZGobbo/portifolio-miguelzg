@@ -5,11 +5,12 @@ import type { Lang } from '../lib/i18n';
 interface Props {
   project: CaseStudyProject;
   lang?: Lang;
+  homeHref: string;
+  projectsId: string;
 }
 
-const { project, lang = 'pt' } = Astro.props;
+const { project, lang = 'pt', homeHref, projectsId } = Astro.props;
 const { caseStudy } = project;
-const base = import.meta.env.BASE_URL;
 const maturity = caseStudy.maturity;
 const labels = {
   pt: {
@@ -66,7 +67,7 @@ const maturityEntries = maturity
 
 <main id="case-study-content" class="case-study-main">
   <article class="case-study" data-case-study={project.slug}>
-    <a class="case-study-back-link" href={`${base}#projetos`}>{labels.back}</a>
+    <a class="case-study-back-link" href={`${homeHref}#${projectsId}`}>{labels.back}</a>
 
     <header class="case-study-header">
       <p class="case-study-current-state">

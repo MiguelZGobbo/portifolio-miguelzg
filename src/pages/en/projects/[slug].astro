@@ -1,7 +1,7 @@
 ---
-import CaseStudyPage from '../../components/pages/CaseStudyPage.astro';
-import { caseStudyProjects, type CaseStudyProject } from '../../data/projects';
-import type { Lang } from '../../lib/i18n';
+import CaseStudyPage from '../../../components/pages/CaseStudyPage.astro';
+import { caseStudyProjects, type CaseStudyProject } from '../../../data/projects';
+import type { Lang } from '../../../lib/i18n';
 
 export function getStaticPaths() {
   return caseStudyProjects.map((project) => ({
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const lang: Lang = 'pt';
+const lang: Lang = 'en';
 ---
 
 <CaseStudyPage lang={lang} project={project} />

@@ -1,0 +1,32 @@
+---
+import Nav from '../Nav.astro';
+import ProjectCaseStudy from '../ProjectCaseStudy.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { CaseStudyProject } from '../../data/projects';
+import { caseStudyPath, homePath, pageUrl, routeConfig } from '../../lib/routes';
+import type { Lang } from '../../lib/i18n';
+
+interface Props {
+  lang: Lang;
+  project: CaseStudyProject;
+}
+
+const { lang, project } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const homeHref = homePath(base, lang);
+const sections = routeConfig[lang].sections;
+const canonicalUrl = pageUrl('https://miguelzgobbo.github.io', caseStudyPath(base, lang, project.slug));
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${project.name[lang]} | ${lang === 'pt' ? 'Estudo de caso' : 'Case study'}`}
+  description={project.summary[lang]}
+  bodySection="case-study"
+  skipTarget="#case-study-content"
+  includeHomeScript={false}
+  canonicalUrl={canonicalUrl}
+>
+  <Nav lang={lang} homeHref={homeHref} showControls={false} sectionIds={sections} />
+  <ProjectCaseStudy project={project} lang={lang} homeHref={homeHref} projectsId={sections.projects} />
+</BaseLayout>

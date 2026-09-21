@@ -6,9 +6,10 @@ import { translations, type Lang } from '../lib/i18n';
 interface Props {
   project: Project;
   lang?: Lang;
+  caseStudyHref?: string;
 }
 
-const { project, lang = 'pt' } = Astro.props;
+const { project, lang = 'pt', caseStudyHref } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 const cardClasses = [
   'project-card',
@@ -16,7 +17,6 @@ const cardClasses = [
   `project-card--${project.hierarchy.toLowerCase()}`,
   ...(project.compact ? ['project-card--compact'] : []),
 ];
-const caseStudyHref = `${import.meta.env.BASE_URL}projetos/${project.slug}/`;
 const caseStudyAria = {
   pt: `Ver estudo de caso de ${project.name.pt}`,
   en: `View ${project.name.en} case study`,
@@ -88,7 +88,7 @@ const caseStudyAria = {
   </div>
   <div class="project-actions">
     {
-      project.caseStudy && (
+      project.caseStudy && caseStudyHref && (
         <a
           href={caseStudyHref}
           class="project-link project-case-study-link"

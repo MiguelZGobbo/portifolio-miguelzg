@@ -6,13 +6,14 @@ import { translations, type Lang } from '../../lib/i18n';
 
 interface Props {
   lang?: Lang;
+  id: string;
 }
 
-const { lang = 'pt' } = Astro.props;
+const { lang = 'pt', id } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 ---
 
-<section class="snap-section home-section home-section--contact" id="contato">
+<section class="snap-section home-section home-section--contact" id={id}>
   <div class="section-inner">
     <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" icon="mail" />
     <p class="contact-intro reveal" data-i18n="contact.intro">{dict['contact.intro']}</p>

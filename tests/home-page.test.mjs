@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import test from 'node:test';
 
 const page = await readFile(resolve('dist/index.html'), 'utf8');
+const englishPage = await readFile(resolve('dist/en/index.html'), 'utf8');
 
 function positionOf(id) {
   return page.indexOf(`id="${id}"`);
@@ -42,6 +43,16 @@ test('renders the approved hero copy and canonical homepage hierarchy', () => {
     [...sectionIds].sort((left, right) => positionOf(left) - positionOf(right)),
     sectionIds,
   );
+});
+
+test('builds both localized homepages with their own visible content and fragments', () => {
+  assert.match(englishPage, /<html lang="en"/);
+  assert.match(englishPage, />Software Developer<\/h1>/);
+  for (const id of ['home', 'projects', 'skills', 'about', 'resume', 'contact']) {
+    assert.notEqual(englishPage.indexOf(`id="${id}"`), -1, `expected English #${id} to be present`);
+  }
+  assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/purchase-orders-api\/"/);
+  assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/beadwise\/"/);
 });
 
 test('renders all project levels with their available depth and visible state', () => {
