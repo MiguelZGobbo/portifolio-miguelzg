@@ -74,6 +74,105 @@ test('updates only observed navigation links with aria-current="location"', () =
   assert.equal(cvLink.classList.active, false);
 });
 
+test('maps the nested Resume anchor to its own active navigation state', () => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  const animationFrames = [];
+  const createLink = (href) => {
+    const attributes = new Map([['href', href]]);
+    return {
+      attributes,
+      parentElement: null,
+      classList: { toggle() {} },
+      getAttribute(name) {
+        return attributes.get(name) ?? null;
+      },
+      removeAttribute(name) {
+        attributes.delete(name);
+      },
+      setAttribute(name, value) {
+        attributes.set(name, value);
+      },
+      getBoundingClientRect() {
+        return { left: 0, width: 64, bottom: 0 };
+      },
+    };
+  };
+  const navigationElement = {
+    querySelector() {
+      return null;
+    },
+    appendChild(element) {
+      element.parentElement = this;
+    },
+    getBoundingClientRect() {
+      return { left: 0, bottom: 0 };
+    },
+  };
+  const aboutLink = createLink('#sobre');
+  const cvLink = createLink('#cv');
+  const contactLink = createLink('#contato');
+  for (const link of [aboutLink, cvLink, contactLink]) link.parentElement = navigationElement;
+  const about = {
+    id: 'sobre',
+    getBoundingClientRect() {
+      return { top: -globalThis.window.scrollY, height: 1000 };
+    },
+  };
+  const cv = {
+    id: 'cv',
+    getBoundingClientRect() {
+      return { top: 750 - globalThis.window.scrollY, height: 120 };
+    },
+  };
+  const contact = {
+    id: 'contato',
+    getBoundingClientRect() {
+      return { top: 1000 - globalThis.window.scrollY, height: 900 };
+    },
+  };
+
+  globalThis.document = {
+    body: { dataset: {} },
+    querySelectorAll(selector) {
+      if (selector === 'main > section[id], main #cv') return [about, cv, contact];
+      if (selector === '.nav-links a[href^="#"]') return [aboutLink, cvLink, contactLink];
+      return [];
+    },
+    querySelector(selector) {
+      return selector === '.nav-links' ? navigationElement : null;
+    },
+    createElement() {
+      return { hidden: false, style: {} };
+    },
+    addEventListener() {},
+  };
+  globalThis.window = {
+    scrollY: 650,
+    innerHeight: 500,
+    addEventListener() {},
+    matchMedia() {
+      return { matches: false };
+    },
+    requestAnimationFrame(callback) {
+      animationFrames.push(callback);
+      return animationFrames.length;
+    },
+  };
+
+  try {
+    navigation.initNavigation();
+    while (animationFrames.length) animationFrames.shift()();
+
+    assert.equal(globalThis.document.body.dataset.section, 'cv');
+    assert.equal(cvLink.attributes.get('aria-current'), 'location');
+    assert.equal(aboutLink.attributes.has('aria-current'), false);
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.window = originalWindow;
+  }
+});
+
 test('hides the section indicator when the observed home section has no matching nav link', () => {
   assert.equal(typeof navigation.updateNavigationPill, 'function');
 
@@ -134,7 +233,7 @@ test('repositions the active navigation pill after a language change updates lin
   globalThis.document = {
     body: { dataset: {} },
     querySelectorAll(selector) {
-      if (selector === 'main > section[id]') return [section];
+      if (selector === 'main > section[id], main #cv') return [section];
       if (selector === '.nav-links a[href^="#"]') return [activeLink];
       return [];
     },

@@ -3,19 +3,23 @@ function sectionCenter(section) {
 }
 
 /**
- * Finds the observed top-level section nearest to the viewport midpoint.
- * Sections are intentionally supplied as plain geometry so this calculation
+ * Finds the observed navigation destination nearest to the viewport midpoint.
+ * Destinations are intentionally supplied as plain geometry so this calculation
  * stays independent from the browser DOM.
  */
 export function findActiveSection(sections, scrollTop, viewportHeight) {
   if (!sections.length) return null;
 
   const midpoint = scrollTop + viewportHeight / 2;
-  const containingSection = sections.find((section) => (
+  const containingSections = sections.filter((section) => (
     midpoint >= section.top && midpoint < section.top + section.height
-  ));
+ ));
 
-  if (containingSection) return containingSection.id;
+  if (containingSections.length) {
+    return containingSections.reduce((nearest, section) => (
+      section.top > nearest.top ? section : nearest
+    )).id;
+  }
 
   return sections.reduce((nearest, section) => (
     Math.abs(sectionCenter(section) - midpoint) < Math.abs(sectionCenter(nearest) - midpoint)
@@ -72,8 +76,22 @@ function sectionGeometry(section) {
   };
 }
 
+function navigationGeometry(sections) {
+  const geometry = sections.map(sectionGeometry).sort((left, right) => left.top - right.top);
+
+  return geometry.map((section, index) => {
+    const nextSection = geometry[index + 1];
+    const distanceToNextSection = nextSection ? nextSection.top - section.top : section.height;
+
+    return {
+      ...section,
+      height: Math.max(section.height, distanceToNextSection),
+    };
+  });
+}
+
 export function initNavigation() {
-  const sections = Array.from(document.querySelectorAll('main > section[id]'));
+  const sections = Array.from(document.querySelectorAll('main > section[id], main #cv'));
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!sections.length) return;
 
@@ -86,7 +104,7 @@ export function initNavigation() {
 
   const update = () => {
     const activeSection = findActiveSection(
-      sections.map(sectionGeometry),
+      navigationGeometry(sections),
       window.scrollY,
       window.innerHeight,
     );

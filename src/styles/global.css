@@ -1929,6 +1929,16 @@ html[data-lang="en"] .lang-en {
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    [data-theme="dark"] nav .nav-controls {
+        background: rgba(38, 30, 22, 0.92);
+        border-color: rgba(243, 205, 165, 0.45);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    [data-theme="dark"] nav .nav-btn:focus-visible {
+        outline-color: var(--brown-dark);
+    }
 }
 
 /* ================================
