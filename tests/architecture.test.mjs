@@ -37,6 +37,7 @@ test('the homepage relies on the document scrollport and static localized conten
   assert.doesNotMatch(home, /scroll-container/);
   assert.doesNotMatch(styles, /\.scroll-container/);
   assert.doesNotMatch(styles, /html\s*\{[^}]*overflow:\s*hidden/s);
+  assert.doesNotMatch(styles, /body\s*\{[^}]*overflow-x:\s*hidden/s);
   assert.doesNotMatch(language, /\b(innerHTML|renderProjects|renderSkills)\b/);
   assert.match(skillCard, /data-skill-localized/);
   assert.match(skillCard, /data-skill-pt=/);

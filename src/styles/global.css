@@ -32,12 +32,6 @@ html {
     scroll-padding-bottom: 104px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-}
-
 body {
     font-family: 'DM Sans Variable', sans-serif;
     background:
@@ -49,7 +43,6 @@ body {
         linear-gradient(135deg, #F8F0E5 0%, #F3E9DA 50%, #EDE1CE 100%);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
 /* ================================
@@ -82,6 +75,9 @@ nav {
     font-weight: 500;
     color: var(--brown-dark);
     letter-spacing: 0.06em;
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
     transition: opacity 0.25s ease;
 }
 
@@ -193,10 +189,13 @@ nav {
     justify-content: center;
     border-bottom: 1px solid rgba(160, 135, 110, 0.4);
     scroll-margin-top: calc(var(--nav-top) + var(--nav-height) + 1rem);
+    scroll-margin-bottom: 104px;
 }
 
-#cv {
+#cv,
+main:focus {
     scroll-margin-top: calc(var(--nav-top) + var(--nav-height) + 1rem);
+    scroll-margin-bottom: 104px;
 }
 
 .section-inner {
@@ -390,6 +389,7 @@ nav a,
 
 .hero-text {
     flex: 1;
+    min-width: 0;
 }
 
 .hero-tag {
@@ -541,6 +541,7 @@ nav a,
     grid-template-columns: 1fr auto;
     gap: 1rem;
     align-items: center;
+    min-width: 0;
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
 }
 
@@ -580,7 +581,8 @@ nav a,
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    white-space: nowrap;
+    min-height: 24px;
+    white-space: normal;
     position: relative;
     overflow: hidden;
     transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -823,6 +825,8 @@ nav a,
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    min-width: 24px;
+    min-height: 24px;
     transition: color 0.2s;
 }
 
@@ -1121,8 +1125,9 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
+    overflow: clip;
     pointer-events: none;
     z-index: 0;
 }
@@ -1295,10 +1300,11 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 .bg-raw {
     position: fixed;
     left: 0;
-    width: 100vw;
+    width: 100%;
     pointer-events: none;
     z-index: 0;
     will-change: transform;
+    overflow: clip;
 }
 
 .bg-raw svg {
@@ -1856,6 +1862,8 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     justify-content: center;
     width: 32px;
     height: 32px;
+    min-width: 24px;
+    min-height: 24px;
     border: 1.5px solid var(--sand);
     border-radius: 8px;
     background: transparent;
@@ -2047,6 +2055,15 @@ html[data-lang="en"] .lang-en {
     outline-offset: 3px;
 }
 
+.hero-contact-link,
+.val-link,
+.case-study-back-link,
+.case-study-repository-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+}
+
 .projects-compact-list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2079,6 +2096,22 @@ html[data-lang="en"] .lang-en {
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
+}
+
+.project-card-header > *,
+.project-actions {
+    min-width: 0;
+}
+
+.project-name,
+.project-summary,
+.project-desc,
+.project-fact dd,
+.case-study-header h1,
+.case-study-section h2,
+.case-study-section p,
+.case-study-section li {
+    overflow-wrap: anywhere;
 }
 
 .project-level,
@@ -2458,5 +2491,72 @@ body[data-section="case-study"] {
     .contact-intro {
         font-size: 0.88rem;
         margin-top: -0.35rem;
+    }
+}
+
+/* ================================
+   21. REDUÇÃO DE MOVIMENTO
+================================ */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .bg-wave,
+    .bg-raw {
+        display: none;
+    }
+
+    html.js .reveal,
+    html.js .reveal.visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .hero-photo::before {
+        animation: none;
+    }
+
+    nav,
+    .logo,
+    .nav-pill,
+    .nav-text,
+    .nav-links a,
+    .nav-links a .nav-icon,
+    .nav-links a .nav-tooltip,
+    .nav-btn,
+    nav .nav-controls,
+    .section-title::after,
+    .btn,
+    .btn::after,
+    .project-link,
+    .project-link::after,
+    .profile-photo,
+    .skill-card,
+    .project-card,
+    .cv-actions .btn-outline,
+    .form-group input,
+    .form-group textarea,
+    .val-link,
+    .copy-btn,
+    .copy-tooltip,
+    .skip-link,
+    .lang-part {
+        transition: none;
+    }
+
+    .btn:hover,
+    .btn:hover::after,
+    .project-link:hover,
+    .project-link:hover::after,
+    .profile-photo:hover,
+    .skill-card:hover,
+    .project-card:hover,
+    .cv-actions .btn-outline:hover,
+    .nav-links a.active,
+    .nav-links a.active .nav-icon,
+    .section-title.reveal.visible::after {
+        transform: none;
     }
 }
