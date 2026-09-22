@@ -55,9 +55,9 @@ test('uses theme-specific error tokens with compliant text and indicator contras
   const lightSurface = hexValue(lightRoot, '--surface');
   const lightPage = hexValue(lightRoot, '--cream');
   const darkSurface = hexValue(darkRoot, '--surface');
-  const darkPage = darkBody.match(/linear-gradient\(135deg,\s*(#[0-9a-f]{6})\s+0%/i)?.[1];
+  const darkPage = hexValue(darkRoot, '--cream');
 
-  assert.ok(darkPage, 'expected the first dark page gradient stop');
+  assert.match(darkBody, /background:\s*var\(--cream\);/);
   assert.notEqual(lightError.toLowerCase(), darkError.toLowerCase());
   for (const [label, foreground, background] of [
     ['light error text on the page', lightError, lightPage],
@@ -136,13 +136,13 @@ test('contains decorative overflow and protects anchor and focus destinations fr
   assert.match(stylesheet, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brown-dark\);/);
 });
 
-test('clips the rotating profile border inside its own layout box', () => {
+test('clips the static profile frame inside its own layout box', () => {
   const heroPhoto = ruleFor('.hero-photo');
   const heroBorder = ruleFor('.hero-photo::before');
 
   assert.match(heroPhoto, /overflow:\s*clip;/);
-  assert.match(heroPhoto, /padding:\s*5px;/);
-  assert.match(heroBorder, /inset:\s*0;/);
+  assert.match(heroPhoto, /padding:\s*4px;/);
+  assert.match(heroBorder, /content:\s*none;/);
   assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*\.hero-photo\s*\{[^}]*padding:\s*0;/);
 });
 
