@@ -21,6 +21,7 @@ No `/pt/` or `/pt-br/` family exists. Portuguese is the `x-default` fallback, no
 | --- | --- | --- |
 | `/` | `/en/` | direct native navigation; history and reload retain English |
 | `/#projetos` | `/en/#projects` | section, active navigation state, back, and forward preserved |
+| `/#competencias` | `/en/#skills` | observed section context preserved without adding a Skills item to the approved navigation |
 | `/#sobre` | `/en/#about` | section, active navigation state, back, and forward preserved |
 | `/#cv` | `/en/#resume` | section and round trip preserved after the Task 4 correction |
 | `/#contato` | `/en/#contact` | section, active navigation state, back, and forward preserved |
@@ -50,12 +51,12 @@ No project-scoped `robots.txt` is emitted. GitHub Project Pages can publish only
 
 ## Automated and browser evidence
 
-Final automated verification on 2026-09-21:
+Final automated verification on 2026-09-22:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 86 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
-| `npm run check` | 46 files; 0 errors, 0 warnings, 0 hints |
+| `npm test` | 89 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo; pretest built six pages |
+| `npm run check` | 47 files; 0 errors, 0 warnings, 0 hints |
 | `npm run build` | 6 static pages built; sitemap index generated |
 | `git diff --check` | no whitespace errors |
 
@@ -106,6 +107,11 @@ The focused navigation suite finished 11/11 green. A real-browser PT `#cv` → E
 The fix round found that valid submissions had no environment boundary before `loadEmailJS`. A strict RED reproduced an SDK append on `127.0.0.1` and `emailjs.init` on `localhost`; the GREEN correction added a pure hostname policy before the loader can run. Its final normalization lowercases the hostname, removes one terminal DNS dot, and unwraps IPv6 brackets. Classification rejects `localhost` and its subdomains, IPv4 `127/8`, IPv6 `::1`, and IPv4-mapped `127/8` in dotted or hexadecimal `7f00`–`7fff` form under compressed `::ffff:` or the accepted fully expanded zero prefix. Tests keep ordinary public hostnames, public IPv6 controls, and mapped addresses outside `127/8` eligible, so non-local deployment behavior remains unchanged.
 
 The first real-browser recheck then found the polite local-preview text present in the status region but visually hidden by its base opacity. A second RED/GREEN cycle added a neutral visible state. The final PT and EN browser passes used `Local Preview Audit`, `local-preview@example.test`, and `Synthetic local boundary verification only`; both showed the localized message with retained values and an enabled idle button, while DOM, resource, and network evidence remained free of any EmailJS boundary.
+
+The final review reopened Task 4 for two Important localization regressions and closed both through independent RED/GREEN cycles:
+
+1. Both English résumé actions still rendered the Portuguese PDF and download filename. A failing built-output regression covered the view URL, download URL, and `download` attribute on both homepages. `ProfileSection` now selects `MiguelZagerGobbo-CV.pdf` for PT and `MiguelZagerGobbo-CV-EN.pdf` for EN once from `lang`, then reuses that filename for both actions.
+2. Competências/Skills was observed but deliberately absent from the approved four-link navigation, so the language resolver received no active link and fell back to the alternate homepage. Failing rendered-output, resolver, and observer-wiring regressions reproduced the missing `#competencias` ↔ `#skills` context. The homepage now derives every non-home alternate from the central route registry, and the language toggle carries a data-only map keyed by localized observed section IDs. The observer consults that map when no visual navigation link exists; no Skills link or other visual navigation change was introduced.
 
 ## Limitations and non-claims
 
