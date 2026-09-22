@@ -3,46 +3,76 @@ import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
 import { translations, type Lang } from '../lib/i18n';
+import type { RouteSection } from '../lib/routes';
 
 interface Props {
   lang?: Lang;
+  homeHref?: string;
+  alternateHref: string;
+  alternateSectionHrefs?: Partial<Record<RouteSection, string>>;
+  sectionIds: {
+    home: string;
+    projects: string;
+    skills: string;
+    about: string;
+    resume: string;
+    contact: string;
+  };
 }
 
-const { lang = 'pt' } = Astro.props;
+const {
+  lang = 'pt',
+  homeHref = '',
+  alternateHref,
+  alternateSectionHrefs,
+  sectionIds,
+} = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: 'home', icon: 'home' },
-  { id: 'sobre', icon: 'user' },
-  { id: 'habilidades', icon: 'code' },
-  { id: 'projetos', icon: 'folder' },
-  { id: 'cv', icon: 'file' },
-  { id: 'contato', icon: 'mail' },
+  { id: sectionIds.projects, section: 'projects', translationId: 'projetos', icon: 'folder' },
+  { id: sectionIds.about, section: 'about', translationId: 'sobre', icon: 'user' },
+  { id: sectionIds.resume, section: 'resume', translationId: 'cv', icon: 'file' },
+  { id: sectionIds.contact, section: 'contact', translationId: 'contato', icon: 'mail' },
 ] as const;
+const observedSectionHrefs = alternateSectionHrefs && Object.fromEntries(
+  (Object.entries(sectionIds) as [RouteSection, string][])
+    .flatMap(([section, id]) => {
+      const alternateSectionHref = alternateSectionHrefs[section];
+      return alternateSectionHref ? [[id, alternateSectionHref] as const] : [];
+    }),
+);
 ---
 
 <nav aria-label={dict['a11y.nav']}>
-  <div class="logo">{dict['nav.logo']}</div>
+  <a href={`${homeHref}#${sectionIds.home}`} class="logo" data-i18n-aria="nav.logo.aria" aria-label={dict['nav.logo.aria']}>
+    <span class="logo-full">{dict['nav.logo']}</span>
+    <span class="logo-mobile">Miguel</span>
+  </a>
   <div class="nav-right">
     <div class="nav-links">
       {
         links.map((link) => (
           <a
-            href={`#${link.id}`}
-            data-i18n-aria={`nav.${link.id}.aria`}
-            aria-label={dict[`nav.${link.id}.aria`]}
-            aria-current={link.id === 'home' ? 'page' : undefined}
+            href={`${homeHref}#${link.id}`}
+            data-language-alternate={alternateSectionHrefs?.[link.section]}
+            data-i18n-aria={`nav.${link.translationId}.aria`}
+            aria-label={dict[`nav.${link.translationId}.aria`]}
           >
-            <span class="nav-text" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+            <span class="nav-text" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
             <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />
-            <span class="nav-tooltip" data-i18n={`nav.${link.id}`}>{dict[`nav.${link.id}`]}</span>
+            <span class="nav-tooltip" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
           </a>
         ))
       }
     </div>
     <div class="nav-controls">
-      <LangToggle />
-      <ThemeToggle />
+      <LangToggle
+        lang={lang}
+        alternateHref={alternateHref}
+        alternateSectionHrefs={observedSectionHrefs}
+      />
+      <ThemeToggle lang={lang} />
     </div>
   </div>
 </nav>

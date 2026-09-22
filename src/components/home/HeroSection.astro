@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import foto from '../../assets/foto-perfil.jpeg';
+import { translations, type Lang } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+  sectionIds: {
+    projects: string;
+    resume: string;
+    contact: string;
+  };
+}
+
+const { lang = 'pt', sectionIds } = Astro.props;
+const dict = translations[lang] as Record<string, string>;
+---
+
+<section class="snap-section home-section home-section--hero" id="home">
+  <div class="section-inner hero-inner">
+    <div class="hero-text">
+      <p class="hero-tag reveal" data-i18n="hero.tag">{dict['hero.tag']}</p>
+      <h1 class="hero-title reveal" data-i18n="hero.title">{dict['hero.title']}</h1>
+      <p class="hero-sub reveal" data-i18n="hero.sub">{dict['hero.sub']}</p>
+      <p class="hero-availability reveal" data-i18n="hero.availability">{dict['hero.availability']}</p>
+      <div class="hero-actions reveal">
+        <a class="btn" href={`#${sectionIds.projects}`} data-i18n="hero.projects">{dict['hero.projects']}</a>
+        <a class="btn btn-outline" href={`#${sectionIds.resume}`} data-i18n="hero.resume">{dict['hero.resume']}</a>
+        <a class="hero-contact-link" href={`#${sectionIds.contact}`} data-i18n="hero.contact">{dict['hero.contact']}</a>
+      </div>
+    </div>
+    <div class="hero-photo reveal">
+      <Image
+        src={foto}
+        alt={dict['img.profile.alt']}
+        data-i18n-alt="img.profile.alt"
+        class="profile-photo"
+        fetchpriority="high"
+        loading="eager"
+        decoding="sync"
+        widths={[120, 150, 180, 240, 280]}
+        sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, min(280px, 22vw)"
+      />
+    </div>
+  </div>
+</section>

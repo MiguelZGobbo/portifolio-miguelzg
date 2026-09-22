@@ -1,56 +1,81 @@
 ---
 import '../styles/global.css';
-import '@fontsource-variable/playfair-display';
 import '@fontsource-variable/dm-sans';
-import playfairLatin from '@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2';
 import { translations, type Lang } from '../lib/i18n';
 
 interface Props {
   title: string;
   description: string;
-  lang?: Lang;
+  lang: Lang;
+  canonicalUrl: string;
+  alternateUrls: {
+    'pt-BR': string;
+    en: string;
+  };
+  pageKind: 'website' | 'article';
+  imageUrl: string;
+  imageAlt: string;
+  siteName: string;
+  structuredData: Record<string, unknown>[];
+  bodySection?: string;
+  skipTarget?: string;
 }
 
-const { title, description, lang = 'pt' } = Astro.props;
+const {
+  title,
+  description,
+  lang,
+  canonicalUrl,
+  alternateUrls,
+  pageKind,
+  imageUrl,
+  imageAlt,
+  siteName,
+  structuredData,
+  bodySection = 'home',
+  skipTarget = '#home',
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
 const dict = translations[lang] as Record<string, string>;
-const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
+const htmlLang = lang === 'pt' ? 'pt-BR' : 'en';
+const openGraphLocale = lang === 'pt' ? 'pt_BR' : 'en_US';
+const alternateOpenGraphLocale = lang === 'pt' ? 'en_US' : 'pt_BR';
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': structuredData,
+}).replaceAll('<', '\\u003c');
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="light" data-lang={lang}>
+<html lang={htmlLang} data-theme="light" data-lang={lang} class={bodySection === 'case-study' ? 'case-study-page' : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#F8F0E5" />
-    <link rel="canonical" href={url} />
-    <meta property="og:type" content="website" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="pt-BR" href={alternateUrls['pt-BR']} />
+    <link rel="alternate" hreflang="en" href={alternateUrls.en} />
+    <link rel="alternate" hreflang="x-default" href={alternateUrls['pt-BR']} />
+    <meta property="og:type" content={pageKind} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={url} />
-    <meta property="og:image" content={`${url}img/foto-perfil.jpeg`} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content={openGraphLocale} />
+    <meta property="og:locale:alternate" content={alternateOpenGraphLocale} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <link rel="icon" type="image/svg+xml" href={`${base}img/favicon.svg`} />
     <link rel="manifest" href={`${base}site.webmanifest`} />
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
-    <link rel="preload" href={playfairLatin} as="font" type="font/woff2" crossorigin />
-    <script type="application/ld+json" set:html={JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'Person',
-      name: 'Miguel Zager Gobbo',
-      jobTitle: 'Software Engineering Student',
-      url,
-      image: `${url}img/foto-perfil.jpeg`,
-      email: 'mailto:miguelzgobbo@gmail.com',
-      sameAs: [
-        'https://www.linkedin.com/in/miguel-zager-gobbo',
-        'https://github.com/MiguelZGobbo',
-      ],
-    })} />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
     <script is:inline>
       (function () {
         document.documentElement.classList.add('js');
@@ -61,18 +86,12 @@ const url = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
           ? savedTheme === 'dark'
           : window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-
-        var savedLang = null;
-        try { savedLang = localStorage.getItem('lang'); } catch (e) {}
-        var lang = savedLang
-          || (navigator.language && navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en');
-        document.documentElement.setAttribute('data-lang', lang);
       })();
     </script>
     <script src="../scripts/main.js"></script>
   </head>
-  <body data-section="home">
-    <a class="skip-link" href="#home" data-i18n="a11y.skip">{dict['a11y.skip']}</a>
+  <body data-section={bodySection}>
+    <a class="skip-link" href={skipTarget} data-i18n="a11y.skip">{dict['a11y.skip']}</a>
     <slot />
   </body>
 </html>

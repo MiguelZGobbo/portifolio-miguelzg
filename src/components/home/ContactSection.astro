@@ -1,0 +1,58 @@
+---
+import ContactForm from '../ContactForm.astro';
+import CopyButton from '../CopyButton.astro';
+import SectionTitle from '../SectionTitle.astro';
+import { translations, type Lang } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+  id: string;
+}
+
+const { lang = 'pt', id } = Astro.props;
+const dict = translations[lang] as Record<string, string>;
+---
+
+<section class="snap-section home-section home-section--contact" id={id}>
+  <div class="section-inner">
+    <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" icon="mail" />
+    <p class="contact-intro reveal" data-i18n="contact.intro">{dict['contact.intro']}</p>
+    <div class="contact-grid">
+      <ContactForm lang={lang} />
+      <div class="contact-info reveal">
+        <div class="contact-group">
+          <div class="contact-item reveal">
+            <div class="label" data-i18n="contact.email">{dict['contact.email']}</div>
+            <div class="val-row">
+              <a class="val-link" href="mailto:miguelzgobbo@gmail.com">miguelzgobbo@gmail.com</a>
+              <CopyButton text="miguelzgobbo@gmail.com" title="E-mail" ariaLabel={dict['copy.email']} i18nKey="copy.email" />
+            </div>
+          </div>
+          <div class="contact-item reveal">
+            <div class="label" data-i18n="contact.linkedin">{dict['contact.linkedin']}</div>
+            <div class="val-row">
+              <a href="https://www.linkedin.com/in/miguel-zager-gobbo" target="_blank" rel="noopener noreferrer" class="val-link">linkedin.com/in/miguel-zg</a>
+              <CopyButton text="https://www.linkedin.com/in/miguel-zager-gobbo" title="LinkedIn" ariaLabel={dict['copy.linkedin']} i18nKey="copy.linkedin" />
+            </div>
+          </div>
+        </div>
+        <div class="contact-group contact-group--muted">
+          <div class="contact-item reveal">
+            <div class="label" data-i18n="contact.github">{dict['contact.github']}</div>
+            <div class="val-row">
+              <a href="https://github.com/MiguelZGobbo" target="_blank" rel="noopener noreferrer" class="val-link">github.com/MiguelZGobbo</a>
+              <CopyButton text="https://github.com/MiguelZGobbo" title="GitHub" ariaLabel={dict['copy.github']} i18nKey="copy.github" />
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="label" data-i18n="contact.location">{dict['contact.location']}</div>
+            <div class="val-row">
+              <span class="val" data-i18n="contact.location.val">{dict['contact.location.val']}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer data-i18n="contact.footer">{dict['contact.footer'].replace('{year}', String(new Date().getFullYear()))}</footer>
+</section>

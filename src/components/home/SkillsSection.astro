@@ -1,0 +1,22 @@
+---
+import SectionTitle from '../SectionTitle.astro';
+import SkillCard from '../SkillCard.astro';
+import { skillGroups } from '../../data/skills';
+import type { Lang } from '../../lib/i18n';
+
+interface Props {
+  lang?: Lang;
+  id: string;
+}
+
+const { lang = 'pt', id } = Astro.props;
+---
+
+<section class="snap-section home-section home-section--skills" id={id}>
+  <div class="section-inner">
+    <SectionTitle lang={lang} labelKey="skills.label" titleKey="skills.title" icon="code" />
+    <div class="skills-grid" id="skills-grid">
+      {skillGroups.map((group) => <SkillCard group={group} lang={lang} />)}
+    </div>
+  </div>
+</section>
