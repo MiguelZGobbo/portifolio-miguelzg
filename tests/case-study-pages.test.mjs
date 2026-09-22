@@ -197,7 +197,7 @@ test('uses shared navigation links that return to homepage anchors through the c
     const page = await readBuiltCaseStudy(slug);
     const navigation = page.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';
 
-    for (const anchor of ['home', 'projetos', 'sobre', 'cv', 'contato']) {
+    for (const anchor of ['home', 'projetos', 'competencias', 'sobre', 'contato']) {
       assert.ok(
         navigation.includes(`href="/portifolio-miguelzg/#${anchor}"`),
         `${slug} navigation should link back to homepage #${anchor}`,

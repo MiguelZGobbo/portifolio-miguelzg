@@ -1,6 +1,6 @@
 import type { Lang } from './i18n';
 
-export type RouteSection = 'home' | 'projects' | 'skills' | 'about' | 'resume' | 'contact';
+export type RouteSection = 'home' | 'projects' | 'skills' | 'about' | 'contact';
 
 export const routeConfig = {
   pt: {
@@ -11,7 +11,6 @@ export const routeConfig = {
       projects: 'projetos',
       skills: 'competencias',
       about: 'sobre',
-      resume: 'cv',
       contact: 'contato',
     },
   },
@@ -23,7 +22,6 @@ export const routeConfig = {
       projects: 'projects',
       skills: 'skills',
       about: 'about',
-      resume: 'resume',
       contact: 'contact',
     },
   },

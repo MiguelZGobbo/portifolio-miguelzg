@@ -10,12 +10,11 @@ Site pessoal estático desenvolvido com **Astro**, **CSS** e **JavaScript**. A p
 
 A homepage mantém esta ordem de conteúdo:
 
-1. **Início** — apresentação profissional, foto e chamadas para projetos, currículo e contato.
+1. **Início** — apresentação profissional e foto.
 2. **Projetos** — Purchase Orders API, BeadWise, Portfólio Miguel ZG e API de Gerenciamento de Tarefas, com níveis de evidência diferentes.
 3. **Competências** — linguagens, backend, bancos de dados, ferramentas e soft skills.
-4. **Sobre mim** — perfil e formação.
-5. **Currículo** — visualização e download dos PDFs em português ou inglês.
-6. **Contato** — formulário, e-mail, LinkedIn e GitHub.
+4. **Sobre mim** — perfil, formação e acesso ao currículo em português ou inglês.
+5. **Contato** — formulário, e-mail, LinkedIn e GitHub.
 
 O conteúdo público está disponível em seis rotas canônicas:
 
@@ -32,7 +31,7 @@ Português permanece nas rotas públicas originais e inglês usa o prefixo `/en/
 
 - Tema claro/escuro com preferência persistida no navegador.
 - Rotas estáticas independentes em PT/EN, com idioma definido pela URL, histórico e links profundos copiáveis.
-- Layout responsivo para desktop e telas pequenas.
+- Navegação responsiva por Início, Projetos, Competências, Sobre e Contato.
 - Animações de reveal progressivo, respeitando prefers-reduced-motion.
 - Skip link, foco visível, rótulos acessíveis e HTML estático disponível antes das melhorias de JavaScript.
 - Módulos de navegador separados para tema, navegação observada, reveals, clipboard e formulário de contato.
@@ -76,7 +75,7 @@ Para testar a saída estática localmente:
 
 | Script | Uso |
 | --- | --- |
-| npm test | Gera as seis páginas estáticas e executa 94 testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
+| npm test | Gera as seis páginas estáticas e executa os testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
 | npm run check | Executa as verificações e diagnósticos do Astro. |
 | npm run build | Gera as seis páginas estáticas, o sitemap e os assets em dist/. |
 | npm run dev | Inicia o servidor de desenvolvimento do Astro. |

@@ -26,15 +26,20 @@ function sectionMarkup(id) {
   return page.slice(start, next === -1 ? undefined : next);
 }
 
-test('renders the approved hero copy and canonical homepage hierarchy', () => {
+test('renders the simplified hero copy and canonical homepage hierarchy', () => {
+  const hero = sectionMarkup('home');
+
   assert.match(page, />Desenvolvedor de Software<\/h1>/);
   assert.match(
     page,
     /Estudo Engenharia de Software e tenho preferência por desenvolvimento backend\. Nos meus projetos, procuro entender o problema, estruturar a implementação e verificar o resultado de cada etapa antes de avançar\./,
   );
   assert.match(page, /Busco estágio e oportunidades iniciais em desenvolvimento de software\./);
+  assert.doesNotMatch(hero, />Miguel Zager Gobbo<\/p>/);
+  assert.doesNotMatch(hero, /class="hero-actions/);
+  assert.doesNotMatch(hero, /href="#/);
 
-  const sectionIds = ['home', 'projetos', 'competencias', 'sobre', 'cv', 'contato'];
+  const sectionIds = ['home', 'projetos', 'competencias', 'sobre', 'contato'];
   for (const id of sectionIds) {
     assert.notEqual(positionOf(id), -1, `expected #${id} to be present`);
   }
@@ -50,9 +55,10 @@ test('builds both localized homepages with their own visible content and fragmen
   assert.match(englishPage, /<html lang="en"/);
   assert.match(englishPage, /<html lang="en"[^>]*data-lang="en"/);
   assert.match(englishPage, />Software Developer<\/h1>/);
-  for (const id of ['home', 'projects', 'skills', 'about', 'resume', 'contact']) {
+  for (const id of ['home', 'projects', 'skills', 'about', 'contact']) {
     assert.notEqual(englishPage.indexOf(`id="${id}"`), -1, `expected English #${id} to be present`);
   }
+  assert.equal(englishPage.indexOf('id="resume"'), -1, 'resume must not remain an independent English anchor');
   assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/purchase-orders-api\/"/);
   assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/beadwise\/"/);
   assert.doesNotMatch(englishPage, /localStorage\.getItem\('lang'\)/);
@@ -74,12 +80,12 @@ test('renders direct reciprocal language links with section-specific alternate d
   const portugueseLinks = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const englishLinks = englishPage.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   assert.match(portugueseLinks, /href="#projetos"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#projects"/);
+  assert.match(portugueseLinks, /href="#competencias"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#skills"/);
   assert.match(portugueseLinks, /href="#sobre"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#about"/);
-  assert.match(portugueseLinks, /href="#cv"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#resume"/);
   assert.match(portugueseLinks, /href="#contato"[^>]*data-language-alternate="\/portifolio-miguelzg\/en\/#contact"/);
   assert.match(englishLinks, /href="#projects"[^>]*data-language-alternate="\/portifolio-miguelzg\/#projetos"/);
+  assert.match(englishLinks, /href="#skills"[^>]*data-language-alternate="\/portifolio-miguelzg\/#competencias"/);
   assert.match(englishLinks, /href="#about"[^>]*data-language-alternate="\/portifolio-miguelzg\/#sobre"/);
-  assert.match(englishLinks, /href="#resume"[^>]*data-language-alternate="\/portifolio-miguelzg\/#cv"/);
   assert.match(englishLinks, /href="#contact"[^>]*data-language-alternate="\/portifolio-miguelzg\/#contato"/);
 });
 
@@ -116,15 +122,16 @@ test('renders a public state badge only for the in-development project', () => {
   assert.doesNotMatch(taskApi, /\bproject-state\b/);
 });
 
-test('keeps global navigation focused on home, projects, profile, résumé, and contact', () => {
+test('keeps global navigation focused on home, projects, skills, profile, and contact', () => {
   const nav = page.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';
   const destinations = [...nav.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
 
   assert.deepEqual(destinations, [
     '#home',
+    '#home',
     '#projetos',
+    '#competencias',
     '#sobre',
-    '#cv',
     '#contato',
     '/portifolio-miguelzg/en/',
   ]);
@@ -145,9 +152,25 @@ test('renders named utility controls and preserves ordered in-page destinations'
 
   const links = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
-  assert.deepEqual(destinations, ['#projetos', '#sobre', '#cv', '#contato']);
+  assert.deepEqual(destinations, ['#home', '#projetos', '#competencias', '#sobre', '#contato']);
+  assert.match(links, />Início<\/span>/);
+  assert.match(links, />Competências<\/span>/);
+  assert.doesNotMatch(links, />Currículo<\/span>/);
   assert.match(page, /<span class="logo-full">MIGUEL ZAGER GOBBO<\/span>/);
   assert.match(page, /<span class="logo-mobile">Miguel<\/span>/);
+});
+
+test('keeps résumé actions inside About without exposing a separate résumé anchor', () => {
+  const about = sectionMarkup('sobre');
+  const englishAboutStart = englishPage.indexOf('id="about"');
+  const englishContactStart = englishPage.indexOf('<section', englishAboutStart + 1);
+  const englishAbout = englishPage.slice(englishAboutStart, englishContactStart);
+
+  assert.equal(positionOf('cv'), -1);
+  assert.match(about, /class="cv-box profile-cv reveal"/);
+  assert.equal((about.match(/data-cv/g) ?? []).length, 2);
+  assert.match(englishAbout, /class="cv-box profile-cv reveal"/);
+  assert.equal((englishAbout.match(/data-cv/g) ?? []).length, 2);
 });
 
 test('renders native contact semantics with linked field errors and a polite status region', () => {

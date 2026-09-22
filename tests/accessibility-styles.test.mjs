@@ -161,6 +161,17 @@ test('uses an intentional compact brand instead of clipping the full mobile logo
   assert.doesNotMatch(stylesheet, /nav \.logo\s*\{[^}]*overflow:\s*hidden;/);
 });
 
+test('keeps the five-item navigation inside its tablet and notebook container', () => {
+  const compactNavigation = stylesheet.match(
+    /@media \(min-width: 641px\) and \(max-width: 1023px\)\s*\{([\s\S]*?)\n\}/,
+  )?.[1] ?? '';
+
+  assert.match(compactNavigation, /nav\s*\{[^}]*left:\s*16px;[^}]*right:\s*16px;[^}]*padding:\s*0 0\.75rem;/);
+  assert.match(compactNavigation, /nav \.logo-full\s*\{[^}]*display:\s*none;/);
+  assert.match(compactNavigation, /nav \.logo-mobile\s*\{[^}]*display:\s*inline;/);
+  assert.match(compactNavigation, /\.nav-links a\s*\{[^}]*font-size:\s*0\.68rem;[^}]*padding:\s*0\.4rem 0\.35rem;/);
+});
+
 test('allows long project card and evidence content to wrap within the grid track', () => {
   const projectCard = ruleFor('.project-card');
   const projectCardInner = ruleFor('.project-card-inner');

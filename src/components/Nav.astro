@@ -15,7 +15,6 @@ interface Props {
     projects: string;
     skills: string;
     about: string;
-    resume: string;
     contact: string;
   };
 }
@@ -30,9 +29,10 @@ const {
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
+  { id: sectionIds.home, section: 'home', translationId: 'home', icon: 'home' },
   { id: sectionIds.projects, section: 'projects', translationId: 'projetos', icon: 'folder' },
+  { id: sectionIds.skills, section: 'skills', translationId: 'skills', icon: 'code' },
   { id: sectionIds.about, section: 'about', translationId: 'sobre', icon: 'user' },
-  { id: sectionIds.resume, section: 'resume', translationId: 'cv', icon: 'file' },
   { id: sectionIds.contact, section: 'contact', translationId: 'contato', icon: 'mail' },
 ] as const;
 const observedSectionHrefs = alternateSectionHrefs && Object.fromEntries(

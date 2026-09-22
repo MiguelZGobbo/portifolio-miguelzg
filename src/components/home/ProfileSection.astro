@@ -6,10 +6,9 @@ import { translations, type Lang } from '../../lib/i18n';
 interface Props {
   lang?: Lang;
   id: string;
-  resumeId: string;
 }
 
-const { lang = 'pt', id, resumeId } = Astro.props;
+const { lang = 'pt', id } = Astro.props;
 const dict = translations[lang] as Record<string, string>;
 const base = import.meta.env.BASE_URL;
 const cvFilename = lang === 'en' ? 'MiguelZagerGobbo-CV-EN.pdf' : 'MiguelZagerGobbo-CV.pdf';
@@ -41,7 +40,7 @@ const cvUrl = `${base}files/${cvFilename}`;
         </div>
       </div>
     </div>
-    <aside class="cv-box profile-cv reveal" id={resumeId} aria-labelledby="cv-title">
+    <aside class="cv-box profile-cv reveal" aria-labelledby="cv-title">
       <div class="cv-info">
         <h3 class="cv-title" id="cv-title" data-i18n="cv.boxTitle">{dict['cv.boxTitle']}</h3>
         <p class="cv-sub" data-i18n="cv.boxSub">{dict['cv.boxSub']}</p>

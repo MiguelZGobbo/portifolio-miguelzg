@@ -86,10 +86,10 @@ const siteName = lang === 'pt' ? 'Portfólio de Miguel Zager Gobbo' : 'Miguel Za
   />
 
   <main class="home-main">
-    <HeroSection lang={lang} sectionIds={sections} />
+    <HeroSection lang={lang} />
     <ProjectsSection lang={lang} id={sections.projects} caseStudyHrefs={caseStudyHrefs} />
     <SkillsSection lang={lang} id={sections.skills} />
-    <ProfileSection lang={lang} id={sections.about} resumeId={sections.resume} />
+    <ProfileSection lang={lang} id={sections.about} />
     <ContactSection lang={lang} id={sections.contact} />
   </main>
 </BaseLayout>

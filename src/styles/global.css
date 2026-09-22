@@ -177,7 +177,6 @@ nav {
     scroll-margin-bottom: 104px;
 }
 
-#cv,
 #case-study-content {
     scroll-margin-top: calc(var(--nav-top) + var(--nav-height) + 1rem);
     scroll-margin-bottom: 104px;
@@ -362,15 +361,6 @@ nav a,
 .hero-text {
     flex: 1;
     min-width: 0;
-}
-
-.hero-tag {
-    font-size: 0.73rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--brown);
-    margin-bottom: 1.1rem;
 }
 
 .hero-title {
@@ -1529,11 +1519,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 0;
     }
 
-    .hero-tag {
-        font-size: 0.62rem;
-        letter-spacing: 0.16em;
-        margin-bottom: 0.7rem;
-    }
     .hero-title {
         font-size: 1.6rem;
         margin-bottom: 0.8rem;
@@ -1903,6 +1888,45 @@ html[data-lang="en"] .lang-en {
     color: var(--brown-dark);
 }
 
+@media (min-width: 641px) and (max-width: 1023px) {
+    nav {
+        left: 16px;
+        right: 16px;
+        padding: 0 0.75rem;
+    }
+
+    nav .logo {
+        padding: 0 0.25rem;
+        white-space: nowrap;
+    }
+
+    nav .logo-full {
+        display: none;
+    }
+
+    nav .logo-mobile {
+        display: inline;
+    }
+
+    .nav-right {
+        gap: 0.35rem;
+    }
+
+    .nav-links {
+        gap: 0.1rem;
+    }
+
+    .nav-links a {
+        font-size: 0.68rem;
+        letter-spacing: 0.03em;
+        padding: 0.4rem 0.35rem;
+    }
+
+    .nav-controls {
+        gap: 0.2rem;
+    }
+}
+
 @media (max-width: 640px) {
     nav {
         justify-content: flex-start;
@@ -2018,33 +2042,6 @@ html[data-lang="en"] .lang-en {
     line-height: 1.75;
 }
 
-.hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.hero-contact-link {
-    color: var(--brown-dark);
-    font-size: 0.82rem;
-    font-weight: 600;
-    text-decoration: none;
-    border-bottom: 1px solid var(--sand);
-}
-
-.hero-contact-link:hover {
-    color: var(--brown);
-    border-bottom-color: var(--brown);
-}
-
-.hero-contact-link:focus-visible {
-    outline: 2px solid var(--brown-dark);
-    outline-offset: 3px;
-}
-
-.hero-contact-link,
 .val-link,
 .case-study-back-link,
 .case-study-repository-link {
@@ -2476,11 +2473,6 @@ body[data-section="case-study"] {
 }
 
 @media (max-width: 640px) {
-    .hero-actions {
-        justify-content: center;
-        margin-top: 1.2rem;
-    }
-
     .hero-availability {
         font-size: 0.85rem;
     }

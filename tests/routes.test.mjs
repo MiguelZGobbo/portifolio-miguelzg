@@ -9,7 +9,6 @@ test('maps every shared homepage section to its localized fragment', () => {
     projects: 'projetos',
     skills: 'competencias',
     about: 'sobre',
-    resume: 'cv',
     contact: 'contato',
   });
   assert.deepEqual(routeConfig.en.sections, {
@@ -17,7 +16,6 @@ test('maps every shared homepage section to its localized fragment', () => {
     projects: 'projects',
     skills: 'skills',
     about: 'about',
-    resume: 'resume',
     contact: 'contact',
   });
 });

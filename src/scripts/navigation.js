@@ -105,7 +105,7 @@ function navigationGeometry(sections) {
 }
 
 export function initNavigation() {
-  const sections = Array.from(document.querySelectorAll('main > section[id], main #cv, main #resume'));
+  const sections = Array.from(document.querySelectorAll('main > section[id]'));
   const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   if (!sections.length) return;
 
