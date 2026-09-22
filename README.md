@@ -121,7 +121,7 @@ Para testar a saída estática localmente:
 
 ## Estado de escopo
 
-A Fase 7 de localização por rotas e SEO está consolidada em [docs/phases/phase-7-consolidation.md](docs/phases/phase-7-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 89 testes além da auditoria funcional e visual em navegador. O polimento de ritmo visual, tipografia, espaçamento, decoração e decisões finais de motion pertence à Fase 8, sem alterar hierarquia, rotas, metadados ou comportamento de acessibilidade.
+A Fase 8 de polimento visual está consolidada em [docs/phases/phase-8-consolidation.md](docs/phases/phase-8-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 94 testes além da auditoria funcional e visual em navegador. A próxima etapa é a Fase 9 — auditoria final independente — conforme [docs/phases/phase-9-handoff.md](docs/phases/phase-9-handoff.md).
 
 ## Autor
 
