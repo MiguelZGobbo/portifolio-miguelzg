@@ -11,25 +11,22 @@ export interface SkillGroup {
 export const skillGroups: SkillGroup[] = [
   {
     cat: { pt: 'Linguagens', en: 'Languages' },
-    tags: { pt: ['Python', 'Java', 'HTML', 'CSS', 'JavaScript'], en: ['Python', 'Java', 'HTML', 'CSS', 'JavaScript'] },
+    tags: { pt: ['Python', 'Java', 'JavaScript', 'C#'], en: ['Python', 'Java', 'JavaScript', 'C#'] },
   },
   {
     cat: { pt: 'Backend', en: 'Backend' },
-    tags: { pt: ['Flask', 'REST APIs', 'JWT', 'Spring Boot', 'Pytest', 'Docker', 'Swagger'], en: ['Flask', 'REST APIs', 'JWT', 'Spring Boot', 'Pytest', 'Docker', 'Swagger'] },
+    tags: { pt: ['Flask', 'Spring Boot', 'APIs REST'], en: ['Flask', 'Spring Boot', 'REST APIs'] },
   },
   {
-    cat: { pt: 'Banco de dados', en: 'Databases' },
-    tags: { pt: ['PostgreSQL', 'MySQL', 'Neo4j'], en: ['PostgreSQL', 'MySQL', 'Neo4j'] },
+    cat: { pt: 'Dados e persistência', en: 'Data & Persistence' },
+    tags: { pt: ['SQL', 'PostgreSQL', 'MySQL', 'SQLAlchemy', 'Spring Data JPA'], en: ['SQL', 'PostgreSQL', 'MySQL', 'SQLAlchemy', 'Spring Data JPA'] },
   },
   {
-    cat: { pt: 'Ferramentas', en: 'Tools' },
-    tags: { pt: ['Git', 'GitHub', 'Figma', 'Draw.io', 'WSL2', 'Maven', 'Postman', 'Excel', 'PowerPoint'], en: ['Git', 'GitHub', 'Figma', 'Draw.io', 'WSL2', 'Maven', 'Postman', 'Excel', 'PowerPoint'] },
+    cat: { pt: 'Testes e qualidade', en: 'Testing & Quality' },
+    tags: { pt: ['Testes automatizados', 'Pytest'], en: ['Automated Testing', 'Pytest'] },
   },
   {
-    cat: { pt: 'Soft Skills', en: 'Soft Skills' },
-    tags: {
-      pt: ['Organização', 'Comprometimento', 'Atenção a Detalhes', 'Pensamento Crítico', 'Comunicação'],
-      en: ['Organization', 'Commitment', 'Attention to Detail', 'Critical Thinking', 'Communication'],
-    },
+    cat: { pt: 'Ambiente e desenvolvimento', en: 'Development Environment' },
+    tags: { pt: ['Docker', 'Docker Compose', 'Git'], en: ['Docker', 'Docker Compose', 'Git'] },
   },
 ];
