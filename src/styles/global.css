@@ -447,8 +447,7 @@ nav a,
     transition: border-color 180ms ease, background 180ms ease;
 }
 
-.skill-card:hover,
-.project-card:hover {
+.skill-card:hover {
     transform: none;
     box-shadow: 0 2px 8px rgba(44, 34, 24, 0.08);
     border-color: var(--tan);
@@ -485,53 +484,178 @@ nav a,
 /* ================================
    8. SEÇÃO — PROJETOS
 ================================ */
-.projects-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.project-card {
+.project-showcase {
     background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
+    border: 1px solid var(--line);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44, 34, 24, 0.06);
-    padding: 1.4rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1rem;
-    align-items: center;
-    min-width: 0;
-    transition: border-color 180ms ease, background 180ms ease;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    transition: background 180ms ease, border-color 180ms ease;
 }
 
-.project-card-inner {
-    min-width: 0;
-}
-
-.project-name {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.4rem;
-}
-
-.project-desc {
-    font-size: 0.87rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-}
-
-.project-stack {
+.project-showcase-toolbar {
     display: flex;
-    gap: 0.4rem;
-    margin-top: 0.75rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--line);
 }
 
-.stack-tag {
-    font-size: 0.7rem;
-    padding: 0.22rem 0.55rem;
+.project-showcase-counter {
+    color: var(--brown-dark);
+    font-size: 0.82rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+}
+
+.project-showcase-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.project-showcase-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--brown-dark);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.project-showcase-arrow:hover:not(:disabled) {
+    background: var(--surface-strong);
+    border-color: var(--tan);
+}
+
+.project-showcase-arrow:disabled {
+    color: var(--warm-gray);
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.project-showcase-arrow:focus-visible,
+.project-showcase-nav-button:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+}
+
+.project-showcase-panels {
+    display: grid;
+    margin-top: clamp(1.75rem, 4vw, 3rem);
+}
+
+.project-showcase-panel {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 160ms ease;
+}
+
+.project-showcase-panel[data-active="true"] {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html.js .project-showcase-panel {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+html.js .project-showcase-panel[data-active="true"] {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+html:not(.js) .project-showcase-toolbar,
+html:not(.js) .project-showcase-nav {
+    display: none;
+}
+
+html:not(.js) .project-showcase-panels {
+    display: block;
+    margin-top: 0;
+}
+
+html:not(.js) .project-showcase-panel {
+    grid-area: auto;
+    padding-block: 1.75rem;
+}
+
+html:not(.js) .project-showcase-panel + .project-showcase-panel {
+    border-top: 1px solid var(--line);
+}
+
+.project-showcase-copy {
+    max-width: 720px;
+}
+
+.project-showcase-name {
+    color: var(--dark);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.project-showcase-summary {
+    max-width: 64ch;
+    margin-top: 0.9rem;
+    color: var(--text-muted);
+    font-size: clamp(0.94rem, 1.5vw, 1.05rem);
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.project-showcase-technologies,
+.project-showcase-aspects {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+}
+
+.project-showcase-technologies {
+    gap: 0.5rem 1rem;
+    margin-top: 1.4rem;
+    color: var(--dark);
+    font-size: 0.86rem;
+    font-weight: 650;
+}
+
+.project-showcase-aspects {
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.project-showcase-aspects li {
+    display: inline-flex;
+    gap: 0.35rem;
+}
+
+.project-showcase-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: clamp(1.75rem, 4vw, 2.5rem);
 }
 
 .project-link {
@@ -562,6 +686,69 @@ nav a,
     outline: 2px solid var(--brown-dark);
     outline-offset: 2px;
     background: var(--dark);
+}
+
+.project-github-link {
+    color: var(--brown-dark);
+    background: transparent;
+    border: 1px solid var(--line);
+}
+
+.project-github-link:hover,
+.project-github-link:focus-visible {
+    color: var(--dark);
+    background: var(--surface-strong);
+    border-color: var(--tan);
+}
+
+.project-showcase-nav {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.project-showcase-nav-list {
+    display: flex;
+    min-width: max-content;
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.project-showcase-nav-button {
+    color: var(--text-muted);
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 0.55rem 0 0.65rem;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: color 160ms ease, border-color 160ms ease;
+}
+
+.project-showcase-nav-button:hover {
+    color: var(--brown-dark);
+}
+
+.project-showcase-nav-button[aria-current="true"] {
+    color: var(--brown-dark);
+    border-bottom-color: var(--brown-dark);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* ================================
@@ -1566,7 +1753,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 
     /* Cards com cantos arredondados e sombra suave */
     .skill-card,
-    .project-card,
+    .project-showcase,
     .cv-box,
     .contact-info {
         border-radius: 14px;
@@ -1576,9 +1763,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
     .skill-card {
         flex: 0 0 100%;
         padding: 1.15rem 1.2rem;
-    }
-    .project-card {
-        padding: 1.15rem;
     }
     .contact-grid {
         grid-template-columns: 1fr;
@@ -1669,10 +1853,6 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         padding: 1.4rem;
     }
 
-    .project-card {
-        grid-template-columns: 1fr;
-    }
-
     .project-link {
         display: inline-block;
         margin-top: 0.5rem;
@@ -1711,8 +1891,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
         color: var(--tan) !important;
     }
 
-    .skill-card:hover,
-    .project-card:hover {
+    .skill-card:hover {
         transform: none !important;
         box-shadow: none !important;
     }
@@ -1769,7 +1948,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] .skill-card,
-[data-theme="dark"] .project-card,
+[data-theme="dark"] .project-showcase,
 [data-theme="dark"] .cv-box,
 [data-theme="dark"] .contact-info,
 [data-theme="dark"] .form-group input,
@@ -1778,7 +1957,7 @@ body[data-section="contato"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] .skill-card,
-[data-theme="dark"] .project-card,
+[data-theme="dark"] .project-showcase,
 [data-theme="dark"] .cv-box,
 [data-theme="dark"] .contact-info {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -2050,167 +2229,11 @@ html[data-lang="en"] .lang-en {
     min-height: 24px;
 }
 
-.projects-compact-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.projects-list--featured {
-    display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.85fr);
-    gap: 1rem;
-}
-
-.projects-list--featured .project-card {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-.projects-list--featured .project-actions {
-    justify-content: flex-start;
-    margin-top: auto;
-    padding-top: 1.5rem;
-}
-
-.project-card--h1,
-.project-card--h2 {
-    align-items: stretch;
-}
-
-.project-card--h1 {
-    background: var(--surface-strong);
-    border-left: 4px solid var(--brown-dark);
-}
-
-.project-card--h2 {
-    border-left: 2px solid var(--tan);
-}
-
-.project-card--h1 .project-name {
-    font-size: clamp(1.45rem, 2vw, 1.8rem);
-    line-height: 1.15;
-}
-
-.project-card--h2 .project-name {
-    font-size: 1.2rem;
-    line-height: 1.2;
-}
-
-.project-card--compact {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 1.1rem;
-}
-
-.project-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.project-card-header > *,
-.project-actions {
-    min-width: 0;
-}
-
-.project-name,
-.project-summary,
-.project-desc,
-.project-fact dd,
 .case-study-header h1,
 .case-study-section h2,
 .case-study-section p,
 .case-study-section li {
     overflow-wrap: anywhere;
-}
-
-.project-level,
-.project-evidence-title,
-.project-fact dt {
-    color: var(--brown);
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-}
-
-.project-level {
-    margin-bottom: 0.35rem;
-}
-
-.project-state {
-    flex-shrink: 0;
-    color: var(--text-muted);
-    background: var(--cream);
-    border: 1px solid var(--sand);
-    border-radius: 999px;
-    padding: 0.2rem 0.55rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-}
-
-.project-state--in-development {
-    color: var(--brown-dark);
-    border-color: var(--tan);
-}
-
-.project-summary {
-    margin-top: 0.6rem;
-}
-
-.project-facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.9rem;
-    margin-top: 0.8rem;
-}
-
-.project-fact dd {
-    color: var(--dark);
-    margin-top: 0.2rem;
-    font-size: 0.8rem;
-}
-
-.project-evidence {
-    margin-top: 0.9rem;
-}
-
-.project-evidence ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-top: 0.45rem;
-    list-style: none;
-}
-
-.project-evidence li {
-    color: var(--text-muted);
-    background: var(--cream);
-    border: 1px solid var(--sand);
-    border-radius: 6px;
-    padding: 0.2rem 0.45rem;
-    font-size: 0.68rem;
-    overflow-wrap: anywhere;
-}
-
-.project-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.6rem;
-}
-
-.project-card--compact .project-actions {
-    justify-content: flex-start;
-    margin-top: 0.9rem;
 }
 
 .profile-grid {
@@ -2412,12 +2435,6 @@ body[data-section="case-study"] {
     padding-inline: clamp(1.25rem, 3vw, 2rem);
 }
 
-@media (max-width: 900px) {
-    .projects-list--featured {
-        grid-template-columns: 1fr;
-    }
-}
-
 .case-study-maturity-list {
     display: grid;
     gap: 0.9rem;
@@ -2477,36 +2494,33 @@ body[data-section="case-study"] {
         font-size: 0.85rem;
     }
 
-    .projects-compact-list,
     .profile-grid {
         grid-template-columns: 1fr;
     }
 
-    .projects-compact-list {
-        gap: 0.75rem;
+    .project-showcase {
+        padding: 1.15rem;
     }
 
-    .project-card-header {
+    .project-showcase-panels {
+        margin-top: 1.5rem;
+    }
+
+    .project-showcase-name {
+        font-size: 1.45rem;
+    }
+
+    .project-showcase-technologies {
+        gap: 0.45rem 0.8rem;
+    }
+
+    .project-showcase-actions {
         align-items: flex-start;
-        gap: 0.65rem;
+        padding-top: 1.5rem;
     }
 
-    .project-state {
-        max-width: 44%;
-        text-align: right;
-    }
-
-    .project-facts,
-    .project-actions {
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-
-    .project-actions {
-        margin-top: 0.75rem;
-    }
-
-    .project-actions .project-link {
+    .project-showcase-actions .project-link {
+        display: inline-flex;
         margin-top: 0;
     }
 
@@ -2567,9 +2581,12 @@ body[data-section="case-study"] {
     .btn::after,
     .project-link,
     .project-link::after,
+    .project-showcase,
+    .project-showcase-panel,
+    .project-showcase-arrow,
+    .project-showcase-nav-button,
     .profile-photo,
     .skill-card,
-    .project-card,
     .cv-actions .btn,
     .cv-actions .btn-outline,
     .form-group input,
@@ -2589,7 +2606,6 @@ body[data-section="case-study"] {
     .project-link:hover::after,
     .profile-photo:hover,
     .skill-card:hover,
-    .project-card:hover,
     .cv-actions .btn-outline:hover,
     .nav-links a.active,
     .nav-links a.active .nav-icon,

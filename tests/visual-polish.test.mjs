@@ -13,30 +13,28 @@ function ruleFor(selector) {
   return match[1];
 }
 
-function lastRuleFor(selector) {
-  const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const matches = [...stylesheet.matchAll(new RegExp(`${escapedSelector}\\s*\\{([^}]*)\\}`, 'g'))];
-  assert.ok(matches.length, `expected a rule for ${selector}`);
-  return matches.at(-1)[1];
-}
-
 test('uses one self-hosted sans-serif family throughout the interface', () => {
   assert.match(layout, /@fontsource-variable\/dm-sans/);
   assert.doesNotMatch(layout, /playfair-display/i);
   assert.doesNotMatch(stylesheet, /Playfair Display Variable/);
 });
 
-test('gives the featured projects visibly different desktop weight', () => {
-  const featuredProjects = ruleFor('.projects-list--featured');
-  const primaryProject = ruleFor('.project-card--h1');
-  const highlightedProject = lastRuleFor('.project-card--h2');
+test('uses one stable visual grammar for every project', () => {
+  const showcase = ruleFor('.project-showcase');
+  const panels = ruleFor('.project-showcase-panels');
+  const inactivePanel = ruleFor('.project-showcase-panel');
+  const activePanel = ruleFor('.project-showcase-panel[data-active="true"]');
 
-  assert.match(featuredProjects, /grid-template-columns:\s*minmax\(0,\s*1\.45fr\)\s+minmax\(280px,\s*0\.85fr\);/);
-  assert.match(primaryProject, /background:\s*var\(--surface-strong\);/);
-  assert.match(primaryProject, /border-left:\s*4px solid var\(--brown-dark\);/);
-  assert.match(highlightedProject, /border-left:\s*2px solid var\(--tan\);/);
-  assert.match(stylesheet, /\.project-card--h1 \.project-name\s*\{[^}]*font-size:\s*clamp\(1\.45rem,\s*2vw,\s*1\.8rem\);/);
-  assert.match(stylesheet, /\.project-card--h2 \.project-name\s*\{[^}]*font-size:\s*1\.2rem;/);
+  assert.match(showcase, /background:\s*var\(--surface\);/);
+  assert.match(showcase, /border:\s*1px solid var\(--line\);/);
+  assert.match(panels, /display:\s*grid;/);
+  assert.match(inactivePanel, /grid-area:\s*1\s*\/\s*1;/);
+  assert.doesNotMatch(inactivePanel, /visibility:\s*hidden;/);
+  assert.match(activePanel, /visibility:\s*visible;/);
+  assert.match(stylesheet, /html\.js \.project-showcase-panel\s*\{[^}]*visibility:\s*hidden;/);
+  assert.match(stylesheet, /\.project-showcase-nav-button\[aria-current="true"\][\s\S]*border-bottom-color:\s*var\(--brown-dark\);/);
+  assert.match(stylesheet, /\.project-showcase-actions\s*\{[^}]*margin-top:\s*auto;[^}]*padding-top:/);
+  assert.match(stylesheet, /html:not\(\.js\) \.project-showcase-panels\s*\{[^}]*display:\s*block;/);
 });
 
 test('uses an editorial case-study flow instead of a stack of equal cards', () => {

@@ -94,7 +94,7 @@ Para testar a saída estática localmente:
     │   ├── assets/                # Assets processados pelo Astro
     │   ├── components/
     │   │   ├── home/              # Seções da homepage
-    │   │   ├── ProjectCard.astro
+    │   │   ├── ProjectShowcase.astro
     │   │   ├── ProjectCaseStudy.astro
     │   │   ├── Nav.astro
     │   │   ├── ThemeToggle.astro
@@ -120,7 +120,7 @@ Para testar a saída estática localmente:
 
 ## Estado de escopo
 
-A Fase 8 de polimento visual está consolidada em [docs/phases/phase-8-consolidation.md](docs/phases/phase-8-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 94 testes além da auditoria funcional e visual em navegador. A próxima etapa é a Fase 9 — auditoria final independente — conforme [docs/phases/phase-9-handoff.md](docs/phases/phase-9-handoff.md).
+A Fase 8 de polimento visual está consolidada em [docs/phases/phase-8-consolidation.md](docs/phases/phase-8-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 97 testes além da auditoria funcional e visual em navegador. A próxima etapa é a Fase 9 — auditoria final independente — conforme [docs/phases/phase-9-handoff.md](docs/phases/phase-9-handoff.md).
 
 ## Autor
 

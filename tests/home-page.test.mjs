@@ -89,37 +89,43 @@ test('renders direct reciprocal language links with section-specific alternate d
   assert.match(englishLinks, /href="#contact"[^>]*data-language-alternate="\/portifolio-miguelzg\/#contato"/);
 });
 
-test('renders all project levels with their available depth and visible state', () => {
+test('renders one navigable showcase with the canonical project order', () => {
+  const projectsSection = sectionMarkup('projetos');
   const purchaseOrders = projectMarkup('purchase-orders-api');
   const beadWise = projectMarkup('beadwise');
   const portfolio = projectMarkup('portfolio');
   const taskApi = projectMarkup('task-management-api');
 
-  assert.match(purchaseOrders, /data-project-hierarchy="H1"/);
-  assert.match(beadWise, /data-project-hierarchy="H2"/);
-  assert.match(portfolio, /data-project-hierarchy="H3"[\s\S]*data-project-compact="true"/);
-  assert.match(taskApi, /data-project-hierarchy="H3"[\s\S]*data-project-compact="true"/);
-
-  assert.match(beadWise, /data-project-state="in-development"/);
-  assert.match(beadWise, />em desenvolvimento</);
+  assert.equal((projectsSection.match(/data-project-showcase/g) ?? []).length, 1);
+  assert.equal((projectsSection.match(/data-project-panel/g) ?? []).length, 4);
+  assert.match(projectsSection, /data-project-counter[^>]*>01 \/ 04</);
+  assert.match(projectsSection, /data-project-direction="previous"[^>]*disabled/);
+  assert.match(projectsSection, /data-project-direction="next"/);
+  assert.match(purchaseOrders, /data-project-panel[^>]*data-active="true"/);
+  for (const inactiveProject of [beadWise, portfolio, taskApi]) {
+    assert.doesNotMatch(inactiveProject, /data-project-panel[^>]*(?:aria-hidden|inert)/);
+  }
 
   assert.match(purchaseOrders, /href="\/portifolio-miguelzg\/projetos\/purchase-orders-api\/"/);
   assert.match(beadWise, /href="\/portifolio-miguelzg\/projetos\/beadwise\/"/);
   assert.doesNotMatch(portfolio, /project-case-study-link/);
   assert.doesNotMatch(taskApi, /project-case-study-link/);
+  assert.doesNotMatch(projectsSection, /\bproject-(?:level|state|facts?)\b/);
+  assert.doesNotMatch(projectsSection, />Origem</);
+  assert.doesNotMatch(projectsSection, />Contribuição</);
+  assert.doesNotMatch(projectsSection, />em desenvolvimento</);
 });
 
-test('renders a public state badge only for the in-development project', () => {
-  const purchaseOrders = projectMarkup('purchase-orders-api');
-  const beadWise = projectMarkup('beadwise');
-  const portfolio = projectMarkup('portfolio');
-  const taskApi = projectMarkup('task-management-api');
+test('renders accessible direct project navigation and a polite change announcement', () => {
+  const projectsSection = sectionMarkup('projetos');
+  const directNavigation = projectsSection.match(/<div class="project-showcase-nav"[^>]*role="navigation"[\s\S]*?<\/div>/)?.[0] ?? '';
 
-  assert.match(beadWise, /class="project-state project-state--in-development"/);
-  assert.match(beadWise, />em desenvolvimento</);
-  assert.doesNotMatch(purchaseOrders, /\bproject-state\b/);
-  assert.doesNotMatch(portfolio, /\bproject-state\b/);
-  assert.doesNotMatch(taskApi, /\bproject-state\b/);
+  assert.match(projectsSection, /data-project-announcement[^>]*role="status"[^>]*aria-live="polite"/);
+  assert.match(projectsSection, /aria-label="Projeto anterior"/);
+  assert.match(projectsSection, /aria-label="Próximo projeto"/);
+  assert.equal((directNavigation.match(/data-project-select=/g) ?? []).length, 4);
+  assert.match(directNavigation, /data-project-select="0"[^>]*aria-current="true"/);
+  assert.match(directNavigation, /data-project-select="1"[^>]*aria-controls="project-panel-beadwise"/);
 });
 
 test('keeps global navigation focused on home, projects, skills, profile, and contact', () => {

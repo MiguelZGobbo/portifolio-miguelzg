@@ -28,6 +28,12 @@ export interface CaseStudyContent {
   maturity?: CaseStudyMaturity;
 }
 
+export interface ProjectShowcaseContent {
+  summary: Localized;
+  technologies: string[];
+  aspects: Localized[];
+}
+
 export interface Project {
   slug: string;
   name: Localized;
@@ -41,6 +47,7 @@ export interface Project {
   compact: boolean;
   evidence: Localized[];
   stack: string[];
+  showcase: ProjectShowcaseContent;
   href: string;
   ariaLabel: Localized;
   caseStudy?: CaseStudyContent;
@@ -250,6 +257,19 @@ export const projects: Project[] = [
     compact: false,
     evidence: purchaseOrdersEvidence,
     stack: ['Python', 'Flask', 'PostgreSQL', 'SQLAlchemy', 'JWT', 'Docker', 'Pytest'],
+    showcase: {
+      summary: {
+        pt: 'API REST para gerenciamento de pedidos de compra e seus itens, com autenticação JWT, persistência em PostgreSQL, execução com Docker e testes automatizados.',
+        en: 'REST API for managing purchase orders and their items, with JWT authentication, PostgreSQL persistence, Docker-based execution, and automated tests.',
+      },
+      technologies: ['Python', 'Flask', 'PostgreSQL', 'Docker'],
+      aspects: [
+        { pt: 'Backend', en: 'Backend' },
+        { pt: 'REST', en: 'REST' },
+        { pt: 'Autenticação', en: 'Authentication' },
+        { pt: 'Testes', en: 'Testing' },
+      ],
+    },
     href: 'https://github.com/MiguelZGobbo/purchase-orders-api',
     ariaLabel: {
       pt: 'Ver o projeto Purchase Orders API no GitHub',
@@ -268,6 +288,19 @@ export const projects: Project[] = [
     compact: false,
     evidence: beadWiseEvidence,
     stack: ['C#', '.NET', 'Windows APIs'],
+    showcase: {
+      summary: {
+        pt: 'Projeto que organiza especificações, protótipos, código e testes para investigar mecanismos do Windows com critérios de prova, segurança e reversibilidade.',
+        en: 'Project organizing specifications, prototypes, source code, and tests to investigate Windows mechanisms with proof, safety, and reversibility criteria.',
+      },
+      technologies: ['C#', '.NET', 'Windows APIs'],
+      aspects: [
+        { pt: 'Sistemas Windows', en: 'Windows systems' },
+        { pt: 'Prototipagem', en: 'Prototyping' },
+        { pt: 'Validação', en: 'Validation' },
+        { pt: 'Segurança', en: 'Safety' },
+      ],
+    },
     href: 'https://github.com/MiguelZGobbo/beadwise',
     ariaLabel: {
       pt: 'Ver o projeto BeadWise no GitHub',
@@ -288,6 +321,19 @@ export const projects: Project[] = [
     compact: true,
     evidence: portfolioEvidence,
     stack: ['Astro', 'HTML', 'CSS', 'JavaScript'],
+    showcase: {
+      summary: {
+        pt: 'Portfólio pessoal em Astro, CSS e JavaScript, com conteúdo em PT/EN, dark mode, responsividade, acessibilidade, SEO e deploy automatizado.',
+        en: 'Personal portfolio built with Astro, CSS, and JavaScript, with PT/EN content, dark mode, responsive behavior, accessibility, SEO, and automated deployment.',
+      },
+      technologies: ['Astro', 'CSS', 'JavaScript', 'GitHub Actions'],
+      aspects: [
+        { pt: 'Componentização', en: 'Componentization' },
+        { pt: 'Responsividade', en: 'Responsive design' },
+        { pt: 'Acessibilidade', en: 'Accessibility' },
+        { pt: 'SEO', en: 'SEO' },
+      ],
+    },
     href: 'https://github.com/MiguelZGobbo/portifolio-miguelzg',
     ariaLabel: {
       pt: 'Ver o projeto Portfólio Miguel ZG no GitHub',
@@ -307,6 +353,19 @@ export const projects: Project[] = [
     compact: true,
     evidence: taskApiEvidence,
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'MySQL', 'Maven', 'Postman'],
+    showcase: {
+      summary: {
+        pt: 'API REST acadêmica para gerenciamento de tarefas, desenvolvida com Java e Spring Boot, com operações de CRUD, persistência em MySQL e validação via Postman.',
+        en: 'Academic REST API for task management built with Java and Spring Boot, with CRUD operations, MySQL persistence, and endpoint validation through Postman.',
+      },
+      technologies: ['Java', 'Spring Boot', 'MySQL', 'Postman'],
+      aspects: [
+        { pt: 'Backend', en: 'Backend' },
+        { pt: 'REST', en: 'REST' },
+        { pt: 'CRUD', en: 'CRUD' },
+        { pt: 'Persistência relacional', en: 'Relational persistence' },
+      ],
+    },
     href: 'https://github.com/MiguelZGobbo/API-de-Gerenciamento-de-Tarefas',
     ariaLabel: {
       pt: 'Ver o projeto API de Gerenciamento de Tarefas no GitHub',

@@ -111,3 +111,21 @@ test('provides localized summaries, evidence, and all case-study sections only w
     }
   }
 });
+
+test('provides a concise, consistent showcase presentation for every project', () => {
+  for (const project of model.projects) {
+    assert.ok(project.showcase, `${project.slug} should provide showcase content`);
+    assert.equal(typeof project.showcase.summary.pt, 'string');
+    assert.equal(typeof project.showcase.summary.en, 'string');
+    assert.ok(project.showcase.summary.pt.length < project.summary.pt.length);
+    assert.ok(project.showcase.summary.en.length < project.summary.en.length);
+    assert.ok(project.showcase.technologies.length >= 2);
+    assert.ok(project.showcase.technologies.length <= 4);
+    assert.equal(project.showcase.aspects.length, 4);
+
+    for (const aspect of project.showcase.aspects) {
+      assert.ok(aspect.pt.length > 0);
+      assert.ok(aspect.en.length > 0);
+    }
+  }
+});

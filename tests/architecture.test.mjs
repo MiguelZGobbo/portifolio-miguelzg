@@ -15,6 +15,7 @@ test('main delegates browser behavior to focused initializers only', () => {
   const expectedInitializers = [
     ['theme', 'initTheme'],
     ['navigation', 'initNavigation'],
+    ['project-showcase', 'initProjectShowcase'],
     ['reveals', 'initReveals'],
     ['clipboard', 'initClipboard'],
     ['contact-form', 'initContactForm'],

@@ -172,14 +172,17 @@ test('keeps the five-item navigation inside its tablet and notebook container', 
   assert.match(compactNavigation, /\.nav-links a\s*\{[^}]*font-size:\s*0\.68rem;[^}]*padding:\s*0\.4rem 0\.35rem;/);
 });
 
-test('allows long project card and evidence content to wrap within the grid track', () => {
-  const projectCard = ruleFor('.project-card');
-  const projectCardInner = ruleFor('.project-card-inner');
-  const projectEvidenceItem = ruleFor('.project-evidence li');
-  const projectState = ruleFor('.project-state');
+test('keeps long showcase content inside flexible tracks and exposes mobile navigation overflow', () => {
+  const projectPanel = ruleFor('.project-showcase-panel');
+  const projectName = ruleFor('.project-showcase-name');
+  const projectSummary = ruleFor('.project-showcase-summary');
+  const projectNavigation = stylesheet.match(
+    /(?:^|\n)\.project-showcase-nav\s*\{([^}]*)\}/m,
+  )?.[1];
 
-  assert.match(projectCard, /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto;/);
-  assert.match(projectCardInner, /min-width:\s*0;/);
-  assert.match(projectEvidenceItem, /overflow-wrap:\s*anywhere;/);
-  assert.match(projectState, /overflow-wrap:\s*anywhere;/);
+  assert.match(projectPanel, /min-width:\s*0;/);
+  assert.match(projectName, /overflow-wrap:\s*anywhere;/);
+  assert.match(projectSummary, /overflow-wrap:\s*anywhere;/);
+  assert.ok(projectNavigation, 'Expected the base .project-showcase-nav rule');
+  assert.match(projectNavigation, /overflow-x:\s*auto;/);
 });
