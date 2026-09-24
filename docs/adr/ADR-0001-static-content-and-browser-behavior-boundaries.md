@@ -53,3 +53,7 @@ The homepage remains the primary index. Purchase Orders API and BeadWise receive
 - Architecture tests validate that `main.js` is only an initializer for focused browser modules.
 - `npm run check` and `npm run build` must remain clean.
 - Browser verification must confirm ordinary wheel, keyboard, anchor, history, and direct-route behavior.
+
+## Later decision
+
+ADR-0003 supersedes the case-study route and eligibility clauses above. The static-content and browser-behavior boundaries remain accepted.

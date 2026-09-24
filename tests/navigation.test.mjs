@@ -13,11 +13,18 @@ const sections = [
   { id: 'contato', top: 4000, height: 900 },
 ];
 
-test('findActiveSection selects the top-level section nearest the viewport center', () => {
+test('findActiveSection selects the latest section crossing the viewport center', () => {
   assert.equal(findActiveSection(sections, 0, 800), 'home');
   assert.equal(findActiveSection(sections, 700, 800), 'projetos');
   assert.equal(findActiveSection(sections, 1700, 800), 'competencias');
   assert.equal(findActiveSection(sections, 3000, 800), 'sobre');
+
+  const longProjectsSection = [
+    { id: 'home', top: 0, height: 844 },
+    { id: 'projetos', top: 844, height: 1719 },
+    { id: 'competencias', top: 2563, height: 754 },
+  ];
+  assert.equal(findActiveSection(longProjectsSection, 608, 844), 'projetos');
 });
 
 test('findActiveSection retains the nearest observed section outside literal geometry', () => {

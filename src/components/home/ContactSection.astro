@@ -15,11 +15,12 @@ const dict = translations[lang] as Record<string, string>;
 
 <section class="snap-section home-section home-section--contact" id={id}>
   <div class="section-inner">
-    <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" icon="mail" />
+    <SectionTitle lang={lang} labelKey="contact.label" titleKey="contact.title" />
     <p class="contact-intro reveal" data-i18n="contact.intro">{dict['contact.intro']}</p>
     <div class="contact-grid">
       <ContactForm lang={lang} />
       <div class="contact-info reveal">
+        <h3 class="contact-info-title" data-i18n="contact.direct">{dict['contact.direct']}</h3>
         <div class="contact-group">
           <div class="contact-item reveal">
             <div class="label" data-i18n="contact.email">{dict['contact.email']}</div>

@@ -7,27 +7,6 @@ export type ProjectHierarchy = 'H1' | 'H2' | 'H3';
 export type ProjectStateKey = 'completed' | 'in-development' | 'active';
 export type ProjectDecision = 'INCLUDE';
 
-export interface CaseStudyMaturity {
-  observed: Localized;
-  prototyped: Localized;
-  specified: Localized;
-  planned: Localized;
-  approved: Localized;
-}
-
-export interface CaseStudyContent {
-  overview: Localized;
-  context: Localized;
-  built: Localized;
-  decisions: Localized[];
-  implementation: Localized;
-  validation: Localized;
-  result: Localized;
-  limitations: Localized;
-  evidence: Localized[];
-  maturity?: CaseStudyMaturity;
-}
-
 export interface ProjectShowcaseContent {
   summary: Localized;
   technologies: string[];
@@ -50,10 +29,7 @@ export interface Project {
   showcase: ProjectShowcaseContent;
   href: string;
   ariaLabel: Localized;
-  caseStudy?: CaseStudyContent;
 }
-
-export type CaseStudyProject = Project & { caseStudy: CaseStudyContent };
 
 const purchaseOrdersSummary: Localized = {
   pt: 'Projeto individual desenvolvido durante um curso para construir uma API REST de gerenciamento de pedidos de compra e seus itens. Implementa autenticação de usuários via JWT, persistência em PostgreSQL com SQLAlchemy, migrações de banco, documentação com Swagger, execução com Docker e uma rotina de qualidade com testes automatizados, lint e pre-commit.',
@@ -72,57 +48,6 @@ const purchaseOrdersEvidence: Localized[] = [
   { pt: 'qualidade de código', en: 'code quality' },
 ];
 
-const purchaseOrdersCaseStudy: CaseStudyContent = {
-  overview: {
-    pt: 'API REST concluída para gerenciamento de pedidos de compra e seus itens, com autenticação, persistência relacional, migrações, documentação, execução reproduzível e validação automatizada.',
-    en: 'Completed REST API for managing purchase orders and their items, with authentication, relational persistence, migrations, documentation, reproducible execution, and automated validation.',
-  },
-  context: {
-    pt: 'Projeto individual desenvolvido durante um curso para praticar a construção de uma API de backend com escopo observável e execução reproduzível.',
-    en: 'Individual project developed as part of a course to practice building a backend API with an observable scope and reproducible execution.',
-  },
-  built: {
-    pt: purchaseOrdersSummary.pt,
-    en: purchaseOrdersSummary.en,
-  },
-  decisions: [
-    {
-      pt: 'Usar JWT para autenticação de usuários da API.',
-      en: 'Use JWT for API user authentication.',
-    },
-    {
-      pt: 'Usar PostgreSQL com SQLAlchemy e migrações para organizar a persistência e a evolução do banco.',
-      en: 'Use PostgreSQL with SQLAlchemy and migrations to organize persistence and database evolution.',
-    },
-    {
-      pt: 'Manter documentação Swagger, execução com Docker e uma rotina de qualidade verificável.',
-      en: 'Keep Swagger documentation, Docker-based execution, and a verifiable quality workflow.',
-    },
-  ],
-  implementation: {
-    pt: 'A implementação pública demonstra uma API REST com Flask, autenticação JWT, PostgreSQL com SQLAlchemy, migrações com Flask-Migrate/Alembic, Swagger/Flasgger, Docker/Docker Compose e organização modular.',
-    en: 'The public implementation demonstrates a Flask REST API, JWT authentication, PostgreSQL with SQLAlchemy, Flask-Migrate/Alembic migrations, Swagger/Flasgger, Docker/Docker Compose, and a modular organization.',
-  },
-  validation: {
-    pt: 'A validação inclui suíte de testes executável com Pytest, Ruff, pre-commit, Makefile, documentação e exemplos de execução e endpoints.',
-    en: 'Validation includes an executable Pytest suite, Ruff, pre-commit, Makefile, documentation, and execution and endpoint examples.',
-  },
-  result: {
-    pt: 'O projeto é tratado como concluído e reúne implementação observável, testes, autenticação, persistência, migrações, Docker e documentação em uma evidência principal de backend.',
-    en: 'The project is treated as completed and brings together observable implementation, testing, authentication, persistence, migrations, Docker, and documentation as a primary backend evidence.',
-  },
-  limitations: {
-    pt: 'O material de referência não apresenta métricas de produção; a avaliação deve se basear na implementação, na execução reproduzível, nos testes, na qualidade e na documentação observáveis.',
-    en: 'The reference material does not present production metrics; evaluation should be based on the observable implementation, reproducible execution, tests, quality checks, and documentation.',
-  },
-  evidence: [
-    {
-      pt: 'Repositório público com código, testes, documentação e exemplos de execução.',
-      en: 'Public repository with source code, tests, documentation, and execution examples.',
-    },
-  ],
-};
-
 const beadWiseSummary: Localized = {
   pt: 'Projeto em desenvolvimento que organiza discovery, especificações, protótipos, código e testes para investigar mecanismos de sistema Windows com critérios explícitos de prova, segurança e reversibilidade.',
   en: 'Project in development that organizes discovery, specifications, prototypes, source code, and tests to investigate Windows system mechanisms with explicit proof, safety, and reversibility criteria.',
@@ -136,79 +61,6 @@ const beadWiseEvidence: Localized[] = [
   { pt: 'validação por evidência', en: 'evidence-based validation' },
   { pt: 'mecanismos reversíveis/seguros', en: 'reversible/safe mechanisms' },
 ];
-
-const beadWiseCaseStudy: CaseStudyContent = {
-  maturity: {
-    observed: {
-      pt: 'Observado/implementado: a solução pública contém BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows e projetos de teste. Isso descreve estrutura de solution e testes observáveis, não funcionalidades de produto aprovadas.',
-      en: 'Observed/implemented: the public solution contains BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows, and test projects. This describes observable solution and test structure, not approved product functionality.',
-    },
-    prototyped: {
-      pt: 'Prototipado/evidência técnica: 40/40 harnesses foram executados em validação controlada. Essa evidência técnica não promove nenhuma capability a PROVEN (PROVEN = 0).',
-      en: 'Prototyped/technical evidence: 40/40 harnesses ran in controlled validation. This technical evidence does not promote any capability to PROVEN (PROVEN = 0).',
-    },
-    specified: {
-      pt: 'Especificado: há 234 Feature Specs, com 90 SPECIFIED; essas especificações não são funcionalidades implementadas.',
-      en: 'Specified: there are 234 Feature Specs, with 90 SPECIFIED; these specifications are not implemented features.',
-    },
-    planned: {
-      pt: 'Planejado/pesquisa/bloqueado/adiado: itens em RESEARCH, BLOCKED ou DEFERRED não constituem funcionalidade de produto.',
-      en: 'Planned/research/blocked/deferred: items in RESEARCH, BLOCKED, or DEFERRED are not product functionality.',
-    },
-    approved: {
-      pt: 'Promoção final: APPROVED = 0; nenhum backend final, UI, DI, IPC ou contratos finais foi promovido.',
-      en: 'Final promotion: APPROVED = 0; no final backend, UI, DI, IPC, or final contracts have been promoted.',
-    },
-  },
-  overview: {
-    pt: 'Projeto em desenvolvimento com evidência de engenharia real. O estado atual documenta estrutura observada da solution, especificações registradas e validação técnica controlada; esses elementos são distintos de funcionalidades finais de produto, que não foram promovidas.',
-    en: 'Project in development with real engineering evidence. The current state documents observed solution structure, recorded specifications, and controlled technical validation; these are distinct from final product functionality, which has not been promoted.',
-  },
-  context: {
-    pt: 'O repositório organiza discovery, feature specs, prototypes, src e tests para investigar um problema complexo de software Windows antes de promover hipóteses a implementação final.',
-    en: 'The repository organizes discovery, feature specs, prototypes, src, and tests to investigate a complex Windows software problem before promoting hypotheses to final implementation.',
-  },
-  built: {
-    pt: 'A solução pública contém BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows e projetos de teste, além de uma matriz de provas e uma fixture de processo controlado.',
-    en: 'The public solution contains BeadWise.App, BeadWise.Application, BeadWise.Core, BeadWise.Windows, and test projects, along with a proof matrix and a controlled-process fixture.',
-  },
-  decisions: [
-    {
-      pt: 'Separar discovery, especificações, protótipos, código e testes para manter o estado de cada hipótese explícito.',
-      en: 'Separate discovery, specifications, prototypes, source code, and tests so the state of each hypothesis stays explicit.',
-    },
-    {
-      pt: 'Usar critérios de prova e harnesses para validar mecanismos técnicos em ambiente controlado.',
-      en: 'Use proof criteria and harnesses to validate technical mechanisms in a controlled environment.',
-    },
-    {
-      pt: 'Priorizar mecanismos seguros e reversíveis antes de qualquer promoção para contratos e componentes finais.',
-      en: 'Prioritize safe and reversible mechanisms before any promotion to final contracts and components.',
-    },
-  ],
-  implementation: {
-    pt: 'A organização observada inclui uma solution C#/.NET com camadas de App, Application, Core e Windows, projetos de teste e uma fixture de processo controlado. Nenhum prototype é promovido automaticamente para backend final, UI, DI, IPC ou contratos finais.',
-    en: 'The observed organization includes a C#/.NET solution with App, Application, Core, and Windows layers, test projects, and a controlled-process fixture. No prototype is automatically promoted to final backend, UI, DI, IPC, or contracts.',
-  },
-  validation: {
-    pt: 'A Fase 2 técnica registrou 234 Feature Specs, 90 em SPECIFIED e 40/40 harnesses executados na verificação central, com provas envolvendo Win32/PInvoke, Registry com snapshot/rollback, Performance Counters, AMD ADL, UAC/admin e restart controlado de processo.',
-    en: 'The technical Phase 2 recorded 234 Feature Specs, 90 in SPECIFIED, and 40/40 harnesses executed in the central verification, with proofs involving Win32/PInvoke, Registry snapshot/rollback, Performance Counters, AMD ADL, UAC/admin, and controlled process restart.',
-  },
-  result: {
-    pt: 'O resultado comprovado é evidência de processo de engenharia, investigação e validação técnica. A documentação registra PROVEN = 0 e APPROVED = 0; o projeto permanece em desenvolvimento.',
-    en: 'The proven result is evidence of an engineering process, investigation, and technical validation. The documentation records PROVEN = 0 and APPROVED = 0; the project remains in development.',
-  },
-  limitations: {
-    pt: 'BeadWise não deve ser apresentado como produto final nem como 234 funcionalidades implementadas. Há capabilities em RESEARCH, BLOCKED ou DEFERRED, e prototypes ainda não equivalem a backend final, UI, DI, IPC ou contratos finais.',
-    en: 'BeadWise must not be presented as a final product or as 234 implemented features. Some capabilities remain in RESEARCH, BLOCKED, or DEFERRED, and prototypes are not equivalent to final backend, UI, DI, IPC, or contracts.',
-  },
-  evidence: [
-    {
-      pt: 'Repositório público com discovery, especificações, protótipos, solution, testes, matriz de provas e fixture de processo controlado.',
-      en: 'Public repository with discovery, specifications, prototypes, solution, tests, proof matrix, and controlled-process fixture.',
-    },
-  ],
-};
 
 const taskApiSummary: Localized = {
   pt: 'Projeto acadêmico individual de uma API REST para gerenciamento de tarefas, desenvolvido com Java e Spring Boot. Implementa operações de CRUD e persistência em MySQL por meio do Spring Data JPA, com coleção Postman para validação dos endpoints.',
@@ -275,7 +127,6 @@ export const projects: Project[] = [
       pt: 'Ver o projeto Purchase Orders API no GitHub',
       en: 'View the Purchase Orders API project on GitHub',
     },
-    caseStudy: purchaseOrdersCaseStudy,
   },
   {
     slug: 'beadwise',
@@ -306,7 +157,6 @@ export const projects: Project[] = [
       pt: 'Ver o projeto BeadWise no GitHub',
       en: 'View the BeadWise project on GitHub',
     },
-    caseStudy: beadWiseCaseStudy,
   },
   {
     slug: 'portfolio',
@@ -373,12 +223,6 @@ export const projects: Project[] = [
     },
   },
 ];
-
-function hasCaseStudy(project: Project): project is CaseStudyProject {
-  return project.caseStudy !== undefined;
-}
-
-export const caseStudyProjects: CaseStudyProject[] = projects.filter(hasCaseStudy);
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug);

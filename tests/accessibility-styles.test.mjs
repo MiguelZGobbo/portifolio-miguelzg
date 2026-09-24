@@ -35,15 +35,12 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
-test('uses the dark navigation surface for mobile utility controls and their focus indicator', () => {
-  assert.match(
-    stylesheet,
-    /\[data-theme="dark"\] nav \.nav-controls \{[\s\S]*background: rgba\(38, 30, 22, 0\.92\);[\s\S]*\}/,
-  );
-  assert.match(
-    stylesheet,
-    /\[data-theme="dark"\] nav \.nav-btn:focus-visible \{[\s\S]*outline-color: var\(--brown-dark\);[\s\S]*\}/,
-  );
+test('keeps navigation restrained and its utility controls usable on mobile in both themes', () => {
+  const editorialStyles = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
+
+  assert.match(editorialStyles, /background:\s*var\(--background\);[\s\S]*border-bottom:\s*1px solid var\(--line\);/);
+  assert.match(editorialStyles, /nav \.nav-btn\s*\{[^}]*min-width:\s*34px;[^}]*min-height:\s*34px;/);
+  assert.match(editorialStyles, /\.nav-btn:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--accent-strong\);/);
 });
 
 test('uses theme-specific error tokens with compliant text and indicator contrast', () => {
@@ -53,9 +50,9 @@ test('uses theme-specific error tokens with compliant text and indicator contras
   const lightError = hexValue(lightRoot, '--error');
   const darkError = hexValue(darkRoot, '--error');
   const lightSurface = hexValue(lightRoot, '--surface');
-  const lightPage = hexValue(lightRoot, '--cream');
+  const lightPage = hexValue(lightRoot, '--background');
   const darkSurface = hexValue(darkRoot, '--surface');
-  const darkPage = hexValue(darkRoot, '--cream');
+  const darkPage = hexValue(darkRoot, '--background');
 
   assert.match(darkBody, /background:\s*var\(--cream\);/);
   assert.notEqual(lightError.toLowerCase(), darkError.toLowerCase());
@@ -84,22 +81,19 @@ test('keeps the local-preview contact status visibly neutral', () => {
 });
 
 test('keeps the reduced-motion contract after component motion and disables decorative movement', () => {
-  const reducedMotionStart = stylesheet.lastIndexOf('@media (prefers-reduced-motion: reduce)');
+  const reducedMotionBlocks = [...stylesheet.matchAll(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*?)\n\}/g)];
+  const reducedMotionStyles = reducedMotionBlocks.map(([, block]) => block).join('\n');
 
-  assert.ok(reducedMotionStart > stylesheet.indexOf('nav .logo'));
-  assert.ok(reducedMotionStart > stylesheet.indexOf('.cv-actions .btn'));
-  assert.ok(reducedMotionStart > stylesheet.indexOf('#contato footer'));
-
-  const reducedMotionStyles = stylesheet.slice(reducedMotionStart);
-  assert.match(reducedMotionStyles, /html\s*\{[^}]*scroll-behavior:\s*auto;/);
+  assert.ok(reducedMotionBlocks.length > 0);
+  assert.match(reducedMotionBlocks[0][1], /html\s*\{[^}]*scroll-behavior:\s*auto;/);
   assert.match(
-    reducedMotionStyles,
+    reducedMotionBlocks[0][1],
     /html\.js \.reveal[\s\S]*?opacity:\s*1;[\s\S]*?transform:\s*none;[\s\S]*?transition:\s*none;/,
   );
-  assert.match(reducedMotionStyles, /\.bg-wave,\s*\.bg-raw\s*\{[^}]*display:\s*none;/);
-  assert.match(reducedMotionStyles, /\.nav-pill[\s\S]*?transition:\s*none;/);
-  assert.match(reducedMotionStyles, /\.btn:hover[\s\S]*?transform:\s*none;/);
-  assert.match(reducedMotionStyles, /nav \.logo[\s\S]*?\.cv-actions \.btn[\s\S]*?#contato footer[\s\S]*?transition:\s*none;/);
+  assert.match(reducedMotionBlocks[0][1], /\.bg-wave\s*\{[^}]*display:\s*none;/);
+  assert.match(reducedMotionBlocks[0][1], /\.nav-pill[\s\S]*?transition:\s*none;/);
+  assert.match(reducedMotionBlocks[0][1], /\.btn:hover[\s\S]*?transform:\s*none;/);
+  assert.match(reducedMotionStyles, /nav[\s\S]*?\.cv-actions \.btn[\s\S]*?#contato footer[\s\S]*?transition:\s*none;/);
 });
 
 test('sizes direct interactive controls and preserves mobile utility targets', () => {
@@ -118,41 +112,32 @@ test('sizes direct interactive controls and preserves mobile utility targets', (
 
 test('contains decorative overflow and protects anchor and focus destinations from fixed navigation', () => {
   const wave = ruleFor('.bg-wave');
-  const raw = ruleFor('.bg-raw');
 
   assert.doesNotMatch(wave, /width:\s*100vw;/);
-  assert.doesNotMatch(raw, /width:\s*100vw;/);
   assert.match(wave, /overflow:\s*clip;/);
-  assert.match(raw, /overflow:\s*clip;/);
   assert.match(wave, /contain:\s*paint;/);
-  assert.match(raw, /contain:\s*paint;/);
-  for (const variant of ['.raw-1', '.raw-2', '.raw-3', '.raw-4']) {
-    assert.doesNotMatch(ruleFor(variant), /animation:/, `${variant} must remain a stationary clipping container`);
-    assert.match(ruleFor(`${variant} svg`), /animation:/, `${variant} should animate only its clipped SVG child`);
-  }
-  assert.match(stylesheet, /\.snap-section,[\s\S]*?scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
-  assert.match(stylesheet, /#case-study-content\s*\{[^}]*scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
+  assert.doesNotMatch(stylesheet, /\.bg-raw|\.raw-[1-4]/);
+  assert.match(ruleFor('.snap-section'), /scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
   assert.doesNotMatch(stylesheet, /main:focus/);
   assert.match(stylesheet, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brown-dark\);/);
 });
 
-test('clips the static profile frame inside its own layout box', () => {
-  const heroPhoto = ruleFor('.hero-photo');
-  const heroBorder = ruleFor('.hero-photo::before');
+test('keeps the open portrait frame visible on desktop and smaller on mobile', () => {
+  const editorialStyles = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
-  assert.match(heroPhoto, /overflow:\s*clip;/);
-  assert.match(heroPhoto, /padding:\s*4px;/);
-  assert.match(heroBorder, /content:\s*none;/);
-  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*\.hero-photo\s*\{[^}]*padding:\s*0;/);
+  assert.match(editorialStyles, /\.hero-photo\s*\{[^}]*overflow:\s*visible;/);
+  assert.match(editorialStyles, /\.hero-photo::before,\s*\.hero-photo::after\s*\{[^}]*width:\s*36px;[^}]*height:\s*36px;[^}]*var\(--accent\)/);
+  assert.match(editorialStyles, /\.hero-photo::before\s*\{[^}]*top:\s*-8px;[^}]*left:\s*-8px;[^}]*border-top-width:\s*1\.5px;[^}]*border-left-width:\s*1\.5px;/);
+  assert.match(editorialStyles, /\.hero-photo::after\s*\{[^}]*right:\s*-8px;[^}]*bottom:\s*-8px;[^}]*border-right-width:\s*1\.5px;[^}]*border-bottom-width:\s*1\.5px;/);
+  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::before,\s*\.hero-photo::after\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/);
+  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::before\s*\{[^}]*top:\s*-5px;[^}]*left:\s*-5px;[^}]*border-top-width:\s*1px;[^}]*border-left-width:\s*1px;/);
+  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::after\s*\{[^}]*right:\s*-5px;[^}]*bottom:\s*-5px;[^}]*border-right-width:\s*1px;[^}]*border-bottom-width:\s*1px;/);
 });
 
-test('keeps keyboard focus scrolling immediate and case-study grid items shrinkable', () => {
+test('keeps keyboard focus scrolling immediate', () => {
   assert.match(ruleFor('html'), /scroll-behavior:\s*auto;/);
   assert.doesNotMatch(ruleFor('html'), /scroll-behavior:\s*smooth;/);
   assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*html\s*\{[^}]*scroll-padding-bottom:\s*152px;/);
-  assert.match(ruleFor('.case-study > *'), /min-width:\s*0;/);
-  assert.match(ruleFor('.case-study-maturity-list > *'), /min-width:\s*0;/);
-  assert.match(ruleFor('.case-study-maturity-list dd'), /overflow-wrap:\s*anywhere;/);
 });
 
 test('uses an intentional compact brand instead of clipping the full mobile logo', () => {
@@ -162,27 +147,20 @@ test('uses an intentional compact brand instead of clipping the full mobile logo
 });
 
 test('keeps the five-item navigation inside its tablet and notebook container', () => {
-  const compactNavigation = stylesheet.match(
-    /@media \(min-width: 641px\) and \(max-width: 1023px\)\s*\{([\s\S]*?)\n\}/,
-  )?.[1] ?? '';
+  const compactNavigation = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
-  assert.match(compactNavigation, /nav\s*\{[^}]*left:\s*16px;[^}]*right:\s*16px;[^}]*padding:\s*0 0\.75rem;/);
-  assert.match(compactNavigation, /nav \.logo-full\s*\{[^}]*display:\s*none;/);
-  assert.match(compactNavigation, /nav \.logo-mobile\s*\{[^}]*display:\s*inline;/);
-  assert.match(compactNavigation, /\.nav-links a\s*\{[^}]*font-size:\s*0\.68rem;[^}]*padding:\s*0\.4rem 0\.35rem;/);
+  assert.match(compactNavigation, /@media \(min-width: 641px\) and \(max-width: 1023px\)[\s\S]*nav\s*\{[^}]*left:\s*0;[^}]*right:\s*0;[^}]*padding-inline:\s*1\.25rem;/);
+  assert.match(compactNavigation, /\.nav-links a\s*\{[^}]*padding-inline:\s*0\.2rem;[^}]*font-size:\s*0\.76rem;/);
 });
 
-test('keeps long showcase content inside flexible tracks and exposes mobile navigation overflow', () => {
-  const projectPanel = ruleFor('.project-showcase-panel');
-  const projectName = ruleFor('.project-showcase-name');
-  const projectSummary = ruleFor('.project-showcase-summary');
-  const projectNavigation = stylesheet.match(
-    /(?:^|\n)\.project-showcase-nav\s*\{([^}]*)\}/m,
-  )?.[1];
+test('keeps editorial project entries readable when names and summaries are long', () => {
+  const projectEntry = ruleFor('.project-entry');
+  const projectName = ruleFor('.project-name');
+  const projectSummary = ruleFor('.project-summary');
+  const projectActions = ruleFor('.project-actions');
 
-  assert.match(projectPanel, /min-width:\s*0;/);
+  assert.match(projectEntry, /min-width:\s*0;/);
   assert.match(projectName, /overflow-wrap:\s*anywhere;/);
   assert.match(projectSummary, /overflow-wrap:\s*anywhere;/);
-  assert.ok(projectNavigation, 'Expected the base .project-showcase-nav rule');
-  assert.match(projectNavigation, /overflow-x:\s*auto;/);
+  assert.match(projectActions, /flex-wrap:\s*wrap;/);
 });

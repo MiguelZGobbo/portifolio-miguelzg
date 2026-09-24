@@ -1,0 +1,52 @@
+---
+import Icon from './Icon.astro';
+import type { Project } from '../data/projects';
+import { translations, type Lang } from '../lib/i18n';
+
+interface Props {
+  projects: Project[];
+  lang?: Lang;
+}
+
+const { projects, lang = 'pt' } = Astro.props;
+const dict = translations[lang] as Record<string, string>;
+---
+
+<div class="project-list">
+  {
+    projects.map((project) => (
+      <article
+        class="project-entry reveal"
+        data-project={project.slug}
+        data-hierarchy={project.hierarchy}
+        aria-labelledby={`project-${project.slug}`}
+      >
+        <div class="project-entry-copy">
+          <h3 class="project-name" id={`project-${project.slug}`}>{project.name[lang]}</h3>
+          <p class="project-state">{project.state[lang]}</p>
+          <p class="project-summary">{project.showcase.summary[lang]}</p>
+
+          <ul class="project-technologies" aria-label={dict['projects.technologies']}>
+            {project.showcase.technologies.map((technology) => <li>{technology}</li>)}
+          </ul>
+          <ul class="project-aspects" aria-label={dict['projects.aspects']}>
+            {project.showcase.aspects.map((aspect) => <li>{aspect[lang]}</li>)}
+          </ul>
+        </div>
+
+        <div class="project-actions">
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-link project-github-link"
+            aria-label={project.ariaLabel[lang]}
+          >
+            <span>{dict['projects.github']}</span>
+            <Icon name="external" size={12} strokeWidth={2} />
+          </a>
+        </div>
+      </article>
+    ))
+  }
+</div>

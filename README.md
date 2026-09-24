@@ -1,6 +1,6 @@
 # 👨‍💻 Portfólio Miguel Zager Gobbo
 
-Site pessoal estático desenvolvido com **Astro**, **CSS** e **JavaScript**. A página inicial reúne apresentação, evidências de projetos, competências, formação, currículo e contato. Os projetos com profundidade suficiente também possuem estudos de caso em rotas próprias.
+Site pessoal estático desenvolvido com **Astro**, **CSS** e **JavaScript**. A página inicial reúne apresentação, projetos, competências, formação, currículo e contato em uma leitura contínua.
 
 ![Astro](https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
@@ -16,37 +16,32 @@ A homepage mantém esta ordem de conteúdo:
 4. **Sobre mim** — perfil, formação e acesso ao currículo em português ou inglês.
 5. **Contato** — formulário, e-mail, LinkedIn e GitHub.
 
-O conteúdo público está disponível em seis rotas canônicas:
+O conteúdo público está disponível em duas rotas canônicas:
 
 - /portifolio-miguelzg/
 - /portifolio-miguelzg/en/
-- /portifolio-miguelzg/projetos/purchase-orders-api/
-- /portifolio-miguelzg/projetos/beadwise/
-- /portifolio-miguelzg/en/projects/purchase-orders-api/
-- /portifolio-miguelzg/en/projects/beadwise/
-
-Português permanece nas rotas públicas originais e inglês usa o prefixo `/en/`. A troca de idioma é uma navegação nativa entre páginas estáticas equivalentes e preserva, quando disponível, a seção da homepage ou o estudo de caso atual. Os links entre a homepage e suas seções usam âncoras e rolagem nativas do documento. Os links de repositório abrem o GitHub em uma nova aba; as páginas de estudo de caso têm navegação própria de retorno à homepage.
+Português permanece na rota principal e inglês usa o prefixo `/en/`. A troca de idioma é uma navegação nativa entre páginas estáticas equivalentes e preserva a seção atual quando disponível. As seções usam âncoras e rolagem nativas; os links dos projetos abrem seus repositórios no GitHub em uma nova aba.
 
 ## Funcionalidades atuais
 
 - Tema claro/escuro com preferência persistida no navegador.
 - Rotas estáticas independentes em PT/EN, com idioma definido pela URL, histórico e links profundos copiáveis.
 - Navegação responsiva por Início, Projetos, Competências, Sobre e Contato.
-- Animações de reveal progressivo, respeitando prefers-reduced-motion.
+- Manchas desfocadas que acompanham as seções e animações de reveal, respeitando `prefers-reduced-motion`.
 - Skip link, foco visível, rótulos acessíveis e HTML estático disponível antes das melhorias de JavaScript.
 - Módulos de navegador separados para tema, navegação observada, reveals, clipboard e formulário de contato.
-- Títulos, descrições, canonical, hreflang, Open Graph, Twitter e JSON-LD localizados e renderizados no build, com sitemap de seis URLs.
+- Títulos, descrições, canonical, hreflang, Open Graph, Twitter e JSON-LD localizados e renderizados no build, com sitemap de duas URLs.
 
 O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêiner de rolagem interno.
 
 ## Tecnologias
 
-- **Astro** — componentes, geração estática e rotas de estudo de caso.
+- **Astro** — componentes e geração das páginas estáticas em PT/EN.
 - **TypeScript** — modelo tipado dos projetos e conteúdo bilíngue.
 - **CSS** — identidade visual, layout responsivo e ondas decorativas.
 - **JavaScript ES modules** — pequenas melhorias de comportamento no HTML gerado.
 - **EmailJS** — carregado sob demanda pelo formulário de contato.
-- **@fontsource-variable** — fontes Playfair Display e DM Sans auto-hospedadas.
+- **@fontsource-variable** — IBM Plex Sans auto-hospedada.
 - **@astrojs/sitemap** — geração do sitemap durante o build.
 
 ## Como executar
@@ -75,9 +70,9 @@ Para testar a saída estática localmente:
 
 | Script | Uso |
 | --- | --- |
-| npm test | Gera as seis páginas estáticas e executa os testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
+| npm test | Gera as duas páginas estáticas e executa os testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
 | npm run check | Executa as verificações e diagnósticos do Astro. |
-| npm run build | Gera as seis páginas estáticas, o sitemap e os assets em dist/. |
+| npm run build | Gera as duas páginas estáticas, o sitemap e os assets em dist/. |
 | npm run dev | Inicia o servidor de desenvolvimento do Astro. |
 | npm run preview | Serve localmente o build produzido. |
 | npm run astro | Expõe a CLI do Astro para comandos adicionais. |
@@ -94,13 +89,12 @@ Para testar a saída estática localmente:
     │   ├── assets/                # Assets processados pelo Astro
     │   ├── components/
     │   │   ├── home/              # Seções da homepage
-    │   │   ├── ProjectShowcase.astro
-    │   │   ├── ProjectCaseStudy.astro
+    │   │   ├── ProjectList.astro
     │   │   ├── Nav.astro
     │   │   ├── ThemeToggle.astro
     │   │   └── demais componentes reutilizáveis
     │   ├── data/
-    │   │   ├── projects.ts        # Hierarquia, evidências e estudos de caso
+    │   │   ├── projects.ts        # Hierarquia e apresentação dos projetos
     │   │   └── skills.ts
     │   ├── layouts/
     │   │   └── BaseLayout.astro   # Head, metadados e inicialização
@@ -108,8 +102,7 @@ Para testar a saída estática localmente:
     │   │   └── i18n.ts            # Dicionários PT/EN
     │   ├── pages/
     │   │   ├── index.astro        # Homepage em português
-    │   │   ├── projetos/[slug].astro
-    │   │   └── en/                # Homepage e estudos de caso em inglês
+    │   │   └── en/index.astro     # Homepage em inglês
     │   ├── scripts/               # Módulos de comportamento do navegador
     │   └── styles/
     │       └── global.css
@@ -120,7 +113,7 @@ Para testar a saída estática localmente:
 
 ## Estado de escopo
 
-A Fase 8 de polimento visual está consolidada em [docs/phases/phase-8-consolidation.md](docs/phases/phase-8-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 97 testes além da auditoria funcional e visual em navegador. A próxima etapa é a Fase 9 — auditoria final independente — conforme [docs/phases/phase-9-handoff.md](docs/phases/phase-9-handoff.md).
+O build atual publica duas páginas estáticas com metadados próprios. [ADR-0003](docs/adr/ADR-0003-editorial-homepages-without-case-studies.md) registra a remoção das rotas de estudo de caso e substitui as partes correspondentes das decisões anteriores.
 
 ## Autor
 

@@ -1,21 +1,15 @@
-function sectionCenter(section) {
-  return section.top + section.height / 2;
-}
-
 /**
- * Finds the observed navigation destination nearest to the viewport midpoint.
- * Destinations are intentionally supplied as plain geometry so this calculation
- * stays independent from the browser DOM.
+ * Finds the last observed section whose top has crossed the viewport midpoint.
+ * This keeps the active destination meaningful when a section is taller than
+ * the viewport. Destinations stay as plain geometry for easy testing.
  */
 export function findActiveSection(sections, scrollTop, viewportHeight) {
   if (!sections.length) return null;
 
   const midpoint = scrollTop + viewportHeight / 2;
-  return sections.reduce((nearest, section) => (
-    Math.abs(sectionCenter(section) - midpoint) < Math.abs(sectionCenter(nearest) - midpoint)
-      ? section
-      : nearest
-  )).id;
+  return sections.reduce((active, section) => (
+    section.top <= midpoint && section.top >= active.top ? section : active
+  ), sections[0]).id;
 }
 
 export function updateNavigationPill(pill, link) {

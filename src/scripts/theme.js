@@ -35,7 +35,7 @@ export function initTheme() {
 
   const applyTheme = (theme, persist = true) => {
     document.documentElement.setAttribute('data-theme', theme);
-    setMetaContent('theme-color', theme === 'dark' ? '#241C14' : '#F8F0E5');
+    setMetaContent('theme-color', theme === 'dark' ? '#202629' : '#F5F6F4');
     updateControlAria();
     if (persist) savePreference('theme', theme);
   };

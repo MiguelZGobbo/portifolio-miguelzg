@@ -1,5 +1,5 @@
 ---
-import ProjectShowcase from '../ProjectShowcase.astro';
+import ProjectList from '../ProjectList.astro';
 import SectionTitle from '../SectionTitle.astro';
 import { projects } from '../../data/projects';
 import type { Lang } from '../../lib/i18n';
@@ -7,15 +7,14 @@ import type { Lang } from '../../lib/i18n';
 interface Props {
   lang?: Lang;
   id: string;
-  caseStudyHrefs: Record<string, string>;
 }
 
-const { lang = 'pt', id, caseStudyHrefs } = Astro.props;
+const { lang = 'pt', id } = Astro.props;
 ---
 
 <section class="snap-section home-section home-section--projects" id={id}>
   <div class="section-inner">
-    <SectionTitle lang={lang} labelKey="projects.label" titleKey="projects.title" icon="folder" />
-    <ProjectShowcase projects={projects} lang={lang} caseStudyHrefs={caseStudyHrefs} />
+    <SectionTitle lang={lang} labelKey="projects.label" titleKey="projects.title" />
+    <ProjectList projects={projects} lang={lang} />
   </div>
 </section>

@@ -1,19 +1,16 @@
 ---
-import Icon from './Icon.astro';
 import { translate, type Lang } from '../lib/i18n';
 
 interface Props {
   labelKey: string;
   titleKey: string;
-  icon: Parameters<typeof Icon>[0]['name'];
   lang?: Lang;
 }
 
-const { labelKey, titleKey, icon, lang = 'pt' } = Astro.props;
+const { labelKey, titleKey, lang = 'pt' } = Astro.props;
 ---
 
-<div class="section-label reveal" data-i18n={labelKey}>{translate(lang, labelKey)}</div>
-<h2 class="section-title reveal">
-  <Icon name={icon} size={22} strokeWidth={1.8} />
-  <span data-i18n={titleKey}>{translate(lang, titleKey)}</span>
-</h2>
+<div class="section-heading reveal">
+  <h2 class="section-title"><span data-i18n={titleKey}>{translate(lang, titleKey)}</span></h2>
+  <p class="section-description" data-i18n={labelKey}>{translate(lang, labelKey)}</p>
+</div>

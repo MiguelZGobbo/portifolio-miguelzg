@@ -1,5 +1,4 @@
 ---
-import Icon from './Icon.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import LangToggle from './LangToggle.astro';
 import { translations, type Lang } from '../lib/i18n';
@@ -29,11 +28,11 @@ const {
 const dict = translations[lang] as Record<string, string>;
 
 const links = [
-  { id: sectionIds.home, section: 'home', translationId: 'home', icon: 'home' },
-  { id: sectionIds.projects, section: 'projects', translationId: 'projetos', icon: 'folder' },
-  { id: sectionIds.skills, section: 'skills', translationId: 'skills', icon: 'code' },
-  { id: sectionIds.about, section: 'about', translationId: 'sobre', icon: 'user' },
-  { id: sectionIds.contact, section: 'contact', translationId: 'contato', icon: 'mail' },
+  { id: sectionIds.home, section: 'home', translationId: 'home' },
+  { id: sectionIds.projects, section: 'projects', translationId: 'projetos' },
+  { id: sectionIds.skills, section: 'skills', translationId: 'skills' },
+  { id: sectionIds.about, section: 'about', translationId: 'sobre' },
+  { id: sectionIds.contact, section: 'contact', translationId: 'contato' },
 ] as const;
 const observedSectionHrefs = alternateSectionHrefs && Object.fromEntries(
   (Object.entries(sectionIds) as [RouteSection, string][])
@@ -60,8 +59,6 @@ const observedSectionHrefs = alternateSectionHrefs && Object.fromEntries(
             aria-label={dict[`nav.${link.translationId}.aria`]}
           >
             <span class="nav-text" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
-            <Icon name={link.icon} size={15} strokeWidth={2.2} class="nav-icon" />
-            <span class="nav-tooltip" data-i18n={`nav.${link.translationId}`}>{dict[`nav.${link.translationId}`]}</span>
           </a>
         ))
       }

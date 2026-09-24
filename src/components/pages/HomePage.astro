@@ -7,8 +7,7 @@ import SkillsSection from '../home/SkillsSection.astro';
 import Nav from '../Nav.astro';
 import Waves from '../Waves.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { caseStudyProjects } from '../../data/projects';
-import { caseStudyPath, homePath, pageUrl, routeConfig, type RouteSection } from '../../lib/routes';
+import { homePath, pageUrl, routeConfig, type RouteSection } from '../../lib/routes';
 import { translations, type Lang } from '../../lib/i18n';
 
 interface Props {
@@ -27,9 +26,6 @@ const alternateSectionHrefs = Object.fromEntries(
     .filter((section) => section !== 'home')
     .map((section) => [section, homePath(base, alternateLang, section)]),
 ) as Partial<Record<RouteSection, string>>;
-const caseStudyHrefs = Object.fromEntries(
-  caseStudyProjects.map((project) => [project.slug, caseStudyPath(base, lang, project.slug)]),
-);
 const canonicalUrl = pageUrl(Astro.site.origin, homePath(base, lang));
 const alternateUrls = {
   'pt-BR': pageUrl(Astro.site.origin, homePath(base, 'pt')),
@@ -71,7 +67,6 @@ const siteName = lang === 'pt' ? 'Portfólio de Miguel Zager Gobbo' : 'Miguel Za
   description={description}
   canonicalUrl={canonicalUrl}
   alternateUrls={alternateUrls}
-  pageKind="website"
   imageUrl={imageUrl}
   imageAlt={dict['img.profile.alt']}
   siteName={siteName}
@@ -87,7 +82,7 @@ const siteName = lang === 'pt' ? 'Portfólio de Miguel Zager Gobbo' : 'Miguel Za
 
   <main class="home-main">
     <HeroSection lang={lang} />
-    <ProjectsSection lang={lang} id={sections.projects} caseStudyHrefs={caseStudyHrefs} />
+    <ProjectsSection lang={lang} id={sections.projects} />
     <SkillsSection lang={lang} id={sections.skills} />
     <ProfileSection lang={lang} id={sections.about} />
     <ContactSection lang={lang} id={sections.contact} />

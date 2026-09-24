@@ -32,9 +32,9 @@ test('renders the simplified hero copy and canonical homepage hierarchy', () => 
   assert.match(page, />Desenvolvedor de Software<\/h1>/);
   assert.match(
     page,
-    /Estudo Engenharia de Software e tenho preferência por desenvolvimento backend\. Nos meus projetos, procuro entender o problema, estruturar a implementação e verificar o resultado de cada etapa antes de avançar\./,
+    /Sou o Miguel, estudante de Engenharia de Software com foco em desenvolvimento backend\. Nos meus projetos, procuro entender bem o problema antes de partir para o código, estruturar a solução e validar cada etapa antes de avançar\. Gosto de trabalhar com critérios claros e manter o processo organizado do início ao fim\./,
   );
-  assert.match(page, /Busco estágio e oportunidades iniciais em desenvolvimento de software\./);
+  assert.match(page, /Atualmente, busco uma oportunidade de estágio ou início de carreira em desenvolvimento de software\./);
   assert.doesNotMatch(hero, />Miguel Zager Gobbo<\/p>/);
   assert.doesNotMatch(hero, /class="hero-actions/);
   assert.doesNotMatch(hero, /href="#/);
@@ -59,8 +59,7 @@ test('builds both localized homepages with their own visible content and fragmen
     assert.notEqual(englishPage.indexOf(`id="${id}"`), -1, `expected English #${id} to be present`);
   }
   assert.equal(englishPage.indexOf('id="resume"'), -1, 'resume must not remain an independent English anchor');
-  assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/purchase-orders-api\/"/);
-  assert.match(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/beadwise\/"/);
+  assert.doesNotMatch(englishPage, /href="\/portifolio-miguelzg\/en\/projects\/[^\"]+\/"/);
   assert.doesNotMatch(englishPage, /localStorage\.getItem\('lang'\)/);
   assert.doesNotMatch(englishPage, /navigator\.language/);
   assert.doesNotMatch(englishPage, /setAttribute\('data-lang'/);
@@ -89,43 +88,33 @@ test('renders direct reciprocal language links with section-specific alternate d
   assert.match(englishLinks, /href="#contact"[^>]*data-language-alternate="\/portifolio-miguelzg\/#contato"/);
 });
 
-test('renders one navigable showcase with the canonical project order', () => {
+test('renders all projects in a static editorial list with the canonical hierarchy', () => {
   const projectsSection = sectionMarkup('projetos');
+  const projectOrder = [...projectsSection.matchAll(/data-project="([^"]+)"/g)].map(([, slug]) => slug);
   const purchaseOrders = projectMarkup('purchase-orders-api');
   const beadWise = projectMarkup('beadwise');
   const portfolio = projectMarkup('portfolio');
   const taskApi = projectMarkup('task-management-api');
 
-  assert.equal((projectsSection.match(/data-project-showcase/g) ?? []).length, 1);
-  assert.equal((projectsSection.match(/data-project-panel/g) ?? []).length, 4);
-  assert.match(projectsSection, /data-project-counter[^>]*>01 \/ 04</);
-  assert.match(projectsSection, /data-project-direction="previous"[^>]*disabled/);
-  assert.match(projectsSection, /data-project-direction="next"/);
-  assert.match(purchaseOrders, /data-project-panel[^>]*data-active="true"/);
-  for (const inactiveProject of [beadWise, portfolio, taskApi]) {
-    assert.doesNotMatch(inactiveProject, /data-project-panel[^>]*(?:aria-hidden|inert)/);
-  }
+  assert.deepEqual(projectOrder, ['purchase-orders-api', 'beadwise', 'portfolio', 'task-management-api']);
+  assert.match(projectsSection, /class="project-list"/);
+  assert.doesNotMatch(projectsSection, /data-project-showcase|data-project-panel|data-project-direction|data-project-select/);
+  assert.match(purchaseOrders, /data-project="purchase-orders-api"[^>]*data-hierarchy="H1"/);
+  assert.match(beadWise, /data-project="beadwise"[^>]*data-hierarchy="H2"/);
+  assert.match(portfolio, /data-project="portfolio"[^>]*data-hierarchy="H3"/);
+  assert.match(taskApi, /data-project="task-management-api"[^>]*data-hierarchy="H3"/);
 
-  assert.match(purchaseOrders, /href="\/portifolio-miguelzg\/projetos\/purchase-orders-api\/"/);
-  assert.match(beadWise, /href="\/portifolio-miguelzg\/projetos\/beadwise\/"/);
-  assert.doesNotMatch(portfolio, /project-case-study-link/);
-  assert.doesNotMatch(taskApi, /project-case-study-link/);
-  assert.doesNotMatch(projectsSection, /\bproject-(?:level|state|facts?)\b/);
-  assert.doesNotMatch(projectsSection, />Origem</);
-  assert.doesNotMatch(projectsSection, />Contribuição</);
-  assert.doesNotMatch(projectsSection, />em desenvolvimento</);
+  assert.doesNotMatch(projectsSection, /project-case-study-link/);
+  assert.match(beadWise, />em desenvolvimento</);
 });
 
-test('renders accessible direct project navigation and a polite change announcement', () => {
+test('keeps only repository actions on all project entries', () => {
   const projectsSection = sectionMarkup('projetos');
-  const directNavigation = projectsSection.match(/<div class="project-showcase-nav"[^>]*role="navigation"[\s\S]*?<\/div>/)?.[0] ?? '';
-
-  assert.match(projectsSection, /data-project-announcement[^>]*role="status"[^>]*aria-live="polite"/);
-  assert.match(projectsSection, /aria-label="Projeto anterior"/);
-  assert.match(projectsSection, /aria-label="Próximo projeto"/);
-  assert.equal((directNavigation.match(/data-project-select=/g) ?? []).length, 4);
-  assert.match(directNavigation, /data-project-select="0"[^>]*aria-current="true"/);
-  assert.match(directNavigation, /data-project-select="1"[^>]*aria-controls="project-panel-beadwise"/);
+  for (const slug of ['purchase-orders-api', 'beadwise', 'portfolio', 'task-management-api']) {
+    assert.match(projectMarkup(slug), /class="project-link project-github-link"/);
+  }
+  assert.doesNotMatch(projectsSection, /project-case-study-link|Ver estudo de caso/);
+  assert.doesNotMatch(projectsSection, /aria-live="polite"/);
 });
 
 test('keeps global navigation focused on home, projects, skills, profile, and contact', () => {
@@ -159,6 +148,7 @@ test('renders named utility controls and preserves ordered in-page destinations'
   const links = page.match(/<div class="nav-links">([\s\S]*?)<\/div>/)?.[1] ?? '';
   const destinations = [...links.matchAll(/href="([^"]+)"/g)].map(([, href]) => href);
   assert.deepEqual(destinations, ['#home', '#projetos', '#competencias', '#sobre', '#contato']);
+  assert.doesNotMatch(links, /nav-icon|nav-tooltip|<svg/);
   assert.match(links, />Início<\/span>/);
   assert.match(links, />Competências<\/span>/);
   assert.doesNotMatch(links, />Currículo<\/span>/);

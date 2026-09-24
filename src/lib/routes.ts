@@ -5,7 +5,6 @@ export type RouteSection = 'home' | 'projects' | 'skills' | 'about' | 'contact';
 export const routeConfig = {
   pt: {
     home: '',
-    caseStudySegment: 'projetos',
     sections: {
       home: 'home',
       projects: 'projetos',
@@ -16,7 +15,6 @@ export const routeConfig = {
   },
   en: {
     home: 'en',
-    caseStudySegment: 'en/projects',
     sections: {
       home: 'home',
       projects: 'projects',
@@ -36,20 +34,9 @@ function pathFor(base: string, segment: string): string {
   return `${normalizedBase(base)}${segment ? `/${segment}` : ''}/`;
 }
 
-function validSlug(slug: string): boolean {
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug);
-}
-
 export function homePath(base: string, lang: Lang, section?: RouteSection): string {
   const path = pathFor(base, routeConfig[lang].home);
   return section ? `${path}#${routeConfig[lang].sections[section]}` : path;
-}
-
-export function caseStudyPath(base: string, lang: Lang, slug: string): string {
-  if (typeof slug !== 'string' || !validSlug(slug)) {
-    throw new TypeError('Case-study slug must be a non-empty URL-safe identifier.');
-  }
-  return pathFor(base, `${routeConfig[lang].caseStudySegment}/${slug}`);
 }
 
 export function pageUrl(siteBase: string, path: string): string {
