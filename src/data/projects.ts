@@ -8,6 +8,7 @@ export type ProjectStateKey = 'completed' | 'in-development' | 'active';
 export type ProjectDecision = 'INCLUDE';
 
 export interface ProjectShowcaseContent {
+  kind: Localized;
   summary: Localized;
   technologies: string[];
   aspects: Localized[];
@@ -110,6 +111,7 @@ export const projects: Project[] = [
     evidence: purchaseOrdersEvidence,
     stack: ['Python', 'Flask', 'PostgreSQL', 'SQLAlchemy', 'JWT', 'Docker', 'Pytest'],
     showcase: {
+      kind: { pt: 'API REST · Backend', en: 'REST API · Backend' },
       summary: {
         pt: 'API REST para gerenciamento de pedidos de compra e seus itens, com autenticação JWT, persistência em PostgreSQL, execução com Docker e testes automatizados.',
         en: 'REST API for managing purchase orders and their items, with JWT authentication, PostgreSQL persistence, Docker-based execution, and automated tests.',
@@ -140,6 +142,7 @@ export const projects: Project[] = [
     evidence: beadWiseEvidence,
     stack: ['C#', '.NET', 'Windows APIs'],
     showcase: {
+      kind: { pt: 'Aplicação Windows', en: 'Windows application' },
       summary: {
         pt: 'Projeto que organiza especificações, protótipos, código e testes para investigar mecanismos do Windows com critérios de prova, segurança e reversibilidade.',
         en: 'Project organizing specifications, prototypes, source code, and tests to investigate Windows mechanisms with proof, safety, and reversibility criteria.',
@@ -172,6 +175,7 @@ export const projects: Project[] = [
     evidence: portfolioEvidence,
     stack: ['Astro', 'HTML', 'CSS', 'JavaScript'],
     showcase: {
+      kind: { pt: 'Site pessoal', en: 'Personal website' },
       summary: {
         pt: 'Portfólio pessoal em Astro, CSS e JavaScript, com conteúdo em PT/EN, dark mode, responsividade, acessibilidade, SEO e deploy automatizado.',
         en: 'Personal portfolio built with Astro, CSS, and JavaScript, with PT/EN content, dark mode, responsive behavior, accessibility, SEO, and automated deployment.',
@@ -204,6 +208,7 @@ export const projects: Project[] = [
     evidence: taskApiEvidence,
     stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'MySQL', 'Maven', 'Postman'],
     showcase: {
+      kind: { pt: 'API REST · Backend', en: 'REST API · Backend' },
       summary: {
         pt: 'API REST acadêmica para gerenciamento de tarefas, desenvolvida com Java e Spring Boot, com operações de CRUD, persistência em MySQL e validação via Postman.',
         en: 'Academic REST API for task management built with Java and Spring Boot, with CRUD operations, MySQL persistence, and endpoint validation through Postman.',

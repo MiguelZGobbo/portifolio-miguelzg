@@ -23,6 +23,18 @@ test('communicates BeadWise as in development in both supported languages', () =
   assert.equal(beadWise.state.en, 'in development');
 });
 
+test('identifies each project with its localized kind', () => {
+  assert.deepEqual(
+    model.projects.map(({ slug, showcase }) => [slug, showcase.kind]),
+    [
+      ['purchase-orders-api', { pt: 'API REST · Backend', en: 'REST API · Backend' }],
+      ['beadwise', { pt: 'Aplicação Windows', en: 'Windows application' }],
+      ['portfolio', { pt: 'Site pessoal', en: 'Personal website' }],
+      ['task-management-api', { pt: 'API REST · Backend', en: 'REST API · Backend' }],
+    ],
+  );
+});
+
 test('keeps H3 projects compact', () => {
   const compactProjects = model.projects.filter(({ hierarchy }) => hierarchy === 'H3');
 

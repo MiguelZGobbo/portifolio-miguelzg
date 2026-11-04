@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { projects } from '../src/data/projects.ts';
+import { translations } from '../src/lib/i18n.ts';
 
 const page = await readFile(resolve('dist/index.html'), 'utf8');
 const englishPage = await readFile(resolve('dist/en/index.html'), 'utf8');
@@ -10,12 +12,13 @@ function positionOf(id) {
   return page.indexOf(`id="${id}"`);
 }
 
-function projectMarkup(slug) {
-  const start = page.indexOf(`data-project="${slug}"`);
-  const next = page.indexOf('data-project="', start + 1);
+function projectMarkup(slug, source = page) {
+  const start = source.indexOf(`data-project="${slug}"`);
+  const end = source.indexOf('</article>', start);
 
   assert.notEqual(start, -1, `expected ${slug} to be rendered`);
-  return page.slice(start, next === -1 ? undefined : next);
+  assert.notEqual(end, -1, `expected ${slug} to have a closing article`);
+  return source.slice(start, end);
 }
 
 function sectionMarkup(id) {
@@ -116,6 +119,31 @@ test('keeps only repository actions on all project entries', () => {
   assert.doesNotMatch(projectsSection, /project-case-study-link|Ver estudo de caso/);
   assert.doesNotMatch(projectsSection, /aria-live="polite"/);
 });
+
+for (const [lang, source] of [['pt', page], ['en', englishPage]]) {
+  test(`renders project kinds, existing content and repository actions in ${lang}`, () => {
+    for (const project of projects) {
+      const markup = projectMarkup(project.slug, source);
+      const metadata = markup.match(/<p class="project-meta">([\s\S]*?)<\/p>/)?.[1] ?? '';
+      const technologies = markup.match(/<ul class="project-technologies"[^>]*>([\s\S]*?)<\/ul>/)?.[1] ?? '';
+      const aspects = markup.match(/<ul class="project-aspects"[^>]*>([\s\S]*?)<\/ul>/)?.[1] ?? '';
+      const items = (list) => [...list.matchAll(/<li>(.*?)<\/li>/g)].map(([, text]) => text);
+      const link = markup.match(/<a\b[^>]*class="project-link project-github-link"[^>]*>/)?.[0] ?? '';
+
+      assert.ok(project.showcase.kind, `${project.slug} needs a localized kind`);
+      assert.ok(metadata.includes(project.showcase.kind[lang]));
+      assert.ok(metadata.includes(project.state[lang]));
+      assert.ok(markup.includes(project.showcase.summary[lang]));
+      assert.deepEqual(items(technologies), project.showcase.technologies);
+      assert.deepEqual(items(aspects), project.showcase.aspects.map((aspect) => aspect[lang]));
+      assert.ok(link.includes(`href="${project.href}"`));
+      assert.ok(link.includes(`aria-label="${project.ariaLabel[lang]}"`));
+      assert.match(link, /target="_blank"/);
+      assert.match(link, /rel="noopener noreferrer"/);
+      assert.ok(markup.includes(`<span>${translations[lang]['projects.github']}</span>`));
+    }
+  });
+}
 
 test('keeps global navigation focused on home, projects, skills, profile, and contact', () => {
   const nav = page.match(/<nav\b[\s\S]*?<\/nav>/)?.[0] ?? '';

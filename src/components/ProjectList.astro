@@ -23,7 +23,10 @@ const dict = translations[lang] as Record<string, string>;
       >
         <div class="project-entry-copy">
           <h3 class="project-name" id={`project-${project.slug}`}>{project.name[lang]}</h3>
-          <p class="project-state">{project.state[lang]}</p>
+          <p class="project-meta">
+            <span class="project-kind">{project.showcase.kind[lang]}</span>
+            <span class="project-state">{project.state[lang]}</span>
+          </p>
           <p class="project-summary">{project.showcase.summary[lang]}</p>
 
           <ul class="project-technologies" aria-label={dict['projects.technologies']}>
@@ -43,7 +46,7 @@ const dict = translations[lang] as Record<string, string>;
             aria-label={project.ariaLabel[lang]}
           >
             <span>{dict['projects.github']}</span>
-            <Icon name="external" size={12} strokeWidth={2} />
+            <Icon name="external" size={16} strokeWidth={2} />
           </a>
         </div>
       </article>
