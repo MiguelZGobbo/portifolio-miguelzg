@@ -36,16 +36,16 @@ O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêin
 
 ## Paleta
 
-A identidade combina as superfícies e os textos de [Radix Colors — Slate](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette) com azuis acinzentados personalizados no tema claro. O blur claro e os azuis do tema escuro usam Radix Blue. Os valores ficam centralizados em `src/styles/global.css`, sem dependência de biblioteca; os números abaixo identificam os passos das escalas [clara](https://github.com/radix-ui/colors/blob/main/src/light.ts) e [escura](https://github.com/radix-ui/colors/blob/main/src/dark.ts).
+A identidade combina superfícies claras e textos de [Radix Colors — Slate](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette) com azuis acinzentados personalizados no tema claro. O tema escuro usa o fundo azul acinzentado da opção C e elementos em prata neutro da opção 1. Os dois blurs usam Radix Blue. Os valores ficam centralizados em `src/styles/global.css`, sem dependência de biblioteca; os números abaixo identificam os passos das escalas [clara](https://github.com/radix-ui/colors/blob/main/src/light.ts) e [escura](https://github.com/radix-ui/colors/blob/main/src/dark.ts).
 
 | Papel | Claro | Escuro |
 | --- | --- | --- |
-| Fundo / campos / superfície de apoio | Slate 2 / 1 / 3 | Slate 5 / 4 / 6 |
+| Fundo / campos / superfície de apoio | Slate 2 / 1 / 3 | `#253640` / `#2B3D48` / `#30434E` |
 | Texto principal / secundário | Slate 12 / 11 | Slate 12 / 11 |
-| Ícones / links e foco | `#647D8A` / `#405A67` | Blue 10 / 11 |
-| Ação preenchida / hover | `#405A67` / Slate 12 | Blue 11 / 12 |
-| Texto sobre ação | Branco | Slate 5 |
-| Separadores / erros | Slate 6 / Red 12 | Slate 6 / Red 11 |
+| Ícones / links e foco | `#647D8A` / `#405A67` | `#A8ADB2` / `#C4C8CC` |
+| Ação preenchida / hover | `#405A67` / Slate 12 | `#C4C8CC` / `#E8ECEC` |
+| Texto sobre ação | Branco | `#202629` |
+| Separadores / erros | Slate 6 / Red 12 | `#3B4F5B` / Red 11 |
 | Blur | Blue 7 | Blue 9 |
 
 As três manchas usam opacidades de 22%, 16% e 9% no claro e 10%, 7% e 4% no escuro, em desktop e mobile. Os tokens `--action-background`, `--action-hover` e `--on-action` separam os botões dos links e indicadores funcionais; os aliases anteriores permanecem disponíveis. O favicon usa Blue 11 com símbolo branco, e os ícones de instalação usam Slate 2 com desenho Blue 11. Para regenerar os PNGs sem alterar sua geometria: `node scripts/generate-icons.mjs`.

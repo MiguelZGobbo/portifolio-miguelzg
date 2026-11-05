@@ -50,7 +50,7 @@ test('uses one self-hosted IBM Plex Sans family throughout the interface', () =>
   assert.doesNotMatch(stylesheet, /DM Sans Variable|Playfair Display Variable/);
 });
 
-test('uses muted light-theme blues while preserving Radix surfaces and dark colors', () => {
+test('uses the approved muted blue light and silver dark palettes', () => {
   const lightTheme = ruleFor(':root');
   const darkTheme = ruleFor(':root[data-theme="dark"]');
 
@@ -66,12 +66,16 @@ test('uses muted light-theme blues while preserving Radix surfaces and dark colo
   assert.match(lightTheme, /--action-background:\s*#405A67;/);
   assert.match(lightTheme, /--action-hover:\s*#1C2024;/);
   assert.match(lightTheme, /--on-action:\s*#FFFFFF;/);
-  assert.match(darkTheme, /--background:\s*#2E3135;/);
+  assert.match(darkTheme, /--background:\s*#253640;/);
+  assert.match(darkTheme, /--surface:\s*#2B3D48;/);
+  assert.match(darkTheme, /--surface-strong:\s*#30434E;/);
   assert.match(darkTheme, /--ambient-rgb:\s*0, 144, 255;/);
-  assert.match(darkTheme, /--accent:\s*#3B9EFF;/);
-  assert.match(darkTheme, /--accent-strong:\s*#70B8FF;/);
-  assert.match(darkTheme, /--action-background:\s*#70B8FF;/);
-  assert.match(darkTheme, /--action-hover:\s*#C2E6FF;/);
+  assert.match(darkTheme, /--accent:\s*#A8ADB2;/);
+  assert.match(darkTheme, /--accent-strong:\s*#C4C8CC;/);
+  assert.match(darkTheme, /--action-background:\s*#C4C8CC;/);
+  assert.match(darkTheme, /--action-hover:\s*#E8ECEC;/);
+  assert.match(darkTheme, /--on-action:\s*#202629;/);
+  assert.match(darkTheme, /--line:\s*#3B4F5B;/);
   assert.doesNotMatch(stylesheet, /--(?:highlight|highlight-hover|on-highlight)\b/);
   assert.match(ruleFor('body'), /background:\s*var\(--background\);/);
   assert.match(ruleFor('body'), /color:\s*var\(--text-primary\);/);

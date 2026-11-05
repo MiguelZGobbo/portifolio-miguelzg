@@ -1561,18 +1561,18 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 =============================== */
 :root[data-theme="dark"] {
     color-scheme: dark;
-    --background: #2E3135;
-    --surface: #272A2D;
-    --surface-strong: #363A3F;
+    --background: #253640;
+    --surface: #2B3D48;
+    --surface-strong: #30434E;
     --text-primary: #EDEEF0;
     --text-secondary: #B0B4BA;
-    --accent: #3B9EFF;
-    --accent-strong: #70B8FF;
-    --action-background: #70B8FF;
-    --action-hover: #C2E6FF;
-    --on-action: #2E3135;
+    --accent: #A8ADB2;
+    --accent-strong: #C4C8CC;
+    --action-background: #C4C8CC;
+    --action-hover: #E8ECEC;
+    --on-action: #202629;
     --ambient-rgb: 0, 144, 255;
-    --line: #363A3F;
+    --line: #3B4F5B;
     --error: #FF9592;
 
     --cream: var(--background);
