@@ -8,8 +8,8 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = join(root, 'public');
 
-const CREAM = [248, 240, 229];
-const BROWN = [122, 82, 52];
+const ICON_BACKGROUND = [249, 249, 251];
+const ICON_FOREGROUND = [13, 116, 206];
 
 function crc32(buf) {
   let crc = 0xffffffff;
@@ -73,11 +73,11 @@ function render(size, { maskable = false } = {}) {
     for (let x = 0; x < size; x++) {
       const px = (x + 0.5) / size;
       const py = (y + 0.5) / size;
-      let color = CREAM;
+      let color = ICON_BACKGROUND;
 
       const dOuter = distToRoundRect(px, py, 0.5, 0.5, half, half, rad);
       const dInner = distToRoundRect(px, py, 0.5, 0.5, inner, inner, rad * 0.7);
-      if (dOuter <= 0 && dInner >= 0) color = BROWN;
+      if (dOuter <= 0 && dInner >= 0) color = ICON_FOREGROUND;
 
       const segs = [
         [0.30, 0.66, 0.30, 0.34],
@@ -86,7 +86,7 @@ function render(size, { maskable = false } = {}) {
         [0.70, 0.34, 0.70, 0.66],
       ];
       for (const [x1, y1, x2, y2] of segs) {
-        if (distToSeg(px, py, x1, y1, x2, y2) < 0.045) color = BROWN;
+        if (distToSeg(px, py, x1, y1, x2, y2) < 0.045) color = ICON_FOREGROUND;
       }
 
       const i = (y * size + x) * 3;
