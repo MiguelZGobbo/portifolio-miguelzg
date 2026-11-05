@@ -133,6 +133,9 @@ test('renders three broad radial lights with theme-specific strength and transpa
 
   const glow = declarationsFor(stylesheet, '.wave-glow');
   const paint = declarationsFor(stylesheet, '.wave-glow::before');
+  const lightGlow = declarationsFor(stylesheet, ':root:not([data-theme="dark"]) .wave-glow');
+  assert.match(paint, /var\(--wave-core-inner-stops,/);
+  assert.match(lightGlow, /--wave-core-inner-stops:\s*rgba\(var\(--wave-rgb\),\s*1\)\s*0%,\s*rgba\(var\(--wave-rgb\),\s*0\.90\)\s*24%,\s*rgba\(var\(--wave-rgb\),\s*0\.60\)\s*45%;/);
   assert.equal((paint.match(/radial-gradient\(/g) ?? []).length, 2);
   assert.match(paint, /ellipse var\(--wave-core-radius\) at var\(--wave-core-position\),/);
   assert.match(paint, /ellipse var\(--wave-halo-radius\) at var\(--wave-core-position\),/);

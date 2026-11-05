@@ -50,6 +50,8 @@ A identidade combina superfícies claras e textos de [Radix Colors — Slate](ht
 
 As três manchas usam opacidades de 22%, 16% e 9% no claro e 10%, 7% e 4% no escuro, em desktop e mobile. Os tokens `--action-background`, `--action-hover` e `--on-action` separam os botões dos links e indicadores funcionais; os aliases anteriores permanecem disponíveis. O favicon usa Blue 11 com símbolo branco, e os ícones de instalação usam Slate 2 com desenho Blue 11. Para regenerar os PNGs sem alterar sua geometria: `node scripts/generate-icons.mjs`.
 
+No tema claro, o núcleo do blur mantém 90% da cor em 24% do raio e 60% em 45%, tornando sua presença mais perceptível perto dos cantos. A cor, a opacidade máxima das camadas, os halos, as bordas transparentes e o movimento permanecem iguais; o tema escuro mantém sua distribuição anterior.
+
 ## Tecnologias
 
 - **Astro** — componentes e geração das páginas estáticas em PT/EN.

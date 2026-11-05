@@ -1037,6 +1037,13 @@ footer {
     opacity: var(--wave-alpha);
 }
 
+:root:not([data-theme="dark"]) .wave-glow {
+    --wave-core-inner-stops:
+        rgba(var(--wave-rgb), 1) 0%,
+        rgba(var(--wave-rgb), 0.90) 24%,
+        rgba(var(--wave-rgb), 0.60) 45%;
+}
+
 .wave-glow::before {
     --wave-core-position: calc(var(--wave-origin-x) + var(--wave-drift-x)) calc(var(--wave-origin-y) + var(--wave-drift-y));
     content: '';
@@ -1046,8 +1053,10 @@ footer {
     background-image:
         radial-gradient(
             ellipse var(--wave-core-radius) at var(--wave-core-position),
-            rgba(var(--wave-rgb), 1) 0%,
-            rgba(var(--wave-rgb), 0.55) 38%,
+            var(--wave-core-inner-stops,
+                rgba(var(--wave-rgb), 1) 0%,
+                rgba(var(--wave-rgb), 0.55) 38%
+            ),
             rgba(var(--wave-rgb), 0.14) 70%,
             rgba(var(--wave-rgb), 0) 100%
         ),
