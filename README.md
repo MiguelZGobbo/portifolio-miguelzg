@@ -36,14 +36,14 @@ O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêin
 
 ## Paleta
 
-A identidade usa os valores oficiais de [Radix Colors — Slate e Blue](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette), centralizados em `src/styles/global.css`, sem dependência de biblioteca. Os números abaixo identificam os passos das escalas [clara](https://github.com/radix-ui/colors/blob/main/src/light.ts) e [escura](https://github.com/radix-ui/colors/blob/main/src/dark.ts).
+A identidade combina as superfícies e os textos de [Radix Colors — Slate](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette) com azuis acinzentados personalizados no tema claro. O blur claro e os azuis do tema escuro usam Radix Blue. Os valores ficam centralizados em `src/styles/global.css`, sem dependência de biblioteca; os números abaixo identificam os passos das escalas [clara](https://github.com/radix-ui/colors/blob/main/src/light.ts) e [escura](https://github.com/radix-ui/colors/blob/main/src/dark.ts).
 
 | Papel | Claro | Escuro |
 | --- | --- | --- |
 | Fundo / campos / superfície de apoio | Slate 2 / 1 / 3 | Slate 5 / 4 / 6 |
 | Texto principal / secundário | Slate 12 / 11 | Slate 12 / 11 |
-| Ícones / links e foco | Blue 11 / 12 | Blue 10 / 11 |
-| Ação preenchida / hover | Blue 11 / 12 | Blue 11 / 12 |
+| Ícones / links e foco | `#647D8A` / `#405A67` | Blue 10 / 11 |
+| Ação preenchida / hover | `#405A67` / Slate 12 | Blue 11 / 12 |
 | Texto sobre ação | Branco | Slate 5 |
 | Separadores / erros | Slate 6 / Red 12 | Slate 6 / Red 11 |
 | Blur | Blue 7 | Blue 9 |

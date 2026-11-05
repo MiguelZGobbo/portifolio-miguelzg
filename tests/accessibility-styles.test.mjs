@@ -35,7 +35,7 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
-test('keeps Radix reading, action labels and functional indicators accessible in both themes', () => {
+test('keeps reading, action labels and functional indicators accessible in both themes', () => {
   for (const selector of [':root', ':root[data-theme="dark"]']) {
     const theme = ruleFor(selector);
     const value = (property) => hexValue(theme, property);
@@ -54,6 +54,13 @@ test('keeps Radix reading, action labels and functional indicators accessible in
 });
 
 test('applies dedicated action colors through the final button overrides', () => {
+  const lightSelection = ruleFor(':root:not([data-theme="dark"]) ::selection');
+  assert.match(lightSelection, /background:\s*var\(--action-background\);/);
+  assert.match(lightSelection, /color:\s*var\(--on-action\);/);
+  const defaultSelection = stylesheet.match(/^::selection\s*\{([^}]*)\}/m)?.[1];
+  assert.ok(defaultSelection);
+  assert.match(defaultSelection, /background:\s*var\(--brown\);/);
+  assert.match(defaultSelection, /color:\s*var\(--cream\);/);
   const editorial = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
   const rule = (source, selector) => {
     const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -7,10 +7,10 @@
     --surface-strong: #F0F0F3;
     --text-primary: #1C2024;
     --text-secondary: #60646C;
-    --accent: #0D74CE;
-    --accent-strong: #113264;
-    --action-background: #0D74CE;
-    --action-hover: #113264;
+    --accent: #647D8A;
+    --accent-strong: #405A67;
+    --action-background: #405A67;
+    --action-hover: #1C2024;
     --on-action: #FFFFFF;
     --control-border: var(--accent-strong);
     --ambient-rgb: 142, 200, 246;
@@ -1839,6 +1839,11 @@ html[data-lang="en"] .lang-en {
 ::selection {
     background: var(--brown);
     color: var(--cream);
+}
+
+:root:not([data-theme="dark"]) ::selection {
+    background: var(--action-background);
+    color: var(--on-action);
 }
 
 /* ================================

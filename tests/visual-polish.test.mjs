@@ -50,7 +50,7 @@ test('uses one self-hosted IBM Plex Sans family throughout the interface', () =>
   assert.doesNotMatch(stylesheet, /DM Sans Variable|Playfair Display Variable/);
 });
 
-test('uses the approved Radix Slate and Blue roles in both themes', () => {
+test('uses muted light-theme blues while preserving Radix surfaces and dark colors', () => {
   const lightTheme = ruleFor(':root');
   const darkTheme = ruleFor(':root[data-theme="dark"]');
 
@@ -61,11 +61,16 @@ test('uses the approved Radix Slate and Blue roles in both themes', () => {
   assert.match(darkTheme, /--accent:\s*#[0-9a-f]{6};/i);
   assert.match(lightTheme, /--background:\s*#F9F9FB;/);
   assert.match(lightTheme, /--ambient-rgb:\s*142, 200, 246;/);
-  assert.match(lightTheme, /--accent-strong:\s*#113264;/);
-  assert.match(lightTheme, /--action-background:\s*#0D74CE;/);
+  assert.match(lightTheme, /--accent:\s*#647D8A;/);
+  assert.match(lightTheme, /--accent-strong:\s*#405A67;/);
+  assert.match(lightTheme, /--action-background:\s*#405A67;/);
+  assert.match(lightTheme, /--action-hover:\s*#1C2024;/);
   assert.match(lightTheme, /--on-action:\s*#FFFFFF;/);
   assert.match(darkTheme, /--background:\s*#2E3135;/);
   assert.match(darkTheme, /--ambient-rgb:\s*0, 144, 255;/);
+  assert.match(darkTheme, /--accent:\s*#3B9EFF;/);
+  assert.match(darkTheme, /--accent-strong:\s*#70B8FF;/);
+  assert.match(darkTheme, /--action-background:\s*#70B8FF;/);
   assert.match(darkTheme, /--action-hover:\s*#C2E6FF;/);
   assert.doesNotMatch(stylesheet, /--(?:highlight|highlight-hover|on-highlight)\b/);
   assert.match(ruleFor('body'), /background:\s*var\(--background\);/);
