@@ -110,7 +110,6 @@ nav {
     text-transform: none;
     padding: 0.45rem 0.4rem;
     border-radius: 0;
-    cursor: pointer;
     position: relative;
     z-index: 1;
     display: inline-flex;
@@ -221,7 +220,6 @@ html.js .reveal.visible {
     text-transform: uppercase;
     border: 2px solid var(--action-background);
     border-radius: 8px;
-    cursor: pointer;
     font-family: 'IBM Plex Sans Variable', sans-serif;
     text-decoration: none;
     position: relative;
@@ -279,16 +277,8 @@ html.js .reveal.visible {
 /* ================================
    4. CURSOR
 ================================ */
-.snap-section,
-.snap-section * {
-    cursor: default;
-}
-
-.snap-section a,
-nav a,
-.copy-btn,
-.btn,
-.project-link {
+a[href],
+button:enabled {
     cursor: pointer;
 }
 
@@ -554,6 +544,7 @@ nav a,
 
 .form-group input,
 .form-group textarea {
+    cursor: text;
     width: 100%;
     padding: 0.65rem 0.9rem;
     border: 1.5px solid var(--sand);
@@ -680,7 +671,6 @@ nav a,
 .copy-btn {
     background: transparent;
     border: none;
-    cursor: pointer;
     color: var(--tan);
     padding: 2px;
     display: flex;
@@ -1664,7 +1654,6 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     border-radius: 8px;
     background: transparent;
     color: var(--text-muted);
-    cursor: pointer;
     font-family: inherit;
     text-decoration: none;
     transition: color 0.2s ease, border-color 0.2s ease;
