@@ -34,6 +34,22 @@ Português permanece na rota principal e inglês usa o prefixo `/en/`. A troca d
 
 O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêiner de rolagem interno.
 
+## Paleta
+
+A identidade usa os valores oficiais de [Radix Colors — Slate e Blue](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette), centralizados em `src/styles/global.css`, sem dependência de biblioteca. Os números abaixo identificam os passos das escalas [clara](https://github.com/radix-ui/colors/blob/main/src/light.ts) e [escura](https://github.com/radix-ui/colors/blob/main/src/dark.ts).
+
+| Papel | Claro | Escuro |
+| --- | --- | --- |
+| Fundo / campos / superfície de apoio | Slate 2 / 1 / 3 | Slate 5 / 4 / 6 |
+| Texto principal / secundário | Slate 12 / 11 | Slate 12 / 11 |
+| Ícones / links e foco | Blue 11 / 12 | Blue 10 / 11 |
+| Ação preenchida / hover | Blue 11 / 12 | Blue 11 / 12 |
+| Texto sobre ação | Branco | Slate 5 |
+| Separadores / erros | Slate 6 / Red 12 | Slate 6 / Red 11 |
+| Blur | Blue 7 | Blue 9 |
+
+As três manchas usam opacidades de 22%, 16% e 9% no claro e 10%, 7% e 4% no escuro, em desktop e mobile. Os tokens `--action-background`, `--action-hover` e `--on-action` separam os botões dos links e indicadores funcionais; os aliases anteriores permanecem disponíveis. O favicon usa Blue 11 com símbolo branco, e os ícones de instalação usam Slate 2 com desenho Blue 11. Para regenerar os PNGs sem alterar sua geometria: `node scripts/generate-icons.mjs`.
+
 ## Tecnologias
 
 - **Astro** — componentes e geração das páginas estáticas em PT/EN.
