@@ -50,7 +50,7 @@ test('uses one self-hosted IBM Plex Sans family throughout the interface', () =>
   assert.doesNotMatch(stylesheet, /DM Sans Variable|Playfair Display Variable/);
 });
 
-test('keeps white and graphite bases with blue controls and violet ambient colors only', () => {
+test('uses the approved Radix Slate and Blue roles in both themes', () => {
   const lightTheme = ruleFor(':root');
   const darkTheme = ruleFor(':root[data-theme="dark"]');
 
@@ -59,10 +59,14 @@ test('keeps white and graphite bases with blue controls and violet ambient color
   assert.match(lightTheme, /--accent-strong:\s*#[0-9a-f]{6};/i);
   assert.match(darkTheme, /--background:\s*#[0-9a-f]{6};/i);
   assert.match(darkTheme, /--accent:\s*#[0-9a-f]{6};/i);
-  assert.match(lightTheme, /--background:\s*#F5F6F4;/);
-  assert.match(lightTheme, /--ambient-rgb:\s*200, 188, 240;/);
-  assert.match(darkTheme, /--background:\s*#2C3336;/);
-  assert.match(darkTheme, /--ambient-rgb:\s*161, 138, 206;/);
+  assert.match(lightTheme, /--background:\s*#F9F9FB;/);
+  assert.match(lightTheme, /--ambient-rgb:\s*142, 200, 246;/);
+  assert.match(lightTheme, /--accent-strong:\s*#113264;/);
+  assert.match(lightTheme, /--action-background:\s*#0D74CE;/);
+  assert.match(lightTheme, /--on-action:\s*#FFFFFF;/);
+  assert.match(darkTheme, /--background:\s*#2E3135;/);
+  assert.match(darkTheme, /--ambient-rgb:\s*0, 144, 255;/);
+  assert.match(darkTheme, /--action-hover:\s*#C2E6FF;/);
   assert.doesNotMatch(stylesheet, /--(?:highlight|highlight-hover|on-highlight)\b/);
   assert.match(ruleFor('body'), /background:\s*var\(--background\);/);
   assert.match(ruleFor('body'), /color:\s*var\(--text-primary\);/);
@@ -150,13 +154,13 @@ test('renders three broad radial lights with theme-specific strength and transpa
   const darkMobile = mediaBlock(stylesheet, '@media (max-width: 640px)', 1);
 
   const expected = [
-    { wave: 1, light: '0.28', mobileLight: '0.28', dark: '0.11', mobileDark: '0.12' },
-    { wave: 2, light: '0.20', mobileLight: '0.20', dark: '0.08', mobileDark: '0.08' },
-    { wave: 3, light: '0.12', mobileLight: '0.12', dark: '0.05', mobileDark: '0.05' },
+    { wave: 1, light: '0.22', mobileLight: '0.22', dark: '0.10', mobileDark: '0.10' },
+    { wave: 2, light: '0.16', mobileLight: '0.16', dark: '0.07', mobileDark: '0.07' },
+    { wave: 3, light: '0.09', mobileLight: '0.09', dark: '0.04', mobileDark: '0.04' },
   ];
 
-  assert.match(ruleFor(':root'), /--ambient-rgb:\s*200, 188, 240;/);
-  assert.match(ruleFor(':root[data-theme="dark"]'), /--ambient-rgb:\s*161, 138, 206;/);
+  assert.match(ruleFor(':root'), /--ambient-rgb:\s*142, 200, 246;/);
+  assert.match(ruleFor(':root[data-theme="dark"]'), /--ambient-rgb:\s*0, 144, 255;/);
   for (const { wave, light, mobileLight, dark, mobileDark } of expected) {
     const selector = `.wave-${wave} .bg-wave-inner`;
     const desktopDeclarations = declarationsFor(desktop, selector);

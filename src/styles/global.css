@@ -2,23 +2,26 @@
    1. VARIÁVEIS E RESET
 ================================ */
 :root {
-    --background: #F5F6F4;
-    --surface: #FEFEFD;
-    --surface-strong: #E9EEEF;
-    --text-primary: #252B2E;
-    --text-secondary: #536168;
-    --accent: #647D8A;
-    --accent-strong: #405A67;
+    --background: #F9F9FB;
+    --surface: #FCFCFD;
+    --surface-strong: #F0F0F3;
+    --text-primary: #1C2024;
+    --text-secondary: #60646C;
+    --accent: #0D74CE;
+    --accent-strong: #113264;
+    --action-background: #0D74CE;
+    --action-hover: #113264;
+    --on-action: #FFFFFF;
     --control-border: var(--accent-strong);
-    --ambient-rgb: 200, 188, 240;
-    --line: rgba(49, 68, 77, 0.18);
-    --error: #A32626;
+    --ambient-rgb: 142, 200, 246;
+    --line: #D9D9E0;
+    --error: #641723;
 
     --cream: var(--background);
     --brown: var(--accent);
     --brown-dark: var(--accent-strong);
     --sand: var(--line);
-    --warm-gray: #68747A;
+    --warm-gray: var(--text-secondary);
     --tan: var(--accent);
     --dark: var(--text-primary);
     --text: var(--text-primary);
@@ -157,7 +160,7 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid rgba(160, 135, 110, 0.4);
+    border-bottom: 1px solid var(--line);
     scroll-margin-top: calc(var(--nav-top) + var(--nav-height) + 1rem);
     scroll-margin-bottom: 104px;
 }
@@ -210,13 +213,13 @@ html.js .reveal.visible {
 .btn {
     display: inline-block;
     padding: 0.72rem 1.6rem;
-    background: var(--accent-strong);
-    color: var(--background);
+    background: var(--action-background);
+    color: var(--on-action);
     font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    border: 2px solid var(--accent-strong);
+    border: 2px solid var(--action-background);
     border-radius: 8px;
     cursor: pointer;
     font-family: 'IBM Plex Sans Variable', sans-serif;
@@ -237,9 +240,9 @@ html.js .reveal.visible {
 }
 
 .btn:hover {
-    background: var(--text-primary);
-    border-color: var(--text-primary);
-    color: var(--background);
+    background: var(--action-hover);
+    border-color: var(--action-hover);
+    color: var(--on-action);
     box-shadow: none;
     transform: none;
 }
@@ -247,9 +250,9 @@ html.js .reveal.visible {
 .btn:focus-visible {
     outline: 2px solid var(--brown-dark);
     outline-offset: 2px;
-    background: var(--text-primary);
-    border-color: var(--text-primary);
-    color: var(--background);
+    background: var(--action-hover);
+    border-color: var(--action-hover);
+    color: var(--on-action);
 }
 
 .btn-outline {
@@ -259,18 +262,18 @@ html.js .reveal.visible {
 }
 
 .btn-outline:hover {
-    background: var(--accent-strong);
-    border-color: var(--control-border);
-    color: var(--background);
+    background: var(--action-background);
+    border-color: var(--action-background);
+    color: var(--on-action);
     box-shadow: none;
 }
 
 .btn-outline:focus-visible {
     outline: 2px solid var(--brown-dark);
     outline-offset: 2px;
-    background: var(--accent-strong);
-    border-color: var(--control-border);
-    color: var(--background);
+    background: var(--action-background);
+    border-color: var(--action-background);
+    color: var(--on-action);
 }
 
 /* ================================
@@ -379,7 +382,7 @@ nav a,
     flex: 0 0 calc((100% - 2rem) / 3);
     min-width: 0;
     background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
+    border: 1px solid var(--line);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44, 34, 24, 0.06);
     padding: 1.05rem 1.1rem;
@@ -449,7 +452,7 @@ nav a,
 ================================ */
 .cv-box {
     background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
+    border: 1px solid var(--line);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44, 34, 24, 0.06);
     padding: 2rem;
@@ -596,7 +599,7 @@ nav a,
     gap: 0.8rem;
     padding: 1.1rem;
     background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
+    border: 1px solid var(--line);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44, 34, 24, 0.06);
     align-self: center;
@@ -725,7 +728,7 @@ nav a,
    11. FOOTER
 ================================ */
 footer {
-    background: var(--dark);
+    background: transparent;
     color: var(--tan);
     text-align: center;
     padding: 1rem;
@@ -1061,7 +1064,7 @@ footer {
 /* ── Luz 1: canto superior esquerdo ── */
 .wave-1 .bg-wave-inner {
     --wave-rgb: var(--ambient-rgb);
-    --wave-alpha: 0.28;
+    --wave-alpha: 0.22;
     --wave-origin-x: 12vw;
     --wave-origin-y: 12vh;
 }
@@ -1072,7 +1075,7 @@ footer {
 /* ── Luz 2: canto inferior direito ── */
 .wave-2 .bg-wave-inner {
     --wave-rgb: var(--ambient-rgb);
-    --wave-alpha: 0.20;
+    --wave-alpha: 0.16;
     --wave-origin-x: 88vw;
     --wave-origin-y: 88vh;
 }
@@ -1083,7 +1086,7 @@ footer {
 /* ── Luz 3: canto superior direito ── */
 .wave-3 .bg-wave-inner {
     --wave-rgb: var(--ambient-rgb);
-    --wave-alpha: 0.12;
+    --wave-alpha: 0.09;
     --wave-origin-x: 88vw;
     --wave-origin-y: 12vh;
 }
@@ -1203,13 +1206,13 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         scroll-padding-bottom: 152px;
     }
     .wave-1 .bg-wave-inner {
-        --wave-alpha: 0.28;
+        --wave-alpha: 0.22;
     }
     .wave-2 .bg-wave-inner {
-        --wave-alpha: 0.20;
+        --wave-alpha: 0.16;
     }
     .wave-3 .bg-wave-inner {
-        --wave-alpha: 0.12;
+        --wave-alpha: 0.09;
     }
     .wave-glow {
         --wave-core-radius: 70vw 60vh;
@@ -1342,7 +1345,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         padding-top: 32px;
         padding-bottom: 56px;
         box-sizing: border-box;
-        border-bottom: 1px solid rgba(160, 135, 110, 0.35);
+        border-bottom: 1px solid var(--line);
     }
 
     body[data-section="home"] #home {
@@ -1408,7 +1411,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         width: 130px;
         height: 158px;
         border-radius: 16px;
-        border: 1px solid rgba(160, 135, 110, 0.5);
+        border: 1px solid var(--line);
         box-shadow: 0 2px 8px rgba(44, 34, 24, 0.08);
     }
 
@@ -1417,7 +1420,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     .cv-box,
     .contact-info {
         border-radius: 14px;
-        border: 1px solid rgba(160, 135, 110, 0.45);
+        border: 1px solid var(--line);
         box-shadow: 0 2px 8px rgba(44, 34, 24, 0.06);
     }
     .skill-card {
@@ -1540,7 +1543,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     }
 
     .copy-btn:hover {
-        color: var(--tan) !important;
+        color: var(--accent-strong) !important;
     }
 
     .skill-card:hover {
@@ -1549,8 +1552,8 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     }
 
     .val-link:hover {
-        color: var(--tan) !important;
-        border-bottom-color: var(--tan) !important;
+        color: var(--accent-strong) !important;
+        border-bottom-color: var(--accent-strong) !important;
     }
 }
 /* ================================
@@ -1558,22 +1561,25 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 =============================== */
 :root[data-theme="dark"] {
     color-scheme: dark;
-    --background: #2C3336;
-    --surface: #343C40;
-    --surface-strong: #3D474C;
-    --text-primary: #E8ECEC;
-    --text-secondary: #BAC4C7;
-    --accent: #9BB2BD;
-    --accent-strong: #B5CAD3;
-    --ambient-rgb: 161, 138, 206;
-    --line: rgba(195, 211, 217, 0.2);
-    --error: #FFAAAA;
+    --background: #2E3135;
+    --surface: #272A2D;
+    --surface-strong: #363A3F;
+    --text-primary: #EDEEF0;
+    --text-secondary: #B0B4BA;
+    --accent: #3B9EFF;
+    --accent-strong: #70B8FF;
+    --action-background: #70B8FF;
+    --action-hover: #C2E6FF;
+    --on-action: #2E3135;
+    --ambient-rgb: 0, 144, 255;
+    --line: #363A3F;
+    --error: #FF9592;
 
     --cream: var(--background);
     --brown: var(--accent);
     --brown-dark: var(--accent-strong);
     --sand: var(--line);
-    --warm-gray: #A9B5B9;
+    --warm-gray: var(--text-secondary);
     --tan: var(--accent);
     --dark: var(--text-primary);
     --text: var(--text-primary);
@@ -1585,7 +1591,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] nav {
-    background: #1E1812;
+    background: var(--background);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
 }
 
@@ -1602,7 +1608,7 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 }
 
 [data-theme="dark"] footer {
-    background: #1E1812;
+    background: transparent;
     color: var(--warm-gray);
 }
 
@@ -1612,14 +1618,14 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     --wave-halo-mid: 0.12;
     --wave-halo-edge: 0;
 }
-[data-theme="dark"] .wave-1 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.11; }
-[data-theme="dark"] .wave-2 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.08; }
-[data-theme="dark"] .wave-3 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.05; }
+[data-theme="dark"] .wave-1 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.10; }
+[data-theme="dark"] .wave-2 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.07; }
+[data-theme="dark"] .wave-3 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.04; }
 
 @media (max-width: 640px) {
-    [data-theme="dark"] .wave-1 .bg-wave-inner { --wave-alpha: 0.12; }
-    [data-theme="dark"] .wave-2 .bg-wave-inner { --wave-alpha: 0.08; }
-    [data-theme="dark"] .wave-3 .bg-wave-inner { --wave-alpha: 0.05; }
+    [data-theme="dark"] .wave-1 .bg-wave-inner { --wave-alpha: 0.10; }
+    [data-theme="dark"] .wave-2 .bg-wave-inner { --wave-alpha: 0.07; }
+    [data-theme="dark"] .wave-3 .bg-wave-inner { --wave-alpha: 0.04; }
 }
 
 /* ================================
@@ -1755,7 +1761,7 @@ html[data-lang="en"] .lang-en {
         gap: 0.25rem;
         padding: 0.2rem;
         background: var(--surface);
-        border: 1px solid rgba(160, 135, 110, 0.45);
+        border: 1px solid var(--line);
         border-radius: 12px;
         box-shadow: 0 4px 14px rgba(44, 34, 24, 0.12);
         pointer-events: auto;
@@ -1871,7 +1877,7 @@ html[data-lang="en"] .lang-en {
 
 .education-card {
     background: var(--surface);
-    border: 1px solid rgba(160, 135, 110, 0.4);
+    border: 1px solid var(--line);
     border-radius: 12px;
     padding: 1.25rem;
     box-shadow: 0 4px 18px rgba(44, 34, 24, 0.07);
@@ -2444,9 +2450,9 @@ nav,
     gap: 0.5rem;
     min-height: 44px;
     padding: 0.625rem 1rem;
-    color: var(--background);
-    background: var(--accent-strong);
-    border: 1px solid var(--accent-strong);
+    color: var(--on-action);
+    background: var(--action-background);
+    border: 1px solid var(--action-background);
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 600;
@@ -2464,9 +2470,9 @@ nav,
 .project-link:focus-visible,
 .project-github-link:hover,
 .project-github-link:focus-visible {
-    color: var(--background);
-    background: var(--text-primary);
-    border-color: var(--text-primary);
+    color: var(--on-action);
+    background: var(--action-hover);
+    border-color: var(--action-hover);
     box-shadow: none;
 }
 
@@ -2545,10 +2551,10 @@ nav,
 .cv-actions .btn {
     min-height: 44px;
     padding: 0.6rem 1rem;
-    background: var(--accent-strong);
-    border-color: var(--accent-strong);
+    background: var(--action-background);
+    border-color: var(--action-background);
     border-radius: 2px;
-    color: var(--background);
+    color: var(--on-action);
     font-size: 0.78rem;
     letter-spacing: 0.025em;
 }
@@ -2561,16 +2567,16 @@ nav,
 
 .cv-actions .btn:hover,
 .cv-actions .btn:focus-visible {
-    color: var(--background);
-    background: var(--text-primary);
-    border-color: var(--text-primary);
+    color: var(--on-action);
+    background: var(--action-hover);
+    border-color: var(--action-hover);
 }
 
 .cv-actions .btn-outline:hover,
 .cv-actions .btn-outline:focus-visible {
-    color: var(--background);
-    background: var(--accent-strong);
-    border-color: var(--control-border);
+    color: var(--on-action);
+    background: var(--action-background);
+    border-color: var(--action-background);
 }
 
 .contact-grid {

@@ -35,7 +35,7 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
-test('keeps reading, blue action labels and functional borders accessible in both palettes', () => {
+test('keeps Radix reading, action labels and functional indicators accessible in both themes', () => {
   for (const selector of [':root', ':root[data-theme="dark"]']) {
     const theme = ruleFor(selector);
     const value = (property) => hexValue(theme, property);
@@ -44,18 +44,42 @@ test('keeps reading, blue action labels and functional borders accessible in bot
         assert.ok(contrastRatio(value(text), value(surface)) >= 4.5, `${selector} ${text} on ${surface}`);
       }
       assert.ok(contrastRatio(value('--accent-strong'), value(surface)) >= 3, `${selector} control border`);
+      assert.ok(contrastRatio(value('--accent'), value(surface)) >= 3, `${selector} meaningful icon`);
     }
-    for (const state of ['--accent-strong', '--text-primary']) {
-      assert.ok(contrastRatio(value('--background'), value(state)) >= 4.5, `${selector} label on ${state}`);
+    for (const state of ['--action-background', '--action-hover']) {
+      assert.ok(contrastRatio(value('--on-action'), value(state)) >= 4.5, `${selector} label on ${state}`);
       assert.ok(contrastRatio(value(state), value('--background')) >= 3, `${selector} ${state} boundary`);
     }
   }
 });
 
+test('applies dedicated action colors through the final button overrides', () => {
+  const editorial = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
+  const rule = (source, selector) => {
+    const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return source.match(new RegExp(`${escaped}\\s*\\{([^}]*)\\}`))?.[1];
+  };
+  for (const [source, selector] of [
+    [stylesheet, '.btn'],
+    [editorial, '.project-link,\n.project-github-link'],
+    [editorial, '.cv-actions .btn'],
+  ]) {
+    const body = rule(source, selector);
+    assert.ok(body, selector);
+    assert.match(body, /background:\s*var\(--action-background\);/);
+    assert.match(body, /color:\s*var\(--on-action\);/);
+  }
+  for (const selector of ['.btn:hover', '.btn:focus-visible']) {
+    assert.match(ruleFor(selector), /background:\s*var\(--action-hover\);/);
+    assert.match(ruleFor(selector), /color:\s*var\(--on-action\);/);
+  }
+  assert.match(rule(editorial, '.cv-actions .btn-outline:hover,\n.cv-actions .btn-outline:focus-visible'), /background:\s*var\(--action-background\);/);
+});
+
 test('preserves reading contrast even when all ambient cores overlap', () => {
   for (const [selector, opacities] of [
-    [':root', [0.28, 0.20, 0.12]],
-    [':root[data-theme="dark"]', [0.12, 0.08, 0.05]],
+    [':root', [0.22, 0.16, 0.09]],
+    [':root[data-theme="dark"]', [0.10, 0.07, 0.04]],
   ]) {
     const theme = ruleFor(selector);
     const ambient = theme.match(/--ambient-rgb:\s*(\d+),\s*(\d+),\s*(\d+)/);
@@ -68,6 +92,7 @@ test('preserves reading contrast even when all ambient cores overlap', () => {
     for (const text of ['--text-primary', '--text-secondary', '--accent-strong', '--error']) {
       assert.ok(contrastRatio(hexValue(theme, text), composite) >= 4.5, `${selector} ${text} on ambient overlap`);
     }
+    assert.ok(contrastRatio(hexValue(theme, '--accent'), composite) >= 3, `${selector} meaningful icon on ambient overlap`);
   }
 });
 
@@ -131,6 +156,13 @@ test('keeps the local-preview contact status visibly neutral', () => {
 
   assert.match(localPreviewStatus, /color:\s*var\(--text-muted\);/);
   assert.match(localPreviewStatus, /opacity:\s*1;/);
+});
+
+test('keeps the shared footer readable on both localized pages', () => {
+  assert.match(stylesheet, /^footer\s*\{\s*background:\s*transparent;/m);
+  assert.match(ruleFor('[data-theme="dark"] footer'), /background:\s*transparent;/);
+  const editorial = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
+  assert.match(editorial, /footer\s*\{\s*color:\s*var\(--text-secondary\);/);
 });
 
 test('keeps the reduced-motion contract after component motion and disables decorative movement', () => {
