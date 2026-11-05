@@ -647,6 +647,16 @@ button:enabled {
     min-height: 1.4rem;
 }
 
+.val-row:has(.copy-control) {
+    display: grid;
+    grid-template-columns: minmax(0, max-content) 24px 4rem;
+}
+
+.val-row:has(.copy-control) .val-link {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .val-link {
     font-size: 0.9rem;
     color: var(--brown-dark);
@@ -668,29 +678,77 @@ button:enabled {
     border-bottom-color: var(--brown);
 }
 
+.copy-control {
+    display: contents;
+}
+
 .copy-btn {
     background: transparent;
     border: none;
     color: var(--tan);
     padding: 2px;
-    display: flex;
-    align-items: center;
+    display: grid;
+    place-items: center;
     flex-shrink: 0;
     min-width: 24px;
     min-height: 24px;
-    transition: color 0.2s;
+    transition: color 160ms ease;
 }
 
 .copy-btn:hover { color: var(--brown-dark); }
-.copy-btn.copied { color: var(--brown-dark); }
+.copy-control[data-copy-state="success"] .copy-btn { color: var(--brown-dark); }
+.copy-control[data-copy-state="error"] .copy-btn { color: var(--error); }
 
-.copy-tooltip {
-    color: var(--brown-dark);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+.copy-btn svg {
+    grid-area: 1 / 1;
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.copy-btn .icon-check,
+.copy-control[data-copy-state="success"] .icon-copy {
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transform: scale(0.9);
+}
+
+.copy-control[data-copy-state="success"] .icon-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.copy-feedback {
+    width: 4rem;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 160ms ease;
+}
+
+.copy-control[data-copy-state="success"] .copy-feedback,
+.copy-control[data-copy-state="error"] .copy-feedback {
+    opacity: 1;
+}
+
+.copy-control[data-copy-state="error"] .copy-feedback {
+    color: var(--error);
+}
+
+.copy-error {
+    display: none;
+    grid-column: 1 / -1;
+    /* Keep long errors from widening the address column. */
+    inline-size: 0;
+    min-inline-size: 100%;
+    color: var(--error);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.copy-control[data-copy-state="error"] .copy-error {
+    display: block;
 }
 
 .copy-btn:focus-visible {
@@ -2005,7 +2063,8 @@ html[data-lang="en"] .lang-en {
     .form-group textarea,
     .val-link,
     .copy-btn,
-    .copy-tooltip,
+    .copy-btn svg,
+    .copy-feedback,
     .skip-link,
     #contato footer,
     .lang-part {

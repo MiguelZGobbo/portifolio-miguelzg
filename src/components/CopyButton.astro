@@ -3,15 +3,19 @@ import Icon from './Icon.astro';
 
 interface Props {
   text: string;
-  title: string;
   ariaLabel: string;
   i18nKey: string;
 }
 
-const { text, title, ariaLabel, i18nKey } = Astro.props;
+const { text, ariaLabel, i18nKey } = Astro.props;
 ---
 
-<button class="copy-btn" data-text={text} title={title} aria-label={ariaLabel} data-i18n-aria={i18nKey}>
-  <Icon name="copy" size={13} strokeWidth={2} class="icon-copy" />
-  <Icon name="check" size={13} strokeWidth={2.5} class="icon-check" style="display:none" />
-</button>
+<span class="copy-control" data-copy-state="idle">
+  <button class="copy-btn" type="button" data-text={text} aria-label={ariaLabel} data-i18n-aria={i18nKey}>
+    <Icon name="copy" size={13} strokeWidth={2} class="icon-copy" />
+    <Icon name="check" size={13} strokeWidth={2.5} class="icon-check" />
+  </button>
+  <span class="copy-feedback" aria-hidden="true"></span>
+  <span class="copy-error" aria-hidden="true"></span>
+  <span class="copy-status visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
+</span>
