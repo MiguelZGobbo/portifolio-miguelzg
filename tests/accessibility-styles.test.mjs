@@ -35,12 +35,65 @@ function contrastRatio(foreground, background) {
   return (values[0] + 0.05) / (values[1] + 0.05);
 }
 
+test('keeps reading, blue action labels and functional borders accessible in both palettes', () => {
+  for (const selector of [':root', ':root[data-theme="dark"]']) {
+    const theme = ruleFor(selector);
+    const value = (property) => hexValue(theme, property);
+    for (const surface of ['--background', '--surface', '--surface-strong']) {
+      for (const text of ['--text-primary', '--text-secondary', '--accent-strong', '--error']) {
+        assert.ok(contrastRatio(value(text), value(surface)) >= 4.5, `${selector} ${text} on ${surface}`);
+      }
+      assert.ok(contrastRatio(value('--accent-strong'), value(surface)) >= 3, `${selector} control border`);
+    }
+    for (const state of ['--accent-strong', '--text-primary']) {
+      assert.ok(contrastRatio(value('--background'), value(state)) >= 4.5, `${selector} label on ${state}`);
+      assert.ok(contrastRatio(value(state), value('--background')) >= 3, `${selector} ${state} boundary`);
+    }
+  }
+});
+
+test('preserves reading contrast even when all ambient cores overlap', () => {
+  for (const [selector, opacities] of [
+    [':root', [0.28, 0.20, 0.12]],
+    [':root[data-theme="dark"]', [0.12, 0.08, 0.05]],
+  ]) {
+    const theme = ruleFor(selector);
+    const ambient = theme.match(/--ambient-rgb:\s*(\d+),\s*(\d+),\s*(\d+)/);
+    assert.ok(ambient, `${selector} ambient color`);
+    let background = hexValue(theme, '--background').slice(1).match(/../g).map((channel) => Number.parseInt(channel, 16));
+    for (const opacity of opacities) {
+      background = background.map((channel, index) => channel * (1 - opacity) + Number(ambient[index + 1]) * opacity);
+    }
+    const composite = `#${background.map((channel) => Math.round(channel).toString(16).padStart(2, '0')).join('')}`;
+    for (const text of ['--text-primary', '--text-secondary', '--accent-strong', '--error']) {
+      assert.ok(contrastRatio(hexValue(theme, text), composite) >= 4.5, `${selector} ${text} on ambient overlap`);
+    }
+  }
+});
+
+test('keeps browser and installed-app colors aligned with the page backgrounds', async () => {
+  const [themeScript, layout, manifest] = await Promise.all([
+    readFile(resolve('src/scripts/theme.js'), 'utf8'),
+    readFile(resolve('src/layouts/BaseLayout.astro'), 'utf8'),
+    readFile(resolve('public/site.webmanifest'), 'utf8').then(JSON.parse),
+  ]);
+  const light = hexValue(ruleFor(':root'), '--background');
+  const dark = hexValue(ruleFor(':root[data-theme="dark"]'), '--background');
+  assert.ok(layout.includes(`<meta name="theme-color" content="${light}"`));
+  assert.ok(themeScript.includes(`theme === 'dark' ? '${dark}' : '${light}'`));
+  assert.equal(manifest.background_color, light);
+  assert.equal(manifest.theme_color, light);
+});
+
 test('keeps navigation restrained and its utility controls usable on mobile in both themes', () => {
   const editorialStyles = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
   assert.match(editorialStyles, /background:\s*var\(--background\);[\s\S]*border-bottom:\s*1px solid var\(--line\);/);
   assert.match(editorialStyles, /nav \.nav-btn\s*\{[^}]*min-width:\s*34px;[^}]*min-height:\s*34px;/);
   assert.match(editorialStyles, /\.nav-btn:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--accent-strong\);/);
+  const mobileHomeNavigation = ruleFor('body[data-section="home"] nav');
+  assert.match(mobileHomeNavigation, /background:\s*var\(--background\);/);
+  assert.match(mobileHomeNavigation, /box-shadow:\s*none;/);
 });
 
 test('uses theme-specific error tokens with compliant text and indicator contrast', () => {
@@ -114,6 +167,8 @@ test('contains decorative overflow and protects anchor and focus destinations fr
   const wave = ruleFor('.bg-wave');
 
   assert.doesNotMatch(wave, /width:\s*100vw;/);
+  assert.match(wave, /inset:\s*0;/);
+  assert.match(wave, /height:\s*100%;/);
   assert.match(wave, /overflow:\s*clip;/);
   assert.match(wave, /contain:\s*paint;/);
   assert.doesNotMatch(stylesheet, /\.bg-raw|\.raw-[1-4]/);

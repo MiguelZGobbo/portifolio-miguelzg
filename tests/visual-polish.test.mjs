@@ -50,7 +50,7 @@ test('uses one self-hosted IBM Plex Sans family throughout the interface', () =>
   assert.doesNotMatch(stylesheet, /DM Sans Variable|Playfair Display Variable/);
 });
 
-test('uses a restrained off-white and graphite palette with a blue-gray accent', () => {
+test('keeps white and graphite bases with blue controls and violet ambient colors only', () => {
   const lightTheme = ruleFor(':root');
   const darkTheme = ruleFor(':root[data-theme="dark"]');
 
@@ -59,6 +59,11 @@ test('uses a restrained off-white and graphite palette with a blue-gray accent',
   assert.match(lightTheme, /--accent-strong:\s*#[0-9a-f]{6};/i);
   assert.match(darkTheme, /--background:\s*#[0-9a-f]{6};/i);
   assert.match(darkTheme, /--accent:\s*#[0-9a-f]{6};/i);
+  assert.match(lightTheme, /--background:\s*#F5F6F4;/);
+  assert.match(lightTheme, /--ambient-rgb:\s*200, 188, 240;/);
+  assert.match(darkTheme, /--background:\s*#2C3336;/);
+  assert.match(darkTheme, /--ambient-rgb:\s*161, 138, 206;/);
+  assert.doesNotMatch(stylesheet, /--(?:highlight|highlight-hover|on-highlight)\b/);
   assert.match(ruleFor('body'), /background:\s*var\(--background\);/);
   assert.match(ruleFor('body'), /color:\s*var\(--text-primary\);/);
 });
@@ -78,11 +83,35 @@ test('presents projects in a continuous editorial list without card surfaces', (
   assert.match(featured, /padding-block:/);
 });
 
-test('retains ambient light movement between sections', () => {
-  assert.match(stylesheet, /\.bg-wave-inner\s*\{[^}]*transition:\s*transform 500ms ease,\s*opacity 500ms ease;/);
+test('smoothly repositions ambient cores and presence when the observed section changes', () => {
+  assert.match(ruleFor('.bg-wave-inner'), /transition:[^;]*--wave-origin-x 900ms ease,[^;]*--wave-origin-y 900ms ease,[^;]*opacity 500ms ease;/);
+  for (const axis of ['x', 'y']) {
+    const registration = ruleFor(`@property --wave-origin-${axis}`);
+    assert.match(registration, /syntax:\s*'<length>';/);
+    assert.match(registration, /inherits:\s*true;/);
+    assert.match(registration, /initial-value:\s*0px;/);
+  }
   assert.equal([...waves.matchAll(/class="bg-wave wave-[1-3]"/g)].length, 3);
+  assert.equal([...waves.matchAll(/aria-hidden="true"/g)].length, 3);
   assert.doesNotMatch(waves, /class="bg-raw/);
   assert.doesNotMatch(stylesheet, /\.bg-raw|\.raw-[1-4]/);
+  assert.doesNotMatch(stylesheet, /--wave-offset-[xy]/);
+
+  for (const [ptSection, enSection, presence, origins] of [
+    ['projetos', 'projects', [0.85, 1, 0.9], [['12vw', '88vh'], ['88vw', '12vh'], ['88vw', '88vh']]],
+    ['competencias', 'skills', [1, 0.85, 0.9], [['12vw', '12vh'], ['12vw', '88vh'], ['88vw', '12vh']]],
+    ['sobre', 'about', [0.9, 1, 0.85], [['88vw', '12vh'], ['12vw', '88vh'], ['88vw', '88vh']]],
+    ['contato', 'contact', [1, 0.9, 0.85], [['88vw', '88vh'], ['12vw', '12vh'], ['12vw', '88vh']]],
+  ]) {
+    for (const wave of [1, 2, 3]) {
+      const groupedRule = new RegExp(`body\\[data-section="${ptSection}"\\] \\.wave-${wave} \\.bg-wave-inner,\\s*body\\[data-section="${enSection}"\\] \\.wave-${wave} \\.bg-wave-inner\\s*\\{([^}]+)\\}`);
+      const declarations = stylesheet.match(groupedRule)?.[1];
+      assert.ok(declarations, `${ptSection}/${enSection} wave ${wave}`);
+      assert.ok(declarations.includes(`opacity: ${presence[wave - 1]};`));
+      assert.ok(declarations.includes(`--wave-origin-x: ${origins[wave - 1][0]};`));
+      assert.ok(declarations.includes(`--wave-origin-y: ${origins[wave - 1][1]};`));
+    }
+  }
 });
 
 test('renders three broad radial lights with theme-specific strength and transparent edges', () => {
@@ -90,17 +119,20 @@ test('renders three broad radial lights with theme-specific strength and transpa
   assert.doesNotMatch(waves, /<svg|<path/);
 
   const glow = declarationsFor(stylesheet, '.wave-glow');
-  assert.equal((glow.match(/radial-gradient\(/g) ?? []).length, 2);
-  assert.match(glow, /ellipse closest-side at var\(--wave-core-position\),/);
-  assert.match(glow, /ellipse closest-side at var\(--wave-halo-position\),/);
-  assert.doesNotMatch(glow, /closest-side at center/);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*1\)\s*0%/);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*0\.55\)\s*38%/);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*0\.14\)\s*70%/);
-  assert.equal([...glow.matchAll(/rgba\(var\(--wave-rgb\),\s*0\)\s*100%/g)].length, 2);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-peak\)\)\s*0%/);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-mid\)\)\s*58%/);
-  assert.match(glow, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-edge\)\)\s*94%/);
+  const paint = declarationsFor(stylesheet, '.wave-glow::before');
+  assert.equal((paint.match(/radial-gradient\(/g) ?? []).length, 2);
+  assert.match(paint, /ellipse var\(--wave-core-radius\) at var\(--wave-core-position\),/);
+  assert.match(paint, /ellipse var\(--wave-halo-radius\) at var\(--wave-core-position\),/);
+  assert.match(glow, /--wave-core-radius:\s*55vw 65vh;/);
+  assert.match(glow, /--wave-halo-radius:\s*90vw 95vh;/);
+  assert.match(paint, /inset:\s*calc\(-1 \* var\(--wave-drift-y\)\) calc\(-1 \* var\(--wave-drift-x\)\);/);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*1\)\s*0%/);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*0\.55\)\s*38%/);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*0\.14\)\s*70%/);
+  assert.equal([...paint.matchAll(/rgba\(var\(--wave-rgb\),\s*0\)\s*100%/g)].length, 2);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-peak\)\)\s*0%/);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-mid\)\)\s*58%/);
+  assert.match(paint, /rgba\(var\(--wave-rgb\),\s*var\(--wave-halo-edge\)\)\s*94%/);
   assert.match(glow, /--wave-halo-peak:\s*0\.48;/);
   assert.match(glow, /--wave-halo-mid:\s*0\.20;/);
   assert.match(glow, /--wave-halo-edge:\s*0\.04;/);
@@ -109,8 +141,7 @@ test('renders three broad radial lights with theme-specific strength and transpa
   assert.match(declarationsFor(stylesheet, '[data-theme="dark"] .wave-glow'), /--wave-halo-mid:\s*0\.12;/);
   assert.match(declarationsFor(stylesheet, '[data-theme="dark"] .wave-glow'), /--wave-halo-edge:\s*0;/);
 
-  const desktop = stylesheet.slice(0, stylesheet.indexOf('@media (max-width: 1199px)'));
-  const medium = mediaBlock(stylesheet, '@media (max-width: 1199px)');
+  const desktop = stylesheet.slice(stylesheet.indexOf('15. ONDAS ANIMADAS'), stylesheet.indexOf('17. TELAS PEQUENAS'));
   const mobile = mediaBlock(stylesheet, '@media (max-width: 640px)');
   const darkTheme = stylesheet.slice(
     stylesheet.indexOf('/* Ondas em dark */'),
@@ -119,52 +150,49 @@ test('renders three broad radial lights with theme-specific strength and transpa
   const darkMobile = mediaBlock(stylesheet, '@media (max-width: 640px)', 1);
 
   const expected = [
-    { wave: 1, rgb: '30, 99, 136', light: '0.24', mobileLight: '0.27', dark: '0.11', mobileDark: '0.12' },
-    { wave: 2, rgb: '78, 116, 152', light: '0.17', mobileLight: '0.20', dark: '0.08', mobileDark: '0.08' },
-    { wave: 3, rgb: '46, 82, 105', light: '0.11', mobileLight: '0.14', dark: '0.05', mobileDark: '0.05' },
+    { wave: 1, light: '0.28', mobileLight: '0.28', dark: '0.11', mobileDark: '0.12' },
+    { wave: 2, light: '0.20', mobileLight: '0.20', dark: '0.08', mobileDark: '0.08' },
+    { wave: 3, light: '0.12', mobileLight: '0.12', dark: '0.05', mobileDark: '0.05' },
   ];
 
-  const desktopSizes = [];
-  const mediumSizes = [];
-  for (const { wave, rgb, light, mobileLight, dark, mobileDark } of expected) {
+  assert.match(ruleFor(':root'), /--ambient-rgb:\s*200, 188, 240;/);
+  assert.match(ruleFor(':root[data-theme="dark"]'), /--ambient-rgb:\s*161, 138, 206;/);
+  for (const { wave, light, mobileLight, dark, mobileDark } of expected) {
     const selector = `.wave-${wave} .bg-wave-inner`;
     const desktopDeclarations = declarationsFor(desktop, selector);
-    const mediumDeclarations = declarationsFor(medium, selector);
-    assert.ok(desktopDeclarations.includes(`--wave-rgb: ${rgb};`));
+    assert.ok(desktopDeclarations.includes('--wave-rgb: var(--ambient-rgb);'));
     assert.ok(desktopDeclarations.includes(`--wave-alpha: ${light};`));
     assert.ok(declarationsFor(mobile, selector).includes(`--wave-alpha: ${mobileLight};`));
-    desktopSizes.push(desktopDeclarations.match(/width:\s*(min\([^;]+\));[\s\S]*height:\s*(min\([^;]+\));/)?.slice(1).join(' / '));
-    mediumSizes.push(mediumDeclarations.match(/width:\s*(max\([^;]+\));[\s\S]*height:\s*(min\([^;]+\));/)?.slice(1).join(' / '));
     const darkSelector = `[data-theme="dark"] ${selector}`;
-    assert.ok(declarationsFor(darkTheme, darkSelector).includes('--wave-rgb: 155, 178, 189;'));
+    assert.ok(declarationsFor(darkTheme, darkSelector).includes('--wave-rgb: var(--ambient-rgb);'));
     assert.ok(declarationsFor(darkTheme, darkSelector).includes(`--wave-alpha: ${dark};`));
     assert.ok(declarationsFor(darkMobile, darkSelector).includes(`--wave-alpha: ${mobileDark};`));
   }
-  assert.equal(new Set(desktopSizes).size, 3);
-  assert.equal(new Set(mediumSizes).size, 3);
-  assert.ok(desktopSizes.every(Boolean));
-  assert.ok(mediumSizes.every(Boolean));
-
   const glowGeometry = [
-    { wave: 1, corePosition: '42% 56%', haloPosition: '60% 40%' },
-    { wave: 2, corePosition: '62% 42%', haloPosition: '38% 62%' },
-    { wave: 3, corePosition: '36% 58%', haloPosition: '66% 38%' },
+    { wave: 1, x: '12vw', y: '12vh', duration: 28 },
+    { wave: 2, x: '88vw', y: '88vh', duration: 22 },
+    { wave: 3, x: '88vw', y: '12vh', duration: 18 },
   ];
 
-  for (const { wave, corePosition, haloPosition } of glowGeometry) {
-    const declarations = declarationsFor(desktop, `.wave-${wave} .wave-glow`);
-    assert.ok(declarations.includes(`--wave-core-position: ${corePosition};`));
-    assert.ok(declarations.includes(`--wave-halo-position: ${haloPosition};`));
+  for (const { wave, x, y, duration } of glowGeometry) {
+    const declarations = declarationsFor(desktop, `.wave-${wave} .bg-wave-inner`);
+    assert.ok(declarations.includes(`--wave-origin-x: ${x};`));
+    assert.ok(declarations.includes(`--wave-origin-y: ${y};`));
+    assert.ok(declarationsFor(desktop, `.wave-${wave} .wave-glow::before`).includes(`animation: waveFloat${wave} ${duration}s ease-in-out infinite;`));
   }
 
   const inner = declarationsFor(desktop, '.bg-wave-inner');
-  assert.match(inner, /transform:\s*translate\(calc\(50vw - 50% \+ var\(--wave-offset-x\)\),\s*var\(--wave-offset-y\)\);/);
-  for (const [ptSection, enSection] of [['sobre', 'about'], ['competencias', 'skills'], ['projetos', 'projects'], ['contato', 'contact']]) {
-    for (const wave of [1, 2, 3]) {
-      const groupedRule = new RegExp(`body\\[data-section="${ptSection}"\\] \\.wave-${wave} \\.bg-wave-inner,\\s*body\\[data-section="${enSection}"\\] \\.wave-${wave} \\.bg-wave-inner\\s*\\{[^}]*--wave-offset-x:`);
-      assert.match(desktop, groupedRule);
-    }
-  }
+  assert.match(inner, /inset:\s*0;/);
+  assert.match(inner, /width:\s*100%;/);
+  assert.match(inner, /height:\s*100%;/);
+  assert.doesNotMatch(inner, /transform:/);
+  assert.doesNotMatch(desktop, /rotate\(|width:\s*(?:min|max)\(/);
+  const mobileGlow = declarationsFor(mobile, '.wave-glow');
+  assert.match(mobileGlow, /--wave-core-radius:\s*70vw 60vh;/);
+  assert.match(mobileGlow, /--wave-halo-radius:\s*110vw 90vh;/);
+  assert.match(mobileGlow, /--wave-drift-x:\s*1vw;/);
+  assert.match(mobileGlow, /--wave-drift-y:\s*0\.75vh;/);
+  assert.doesNotMatch(mobile, /animation:\s*none;/);
   assert.match(mediaBlock(stylesheet, '@media (prefers-reduced-motion: reduce)'), /\.bg-wave\s*\{\s*display:\s*none;/);
 
   const waveStyles = stylesheet.slice(stylesheet.indexOf('15. ONDAS ANIMADAS'), stylesheet.indexOf('17. TELAS PEQUENAS'));

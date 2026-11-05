@@ -9,6 +9,8 @@
     --text-secondary: #536168;
     --accent: #647D8A;
     --accent-strong: #405A67;
+    --control-border: var(--accent-strong);
+    --ambient-rgb: 200, 188, 240;
     --line: rgba(49, 68, 77, 0.18);
     --error: #A32626;
 
@@ -208,13 +210,13 @@ html.js .reveal.visible {
 .btn {
     display: inline-block;
     padding: 0.72rem 1.6rem;
-    background: var(--brown-dark);
-    color: var(--cream);
+    background: var(--accent-strong);
+    color: var(--background);
     font-size: 0.82rem;
     font-weight: 600;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    border: 2px solid var(--brown-dark);
+    border: 2px solid var(--accent-strong);
     border-radius: 8px;
     cursor: pointer;
     font-family: 'IBM Plex Sans Variable', sans-serif;
@@ -235,9 +237,9 @@ html.js .reveal.visible {
 }
 
 .btn:hover {
-    background: var(--dark);
-    border-color: var(--dark);
-    color: var(--cream);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--background);
     box-shadow: none;
     transform: none;
 }
@@ -245,26 +247,30 @@ html.js .reveal.visible {
 .btn:focus-visible {
     outline: 2px solid var(--brown-dark);
     outline-offset: 2px;
-    background: var(--dark);
-    border-color: var(--dark);
-    color: var(--cream);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--background);
 }
 
 .btn-outline {
     background: transparent;
-    color: var(--brown-dark);
+    color: var(--accent-strong);
+    border-color: var(--control-border);
 }
 
 .btn-outline:hover {
-    background: var(--brown-dark);
+    background: var(--accent-strong);
+    border-color: var(--control-border);
+    color: var(--background);
     box-shadow: none;
 }
 
 .btn-outline:focus-visible {
     outline: 2px solid var(--brown-dark);
     outline-offset: 2px;
-    background: var(--brown-dark);
-    color: var(--cream);
+    background: var(--accent-strong);
+    border-color: var(--control-border);
+    color: var(--background);
 }
 
 /* ================================
@@ -572,16 +578,6 @@ nav a,
 .form-group textarea {
     height: 100px;
     resize: vertical;
-}
-
-.form-group input[aria-invalid="true"],
-.form-group textarea[aria-invalid="true"] {
-    border-color: var(--error);
-}
-
-.form-group input[aria-invalid="true"]:focus-visible,
-.form-group textarea[aria-invalid="true"]:focus-visible {
-    outline-color: var(--error);
 }
 
 .field-error {
@@ -989,12 +985,23 @@ footer {
 /* ================================
     15. ONDAS ANIMADAS
 ================================= */
+@property --wave-origin-x {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+}
+
+@property --wave-origin-y {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+}
+
 .bg-wave {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     overflow: clip;
     contain: paint;
     pointer-events: none;
@@ -1003,89 +1010,84 @@ footer {
 
 .bg-wave-inner {
     position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(calc(50vw - 50% + var(--wave-offset-x)), var(--wave-offset-y));
-    will-change: transform;
-    transition: transform 500ms ease, opacity 500ms ease;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition:
+        --wave-origin-x 900ms ease,
+        --wave-origin-y 900ms ease,
+        opacity 500ms ease;
 }
 
 .wave-glow {
-    --wave-core-position: 50% 50%;
-    --wave-halo-position: 50% 50%;
+    --wave-core-radius: 55vw 65vh;
+    --wave-halo-radius: 90vw 95vh;
+    --wave-drift-x: 2vw;
+    --wave-drift-y: 1.5vh;
     --wave-halo-peak: 0.48;
     --wave-halo-mid: 0.20;
     --wave-halo-edge: 0.04;
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;
+    opacity: var(--wave-alpha);
+}
+
+.wave-glow::before {
+    --wave-core-position: calc(var(--wave-origin-x) + var(--wave-drift-x)) calc(var(--wave-origin-y) + var(--wave-drift-y));
+    content: '';
+    position: absolute;
+    /* A margem interna de pintura evita faixas vazias durante a flutuação. */
+    inset: calc(-1 * var(--wave-drift-y)) calc(-1 * var(--wave-drift-x));
     background-image:
         radial-gradient(
-            ellipse closest-side at var(--wave-core-position),
+            ellipse var(--wave-core-radius) at var(--wave-core-position),
             rgba(var(--wave-rgb), 1) 0%,
             rgba(var(--wave-rgb), 0.55) 38%,
             rgba(var(--wave-rgb), 0.14) 70%,
             rgba(var(--wave-rgb), 0) 100%
         ),
         radial-gradient(
-            ellipse closest-side at var(--wave-halo-position),
+            ellipse var(--wave-halo-radius) at var(--wave-core-position),
             rgba(var(--wave-rgb), var(--wave-halo-peak)) 0%,
             rgba(var(--wave-rgb), var(--wave-halo-mid)) 58%,
             rgba(var(--wave-rgb), var(--wave-halo-edge)) 94%,
             rgba(var(--wave-rgb), 0) 100%
         );
-    opacity: var(--wave-alpha);
     will-change: transform;
-    transform: translateZ(0);
 }
 
-.wave-2 .bg-wave-inner {
-    top: auto;
-    bottom: 0;
-}
-
-/* ── Luz 1: ampla e horizontal ── */
+/* ── Luz 1: canto superior esquerdo ── */
 .wave-1 .bg-wave-inner {
-    width: min(150vw, 3800px);
-    height: min(110vh, 1300px);
-    --wave-rgb: 30, 99, 136;
-    --wave-alpha: 0.24;
-    --wave-offset-x: -12vw;
-    --wave-offset-y: -12vh;
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.28;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
 }
-.wave-1 .wave-glow {
-    --wave-core-position: 42% 56%;
-    --wave-halo-position: 60% 40%;
+.wave-1 .wave-glow::before {
     animation: waveFloat1 28s ease-in-out infinite;
 }
 
-/* ── Luz 2: média e diagonal ── */
+/* ── Luz 2: canto inferior direito ── */
 .wave-2 .bg-wave-inner {
-    width: min(118vw, 3300px);
-    height: min(128vh, 1450px);
-    --wave-rgb: 78, 116, 152;
-    --wave-alpha: 0.17;
-    --wave-offset-x: 12vw;
-    --wave-offset-y: 10vh;
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.20;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
 }
-.wave-2 .wave-glow {
-    --wave-core-position: 62% 42%;
-    --wave-halo-position: 38% 62%;
+.wave-2 .wave-glow::before {
     animation: waveFloat2 22s ease-in-out infinite;
 }
 
-/* ── Luz 3: menor e contra-diagonal ── */
+/* ── Luz 3: canto superior direito ── */
 .wave-3 .bg-wave-inner {
-    width: min(58vw, 1900px);
-    height: min(118vh, 1300px);
-    --wave-rgb: 46, 82, 105;
-    --wave-alpha: 0.11;
-    --wave-offset-x: 8vw;
-    --wave-offset-y: -4vh;
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.12;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
 }
-.wave-3 .wave-glow {
-    --wave-core-position: 36% 58%;
-    --wave-halo-position: 66% 38%;
+.wave-3 .wave-glow::before {
     animation: waveFloat3 18s ease-in-out infinite;
 }
 
@@ -1097,104 +1099,100 @@ footer {
 /* ── Sobre ── */
 body[data-section="sobre"] .wave-1 .bg-wave-inner,
 body[data-section="about"] .wave-1 .bg-wave-inner {
-    --wave-offset-x: 13vw;
-    --wave-offset-y: 6vh;
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
 }
 body[data-section="sobre"] .wave-2 .bg-wave-inner,
 body[data-section="about"] .wave-2 .bg-wave-inner {
-    --wave-offset-x: -11vw;
-    --wave-offset-y: -6vh;
+    opacity: 1;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
 }
 body[data-section="sobre"] .wave-3 .bg-wave-inner,
 body[data-section="about"] .wave-3 .bg-wave-inner {
-    --wave-offset-x: -9vw;
-    --wave-offset-y: 9vh;
+    opacity: 0.85;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
 }
 
 /* ── Habilidades ── */
 body[data-section="competencias"] .wave-1 .bg-wave-inner,
 body[data-section="skills"] .wave-1 .bg-wave-inner {
-    --wave-offset-x: -9vw;
-    --wave-offset-y: -8vh;
+    opacity: 1;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
 }
 body[data-section="competencias"] .wave-2 .bg-wave-inner,
 body[data-section="skills"] .wave-2 .bg-wave-inner {
-    --wave-offset-x: 10vw;
-    --wave-offset-y: 9vh;
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
 }
 body[data-section="competencias"] .wave-3 .bg-wave-inner,
 body[data-section="skills"] .wave-3 .bg-wave-inner {
-    --wave-offset-x: 9vw;
-    --wave-offset-y: -7vh;
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
 }
 
 /* ── Projetos ── */
 body[data-section="projetos"] .wave-1 .bg-wave-inner,
 body[data-section="projects"] .wave-1 .bg-wave-inner {
-    --wave-offset-x: 12vw;
-    --wave-offset-y: 5vh;
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
 }
 body[data-section="projetos"] .wave-2 .bg-wave-inner,
 body[data-section="projects"] .wave-2 .bg-wave-inner {
-    --wave-offset-x: -12vw;
-    --wave-offset-y: -6vh;
+    opacity: 1;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
 }
 body[data-section="projetos"] .wave-3 .bg-wave-inner,
 body[data-section="projects"] .wave-3 .bg-wave-inner {
-    --wave-offset-x: -10vw;
-    --wave-offset-y: 8vh;
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
 }
 
 /* ── Contato ── */
 body[data-section="contato"] .wave-1 .bg-wave-inner,
 body[data-section="contact"] .wave-1 .bg-wave-inner {
-    --wave-offset-x: -12vw;
-    --wave-offset-y: -5vh;
+    opacity: 1;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
 }
 body[data-section="contato"] .wave-2 .bg-wave-inner,
 body[data-section="contact"] .wave-2 .bg-wave-inner {
-    --wave-offset-x: 12vw;
-    --wave-offset-y: 10vh;
+    opacity: 0.9;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
 }
 body[data-section="contato"] .wave-3 .bg-wave-inner,
 body[data-section="contact"] .wave-3 .bg-wave-inner {
-    --wave-offset-x: 10vw;
-    --wave-offset-y: -8vh;
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
 }
 
 /* ── Keyframes ── */
 @keyframes waveFloat1 {
     0%, 100% { transform: translate(0, 0); }
-    33%      { transform: translate(2vw, -1.5vw); }
-    66%      { transform: translate(-1.5vw, 1vw); }
+    33%      { transform: translate(var(--wave-drift-x), calc(-1 * var(--wave-drift-y))); }
+    66%      { transform: translate(calc(-0.75 * var(--wave-drift-x)), var(--wave-drift-y)); }
 }
 
 @keyframes waveFloat2 {
-    0%, 100% { transform: rotate(35deg) translate(0, 0); }
-    33%      { transform: rotate(37deg) translate(1.5vw, -1.2vw); }
-    66%      { transform: rotate(33deg) translate(-1vw, 0.8vw); }
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(calc(-1 * var(--wave-drift-x)), calc(0.75 * var(--wave-drift-y))); }
+    66%      { transform: translate(calc(0.75 * var(--wave-drift-x)), calc(-1 * var(--wave-drift-y))); }
 }
 
 @keyframes waveFloat3 {
-    0%, 100% { transform: rotate(-25deg) translate(0, 0); }
-    33%      { transform: rotate(-23deg) translate(1vw, -1vw); }
-    66%      { transform: rotate(-27deg) translate(-0.8vw, 0.6vw); }
-}
-
-/* ── Ondas reduzidas (telas médias) ── */
-@media (max-width: 1199px) {
-    .wave-1 .bg-wave-inner {
-        width: max(145vw, 720px);
-        height: min(115vh, 1000px);
-    }
-    .wave-2 .bg-wave-inner {
-        width: max(120vw, 620px);
-        height: min(128vh, 1150px);
-    }
-    .wave-3 .bg-wave-inner {
-        width: max(70vw, 500px);
-        height: min(115vh, 1100px);
-    }
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(calc(0.6 * var(--wave-drift-x)), var(--wave-drift-y)); }
+    66%      { transform: translate(calc(-1 * var(--wave-drift-x)), calc(-0.5 * var(--wave-drift-y))); }
 }
 
 /* ================================
@@ -1205,22 +1203,19 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         scroll-padding-bottom: 152px;
     }
     .wave-1 .bg-wave-inner {
-        --wave-alpha: 0.27;
-    }
-    .wave-1 .wave-glow {
-        animation: none;
+        --wave-alpha: 0.28;
     }
     .wave-2 .bg-wave-inner {
         --wave-alpha: 0.20;
     }
-    .wave-2 .wave-glow {
-        animation: none;
-    }
     .wave-3 .bg-wave-inner {
-        --wave-alpha: 0.14;
+        --wave-alpha: 0.12;
     }
-    .wave-3 .wave-glow {
-        animation: none;
+    .wave-glow {
+        --wave-core-radius: 70vw 60vh;
+        --wave-halo-radius: 110vw 90vh;
+        --wave-drift-x: 1vw;
+        --wave-drift-y: 0.75vh;
     }
 
     :root {
@@ -1243,10 +1238,8 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     }
 
     body[data-section="home"] nav {
-        background: rgba(248, 240, 229, 0.92);
-        box-shadow:
-            inset 0 -1px 0 rgba(44, 34, 24, 0.04),
-            0 1px 3px rgba(44, 34, 24, 0.04);
+        background: var(--background);
+        box-shadow: none;
         pointer-events: auto;
     }
 
@@ -1532,16 +1525,11 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 @media (hover: none) and (pointer: coarse) {
     .btn:hover,
     .btn:focus-visible:hover {
-        background: var(--brown-dark) !important;
-        border-color: var(--brown-dark) !important;
-        color: var(--cream) !important;
         transform: none !important;
         box-shadow: none !important;
     }
 
     .btn-outline:hover {
-        background: transparent !important;
-        color: var(--brown-dark) !important;
         transform: none !important;
         box-shadow: none !important;
     }
@@ -1570,13 +1558,14 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
 =============================== */
 :root[data-theme="dark"] {
     color-scheme: dark;
-    --background: #202629;
-    --surface: #292F32;
-    --surface-strong: #333B3F;
+    --background: #2C3336;
+    --surface: #343C40;
+    --surface-strong: #3D474C;
     --text-primary: #E8ECEC;
     --text-secondary: #BAC4C7;
     --accent: #9BB2BD;
     --accent-strong: #B5CAD3;
+    --ambient-rgb: 161, 138, 206;
     --line: rgba(195, 211, 217, 0.2);
     --error: #FFAAAA;
 
@@ -1623,20 +1612,11 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     --wave-halo-mid: 0.12;
     --wave-halo-edge: 0;
 }
-[data-theme="dark"] .wave-1 .bg-wave-inner { --wave-rgb: 155, 178, 189; --wave-alpha: 0.11; }
-[data-theme="dark"] .wave-2 .bg-wave-inner { --wave-rgb: 155, 178, 189; --wave-alpha: 0.08; }
-[data-theme="dark"] .wave-3 .bg-wave-inner { --wave-rgb: 155, 178, 189; --wave-alpha: 0.05; }
+[data-theme="dark"] .wave-1 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.11; }
+[data-theme="dark"] .wave-2 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.08; }
+[data-theme="dark"] .wave-3 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.05; }
 
 @media (max-width: 640px) {
-    [data-theme="dark"] nav {
-        background: transparent;
-        box-shadow: none;
-    }
-    [data-theme="dark"] body[data-section="home"] nav,
-    [data-theme="dark"] .nav-links {
-        background: var(--surface);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
-    }
     [data-theme="dark"] .wave-1 .bg-wave-inner { --wave-alpha: 0.12; }
     [data-theme="dark"] .wave-2 .bg-wave-inner { --wave-alpha: 0.08; }
     [data-theme="dark"] .wave-3 .bg-wave-inner { --wave-alpha: 0.05; }
@@ -1803,12 +1783,6 @@ html[data-lang="en"] .lang-en {
 
     nav .logo-mobile {
         display: inline;
-    }
-
-    [data-theme="dark"] nav .nav-controls {
-        background: var(--surface);
-        border-color: rgba(243, 205, 165, 0.45);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     }
 
     [data-theme="dark"] nav .nav-btn:focus-visible {
@@ -2492,6 +2466,7 @@ nav,
 .project-github-link:focus-visible {
     color: var(--background);
     background: var(--text-primary);
+    border-color: var(--text-primary);
     box-shadow: none;
 }
 
@@ -2581,14 +2556,21 @@ nav,
 .cv-actions .btn-outline {
     color: var(--accent-strong);
     background: transparent;
-    border-color: var(--line);
+    border-color: var(--control-border);
 }
 
 .cv-actions .btn:hover,
-.cv-actions .btn-outline:hover {
+.cv-actions .btn:focus-visible {
+    color: var(--background);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+}
+
+.cv-actions .btn-outline:hover,
+.cv-actions .btn-outline:focus-visible {
     color: var(--background);
     background: var(--accent-strong);
-    border-color: var(--accent-strong);
+    border-color: var(--control-border);
 }
 
 .contact-grid {
@@ -2663,8 +2645,8 @@ nav,
     min-height: 46px;
     padding: 0.7rem 0.8rem;
     color: var(--text-primary);
-    background: transparent;
-    border: 1px solid var(--line);
+    background: var(--surface);
+    border: 1px solid var(--control-border);
     border-radius: 2px;
     font-family: 'IBM Plex Sans Variable', sans-serif;
 }
@@ -2677,13 +2659,37 @@ nav,
 .form-group textarea:focus,
 .form-group input:focus-visible,
 .form-group textarea:focus-visible {
-    border-color: var(--accent);
+    border-color: var(--control-border);
     outline-color: var(--accent-strong);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 1;
+}
+
+.form-group input[aria-invalid="true"],
+.form-group textarea[aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+.form-group input[aria-invalid="true"]:focus-visible,
+.form-group textarea[aria-invalid="true"]:focus-visible {
+    outline-color: var(--error);
 }
 
 .btn {
     border-radius: 2px;
     letter-spacing: 0.025em;
+}
+
+.btn:disabled,
+.btn:disabled:hover {
+    color: var(--text-secondary);
+    background: var(--surface-strong);
+    border-color: var(--line);
+    cursor: not-allowed;
 }
 
 #btn-enviar {
