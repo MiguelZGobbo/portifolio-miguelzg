@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" role="img" aria-labelledby="title desc">
+  <title id="title">Task Management API</title>
+  <desc id="desc">REST endpoints implemented by TarefaController, the Tarefa entity fields and MySQL persistence through Spring Data JPA.</desc>
+  <rect width="1200" height="750" fill="#F3F6F2"/>
+  <g font-family="sans-serif" fill="#233428">
+    <text x="64" y="91" font-size="42" font-weight="700">Task Management API</text>
+    <text x="64" y="135" font-size="25" fill="#536350">Java · Spring Boot · MySQL</text>
+    <path d="M64 171H1136" stroke="#B9C9B5"/>
+    <text x="64" y="222" font-size="25" font-weight="700">REST endpoints</text>
+    <g font-family="monospace" font-size="27">
+      <rect x="64" y="250" width="565" height="63" rx="5" fill="#E2EBDF"/>
+      <text x="84" y="291" fill="#31633A" font-weight="700">POST</text><text x="217" y="291">/tarefas</text>
+      <rect x="64" y="325" width="565" height="63" rx="5" fill="#E4EBF1"/>
+      <text x="84" y="366" fill="#355D7A" font-weight="700">GET</text><text x="217" y="366">/tarefas</text>
+      <rect x="64" y="400" width="565" height="63" rx="5" fill="#E4EBF1"/>
+      <text x="84" y="441" fill="#355D7A" font-weight="700">GET</text><text x="217" y="441">/tarefas/{id}</text>
+      <rect x="64" y="475" width="565" height="63" rx="5" fill="#F2E8D7"/>
+      <text x="84" y="516" fill="#825A25" font-weight="700">PUT</text><text x="217" y="516">/tarefas/{id}</text>
+      <rect x="64" y="550" width="565" height="63" rx="5" fill="#F1E1DF"/>
+      <text x="84" y="591" fill="#913F38" font-weight="700">DELETE</text><text x="217" y="591">/tarefas/{id}</text>
+    </g>
+    <path d="M653 421H700M688 410L700 421 688 432" fill="none" stroke="#698060" stroke-width="3"/>
+    <rect x="725" y="250" width="411" height="270" rx="5" fill="#FFFFFF" stroke="#B9C9B5" stroke-width="2"/>
+    <text x="753" y="294" font-size="28" font-weight="700">Tarefa</text>
+    <path d="M725 314H1136" stroke="#B9C9B5"/>
+    <g font-family="monospace" font-size="25" fill="#42533D">
+      <text x="753" y="358">id: Long</text>
+      <text x="753" y="399">nome: String</text>
+      <text x="753" y="440">dataEntrega: LocalDate</text>
+      <text x="753" y="481">responsavel: String</text>
+    </g>
+    <path d="M930 531V550M919 539L930 550 941 539" fill="none" stroke="#698060" stroke-width="3"/>
+    <rect x="725" y="567" width="411" height="72" rx="5" fill="#DFE9DB"/>
+    <text x="930" y="612" font-size="25" text-anchor="middle" font-weight="600">Spring Data JPA → MySQL</text>
+    <text x="64" y="699" font-size="21" fill="#536350">Implementation overview · TarefaController / Tarefa / TarefaRepository</text>
+  </g>
+</svg>

@@ -1,0 +1,49 @@
+/* ================================
+   15. ACESSIBILIDADE
+=============================== */
+.skip-link {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    z-index: 1000;
+    background: var(--brown-dark);
+    color: var(--cream);
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    font-size: calc(var(--fluid-type) * 0.78);
+    font-weight: 600;
+    text-decoration: none;
+    transform: translateY(-200%);
+    transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+:focus-visible {
+    outline: 2px solid var(--brown-dark);
+    outline-offset: 2px;
+}
+
+.hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* ================================
+   18. POLIMENTO
+=============================== */
+::selection {
+    background: var(--brown);
+    color: var(--cream);
+}
+
+:root:not([data-theme="dark"]) ::selection {
+    background: var(--action-background);
+    color: var(--on-action);
+}

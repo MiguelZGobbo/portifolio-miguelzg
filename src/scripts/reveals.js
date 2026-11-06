@@ -14,13 +14,12 @@ export function initReveals() {
     return;
   }
 
+  const threshold = 0.12;
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      reveal(entry.target);
-      observer.unobserve(entry.target);
+      entry.target.classList.toggle('visible', entry.isIntersecting && entry.intersectionRatio >= threshold);
     }
-  }, { threshold: 0.12 });
+  }, { threshold });
 
   elements.forEach((element) => observer.observe(element));
 }

@@ -1,0 +1,62 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Project } from '../data/projects';
+import { translate, type Lang } from '../lib/i18n';
+
+interface Props {
+  image: NonNullable<Project['image']>;
+  title: string;
+  lang: Lang;
+}
+
+const { image, title, lang } = Astro.props;
+const projectImages = import.meta.glob<ImageMetadata>('../assets/projects/*.{png,jpg,webp,svg}', { eager: true, import: 'default' });
+const source = projectImages[`../assets/projects/${image.src}`];
+const fullImage = source.format === 'svg'
+  ? source
+  : await getImage({ src: source, width: source.width, format: 'webp', quality: 90 });
+---
+
+<a
+  class="project-media project-preview-link"
+  href={fullImage.src}
+  data-viewer-trigger
+  data-title={title}
+  data-description={image.alt[lang]}
+  data-caption={image.caption?.[lang] ?? ''}
+  data-width={source.width}
+  data-height={source.height}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={`${translate(lang, 'projects.enlarge')}: ${title}${image.caption ? ` — ${image.caption[lang]}` : ''}`}
+>
+  <figure>
+    {source.format === 'svg' ? (
+      <img
+        src={source.src}
+        alt={image.alt[lang]}
+        width={source.width}
+        height={source.height}
+        loading="lazy"
+        decoding="async"
+        class="project-thumbnail"
+      />
+    ) : (
+      <Image
+        src={source}
+        alt={image.alt[lang]}
+        width={640}
+        widths={[320, 480, 640, 768, 960, 1280]}
+        sizes="auto, 100vw"
+        loading="lazy"
+        decoding="async"
+        class="project-thumbnail"
+      />
+    )}
+    <figcaption>
+      {image.caption && <span>{image.caption[lang]}</span>}
+      <svg class="project-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+    </figcaption>
+  </figure>
+</a>

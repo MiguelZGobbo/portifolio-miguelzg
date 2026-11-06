@@ -1,130 +1,80 @@
-# 👨‍💻 Portfólio Miguel Zager Gobbo
+# Portfólio Miguel Zager Gobbo
 
-Site pessoal estático desenvolvido com **Astro**, **CSS** e **JavaScript**. A página inicial reúne apresentação, evidências de projetos, competências, formação, currículo e contato. Os projetos com profundidade suficiente também possuem estudos de caso em rotas próprias.
+Site pessoal estático em Astro, TypeScript, CSS e JavaScript, com apresentação profissional, projetos, competências, formação, currículos e contato em português e inglês.
 
-![Astro](https://img.shields.io/badge/Astro-FF5D01?logo=astro&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS-3-1572B6?logo=css3)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript)
+## Executar
 
-## Estrutura pública
+Requer Node.js 22.12 ou superior.
 
-A homepage mantém esta ordem de conteúdo:
+~~~sh
+npm ci
+npm run dev
+~~~
 
-1. **Início** — apresentação profissional, foto e chamadas para projetos, currículo e contato.
-2. **Projetos** — Purchase Orders API, BeadWise, Portfólio Miguel ZG e API de Gerenciamento de Tarefas, com níveis de evidência diferentes.
-3. **Competências** — linguagens, backend, bancos de dados, ferramentas e soft skills.
-4. **Sobre mim** — perfil e formação.
-5. **Currículo** — visualização e download dos PDFs em português ou inglês.
-6. **Contato** — formulário, e-mail, LinkedIn e GitHub.
+Abra [localhost:4321/portifolio-miguelzg/](http://localhost:4321/portifolio-miguelzg/). Para conferir a saída de produção, execute `npm run build` e `npm run preview`.
 
-O conteúdo público está disponível em seis rotas canônicas:
-
-- /portifolio-miguelzg/
-- /portifolio-miguelzg/en/
-- /portifolio-miguelzg/projetos/purchase-orders-api/
-- /portifolio-miguelzg/projetos/beadwise/
-- /portifolio-miguelzg/en/projects/purchase-orders-api/
-- /portifolio-miguelzg/en/projects/beadwise/
-
-Português permanece nas rotas públicas originais e inglês usa o prefixo `/en/`. A troca de idioma é uma navegação nativa entre páginas estáticas equivalentes e preserva, quando disponível, a seção da homepage ou o estudo de caso atual. Os links entre a homepage e suas seções usam âncoras e rolagem nativas do documento. Os links de repositório abrem o GitHub em uma nova aba; as páginas de estudo de caso têm navegação própria de retorno à homepage.
-
-## Funcionalidades atuais
-
-- Tema claro/escuro com preferência persistida no navegador.
-- Rotas estáticas independentes em PT/EN, com idioma definido pela URL, histórico e links profundos copiáveis.
-- Layout responsivo para desktop e telas pequenas.
-- Animações de reveal progressivo, respeitando prefers-reduced-motion.
-- Skip link, foco visível, rótulos acessíveis e HTML estático disponível antes das melhorias de JavaScript.
-- Módulos de navegador separados para tema, navegação observada, reveals, clipboard e formulário de contato.
-- Títulos, descrições, canonical, hreflang, Open Graph, Twitter e JSON-LD localizados e renderizados no build, com sitemap de seis URLs.
-
-O escopo desta versão não inclui partículas, parallax, tilt 3D ou um contêiner de rolagem interno.
-
-## Tecnologias
-
-- **Astro** — componentes, geração estática e rotas de estudo de caso.
-- **TypeScript** — modelo tipado dos projetos e conteúdo bilíngue.
-- **CSS** — identidade visual, layout responsivo e ondas decorativas.
-- **JavaScript ES modules** — pequenas melhorias de comportamento no HTML gerado.
-- **EmailJS** — carregado sob demanda pelo formulário de contato.
-- **@fontsource-variable** — fontes Playfair Display e DM Sans auto-hospedadas.
-- **@astrojs/sitemap** — geração do sitemap durante o build.
-
-## Como executar
-
-### Pré-requisitos
-
-- Node.js 22.12 ou superior.
-
-### Instalação e desenvolvimento
-
-    git clone https://github.com/MiguelZGobbo/portifolio-miguelzg.git
-    cd portifolio-miguelzg
-    npm install
-    npm run dev
-
-Com a configuração atual, a aplicação fica disponível em:
-
-    http://localhost:4321/portifolio-miguelzg/
-
-Para testar a saída estática localmente:
-
-    npm run build
-    npm run preview
-
-## Scripts
-
-| Script | Uso |
+| Comando | Finalidade |
 | --- | --- |
-| npm test | Gera as seis páginas estáticas e executa 94 testes de modelo, páginas construídas, navegação, SEO e arquitetura. |
-| npm run check | Executa as verificações e diagnósticos do Astro. |
-| npm run build | Gera as seis páginas estáticas, o sitemap e os assets em dist/. |
-| npm run dev | Inicia o servidor de desenvolvimento do Astro. |
-| npm run preview | Serve localmente o build produzido. |
-| npm run astro | Expõe a CLI do Astro para comandos adicionais. |
+| `npm run dev` | Desenvolvimento local com Astro. |
+| `npm run check` | Verificação de tipos e componentes Astro. |
+| `npm test` | Build seguido dos testes de conteúdo, comportamento, acessibilidade, SEO e arquitetura. |
+| `npm run build` | Geração de páginas, sitemap e assets em dist/. |
+| `npm run preview` | Prévia local do build. |
 
-## Estrutura do projeto
+O GitHub Actions executa `npm run check` e `npm test` antes de publicar a branch main no GitHub Pages.
 
-    portifolio-miguelzg/
-    ├── public/
-    │   ├── files/                  # Currículos em português e inglês
-    │   ├── img/                   # Favicon, foto e imagens públicas
-    │   ├── site.webmanifest
-    │   └── ícones de instalação
-    ├── src/
-    │   ├── assets/                # Assets processados pelo Astro
-    │   ├── components/
-    │   │   ├── home/              # Seções da homepage
-    │   │   ├── ProjectCard.astro
-    │   │   ├── ProjectCaseStudy.astro
-    │   │   ├── Nav.astro
-    │   │   ├── ThemeToggle.astro
-    │   │   └── demais componentes reutilizáveis
-    │   ├── data/
-    │   │   ├── projects.ts        # Hierarquia, evidências e estudos de caso
-    │   │   └── skills.ts
-    │   ├── layouts/
-    │   │   └── BaseLayout.astro   # Head, metadados e inicialização
-    │   ├── lib/
-    │   │   └── i18n.ts            # Dicionários PT/EN
-    │   ├── pages/
-    │   │   ├── index.astro        # Homepage em português
-    │   │   ├── projetos/[slug].astro
-    │   │   └── en/                # Homepage e estudos de caso em inglês
-    │   ├── scripts/               # Módulos de comportamento do navegador
-    │   └── styles/
-    │       └── global.css
-    ├── tests/                     # Testes de modelo, build, arquitetura e navegação
-    ├── docs/adr/                  # Decisões arquiteturais aceitas
-    ├── docs/phases/               # Consolidações das fases concluídas
-    └── docs/superpowers/plans/    # Planos de implementação por fase
+## Conteúdo e comportamento
 
-## Estado de escopo
+- Rotas canônicas: /portifolio-miguelzg/ (PT) e /portifolio-miguelzg/en/ (EN).
+- Ordem das seções: Início, Projetos, Competências, Sobre e Contato.
+- Idioma definido pela URL, com troca de página que preserva a seção equivalente.
+- Tema claro/escuro persistido no navegador, navegação por âncoras e layout fluido.
+- Quatro projetos em lista contínua, com links para repositórios e miniaturas que abrem um diálogo acessível.
+- Currículos em PT/EN com visualização e download.
+- Formulário com validação acessível, honeypot e EmailJS sob demanda. O envio permanece desativado em localhost e endereços de loopback.
+- Conteúdo e links disponíveis sem JavaScript; animações respeitam a preferência por movimento reduzido.
+- Metadados, canonical, hreflang, Open Graph, Twitter, JSON-LD e sitemap gerados no build.
 
-A Fase 8 de polimento visual está consolidada em [docs/phases/phase-8-consolidation.md](docs/phases/phase-8-consolidation.md). O build atual publica seis páginas estáticas com identidade de idioma e metadados próprios, e a regressão final reúne 94 testes além da auditoria funcional e visual em navegador. A próxima etapa é a Fase 9 — auditoria final independente — conforme [docs/phases/phase-9-handoff.md](docs/phases/phase-9-handoff.md).
+## Organização
+
+~~~text
+src/
+  assets/             Imagens processadas pelo Astro
+  components/         Apresentação, mídia e diálogo
+    home/             Seções da homepage
+    pages/            Composição compartilhada PT/EN
+  data/               Projetos, competências e campos de contato
+  layouts/            Documento HTML e metadados
+  lib/                Traduções, rotas e geração de SEO
+  pages/              Entradas estáticas PT/EN
+  scripts/            Comportamentos do navegador
+  styles/             CSS importado em ordem por global.css
+public/               Currículos, foto social, manifesto e ícones públicos
+scripts/              Geração dos ícones de instalação
+tests/                Testes de comportamento, modelo, build e estilos
+docs/                 Arquitetura, decisões e desempenho
+~~~
+
+Consulte [a arquitetura e o contrato visual](docs/architecture.md), [as decisões arquiteturais](docs/adr/README.md) e [o registro de desempenho](docs/performance.md).
+
+## Manutenção de imagens e estilos
+
+Edite projetos em `src/data/projects.ts`, competências em `src/data/skills.ts` e textos em `src/lib/i18n.ts`.
+
+As imagens ficam em `src/assets/projects/`; a [documentação dos assets](src/assets/projects/README.md) registra sua origem. O campo opcional `image` informa o arquivo, alt text e legenda em PT/EN. Bitmaps recebem miniaturas responsivas e ampliação WebP com qualidade 90; o SVG usa o mesmo arquivo nas duas visualizações. Sem JavaScript, o link abre a imagem em outra aba.
+
+A foto em `src/assets/` alimenta as variantes otimizadas; a cópia em `public/img/` mantém uma URL estável para compartilhamento. Os dois usos são intencionais. Currículos, imagens e ícones em `public/` fazem parte da publicação e devem continuar versionados.
+
+`src/styles/global.css` define a ordem da cascata. As cores e escalas fluidas ficam em `foundation.css`, com tokens escuros em `theme.css`. A IBM Plex Sans Variable usa o subconjunto latino local de `fonts.css`; revise sua cobertura ao adicionar idiomas. Regenere o favicon SVG e os PNGs de instalação com `node scripts/generate-icons.mjs`; o gerador compartilha a mesma geometria e as mesmas cores entre todos os formatos.
+
+## Git e arquivos locais
+
+Versione código, testes, configurações compartilhadas, workflow, `package-lock.json`, documentação de manutenção e assets publicados. `dist/` é gerado pelo CI e enviado como artefato de deploy, sem ser commitado.
+
+O `.gitignore` mantém dependências, caches, ambientes `.env*`, logs, cobertura, capturas de testes, planos de agentes e anotações em `.local/` ou `.clean/` apenas no computador. Modelos `.env.example` podem ser versionados com valores fictícios. A configuração de extensões do VS Code pode ser compartilhada; as demais preferências do editor ficam locais.
+
+O formulário utiliza identificadores públicos do EmailJS no navegador. Não coloque credenciais privadas no frontend ou nos modelos de ambiente.
 
 ## Autor
 
-**Miguel Zager Gobbo**
-
-[![GitHub](https://img.shields.io/badge/GitHub-MiguelZGobbo-181717?logo=github)](https://github.com/MiguelZGobbo)
+[Miguel Zager Gobbo](https://github.com/MiguelZGobbo)

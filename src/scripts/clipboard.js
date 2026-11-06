@@ -1,66 +1,58 @@
-import { translations } from '../lib/i18n';
-
-const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
-
-function copiedMessage() {
-  const language = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
-  return translations[language]['copy.done'];
-}
-
-async function copyText(text, button) {
-  if (!navigator.clipboard?.writeText) return;
-
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    return;
-  }
-
-  const iconCopy = button.querySelector('.icon-copy');
-  const iconCheck = button.querySelector('.icon-check');
-  if (!iconCopy || !iconCheck || !button.parentElement) return;
-
-  const tooltip = document.createElement('span');
-  tooltip.textContent = copiedMessage();
-  tooltip.className = 'copy-tooltip';
-  button.parentElement.appendChild(tooltip);
-
-  const fade = (icon, opacity, scale) => {
-    icon.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
-    icon.style.opacity = opacity;
-    icon.style.transform = `scale(${scale})`;
-  };
-
-  fade(iconCopy, '0', '0.6');
-  await delay(150);
-
-  iconCopy.style.display = 'none';
-  iconCheck.style.display = 'block';
-  fade(iconCheck, '0', '0.6');
-  button.classList.add('copied');
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    fade(iconCheck, '1', '1');
-    tooltip.style.opacity = '1';
-  }));
-
-  await delay(2000);
-  fade(iconCheck, '0', '0.6');
-  tooltip.style.opacity = '0';
-  await delay(150);
-
-  iconCheck.style.display = 'none';
-  iconCheck.style.transition = 'none';
-  iconCopy.style.display = 'block';
-  fade(iconCopy, '0', '0.6');
-  button.classList.remove('copied');
-  tooltip.remove();
-  requestAnimationFrame(() => requestAnimationFrame(() => fade(iconCopy, '1', '1')));
-}
+import { translatePage } from './browser-i18n.js';
 
 export function initClipboard() {
   document.querySelectorAll('.copy-btn').forEach((button) => {
-    button.addEventListener('click', () => {
-      void copyText(button.dataset.text ?? '', button);
+    const control = button.closest('.copy-control');
+    const message = control?.querySelector('.copy-status');
+    const feedback = control?.querySelector('.copy-feedback');
+    const error = control?.querySelector('.copy-error');
+    if (!control || !message || !feedback || !error) return;
+
+    let pending = false;
+    let dismissed = false;
+    let timer;
+
+    const resetFeedback = () => {
+      clearTimeout(timer);
+      control.dataset.copyState = 'idle';
+      message.textContent = '';
+      error.textContent = '';
+    };
+
+    button.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      dismissed = true;
+      if (!pending) resetFeedback();
+    });
+
+    button.addEventListener('click', async () => {
+      if (pending) return;
+      resetFeedback();
+      pending = true;
+      dismissed = false;
+      control.dataset.copyState = 'copying';
+      button.setAttribute('aria-busy', 'true');
+
+      let state = 'success';
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(button.dataset.text ?? '');
+      } catch {
+        state = 'error';
+      }
+
+      pending = false;
+      button.removeAttribute('aria-busy');
+      if (dismissed) {
+        resetFeedback();
+        return;
+      }
+
+      control.dataset.copyState = state;
+      message.textContent = translatePage(state === 'success' ? 'copy.done' : 'copy.error');
+      feedback.textContent = translatePage(state === 'success' ? 'copy.done' : 'copy.failed');
+      error.textContent = state === 'error' ? message.textContent : '';
+      timer = setTimeout(resetFeedback, state === 'success' ? 2000 : 5000);
     });
   });
 }

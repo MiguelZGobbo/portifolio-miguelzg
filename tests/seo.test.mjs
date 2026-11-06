@@ -6,16 +6,6 @@ import test from 'node:test';
 const siteUrl = 'https://miguelzgobbo.github.io/portifolio-miguelzg/';
 const imageUrl = `${siteUrl}img/foto-perfil.jpeg`;
 
-const purchaseOrdersDescription = {
-  pt: 'Projeto individual desenvolvido durante um curso para construir uma API REST de gerenciamento de pedidos de compra e seus itens. Implementa autenticação de usuários via JWT, persistência em PostgreSQL com SQLAlchemy, migrações de banco, documentação com Swagger, execução com Docker e uma rotina de qualidade com testes automatizados, lint e pre-commit.',
-  en: 'Individual project developed as part of a course to build a REST API for managing purchase orders and their items. It includes JWT-based user authentication, PostgreSQL persistence with SQLAlchemy, database migrations, Swagger documentation, Docker-based execution, and an automated quality workflow with testing, linting, and pre-commit checks.',
-};
-
-const beadWiseDescription = {
-  pt: 'Projeto em desenvolvimento que organiza discovery, especificações, protótipos, código e testes para investigar mecanismos de sistema Windows com critérios explícitos de prova, segurança e reversibilidade.',
-  en: 'Project in development that organizes discovery, specifications, prototypes, source code, and tests to investigate Windows system mechanisms with explicit proof, safety, and reversibility criteria.',
-};
-
 const pages = [
   {
     file: ['index.html'],
@@ -49,41 +39,6 @@ const pages = [
     imageAlt: 'Profile photo of Miguel Zager Gobbo',
     personJobTitle: 'Software Developer',
   },
-  ...[
-    ['purchase-orders-api', 'Purchase Orders API', purchaseOrdersDescription],
-    ['beadwise', 'BeadWise', beadWiseDescription],
-  ].flatMap(([slug, name, description]) => [
-    {
-      file: ['projetos', slug, 'index.html'],
-      lang: 'pt-BR',
-      dataLang: 'pt',
-      title: `${name} | Estudo de caso`,
-      description: description.pt,
-      canonical: `${siteUrl}projetos/${slug}/`,
-      pt: `${siteUrl}projetos/${slug}/`,
-      en: `${siteUrl}en/projects/${slug}/`,
-      ogType: 'article',
-      ogLocale: 'pt_BR',
-      ogAlternateLocale: 'en_US',
-      siteName: 'Portfólio de Miguel Zager Gobbo',
-      imageAlt: 'Foto de perfil de Miguel Zager Gobbo',
-    },
-    {
-      file: ['en', 'projects', slug, 'index.html'],
-      lang: 'en',
-      dataLang: 'en',
-      title: `${name} | Case study`,
-      description: description.en,
-      canonical: `${siteUrl}en/projects/${slug}/`,
-      pt: `${siteUrl}projetos/${slug}/`,
-      en: `${siteUrl}en/projects/${slug}/`,
-      ogType: 'article',
-      ogLocale: 'en_US',
-      ogAlternateLocale: 'pt_BR',
-      siteName: 'Miguel Zager Gobbo Portfolio',
-      imageAlt: 'Profile photo of Miguel Zager Gobbo',
-    },
-  ]),
 ];
 
 function attributes(tag) {
@@ -164,29 +119,24 @@ for (const expected of pages) {
     assert.equal(webPage.inLanguage, expected.lang);
 
     const people = jsonLd['@graph'].filter((node) => node['@type'] === 'Person');
-    if (expected.personJobTitle) {
-      const person = one(people, 'expected one homepage Person node');
-      assert.equal(webPage.mainEntity['@id'], `${expected.canonical}#person`);
-      assert.deepEqual(person, {
-        '@type': 'Person',
-        '@id': `${expected.canonical}#person`,
-        name: 'Miguel Zager Gobbo',
-        jobTitle: expected.personJobTitle,
-        image: imageUrl,
-        email: 'mailto:miguelzgobbo@gmail.com',
-        sameAs: [
-          'https://www.linkedin.com/in/miguel-zager-gobbo',
-          'https://github.com/MiguelZGobbo',
-        ],
-      });
-    } else {
-      assert.deepEqual(people, [], 'case studies should not expose a Person schema node');
-      assert.equal(jsonLd['@graph'].length, 1, 'case studies should expose only their WebPage node');
-    }
+    const person = one(people, 'expected one homepage Person node');
+    assert.equal(webPage.mainEntity['@id'], `${expected.canonical}#person`);
+    assert.deepEqual(person, {
+      '@type': 'Person',
+      '@id': `${expected.canonical}#person`,
+      name: 'Miguel Zager Gobbo',
+      jobTitle: expected.personJobTitle,
+      image: imageUrl,
+      email: 'mailto:miguelzgobbo@gmail.com',
+      sameAs: [
+        'https://www.linkedin.com/in/miguel-zager-gobbo',
+        'https://github.com/MiguelZGobbo',
+      ],
+    });
   });
 }
 
-test('publishes exactly the six canonical routes through generated sitemap files', async () => {
+test('publishes exactly the two homepage routes through generated sitemap files', async () => {
   const index = await readFile(resolve('dist', 'sitemap-index.xml'), 'utf8');
   const sitemapUrls = [...index.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, url]) => url);
   assert.ok(sitemapUrls.length > 0, 'sitemap index should reference at least one generated sitemap');

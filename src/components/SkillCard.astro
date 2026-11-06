@@ -1,6 +1,7 @@
 ---
 import type { SkillGroup } from '../data/skills';
 import type { Lang } from '../lib/i18n';
+import Icon from './Icon.astro';
 
 interface Props {
   group: SkillGroup;
@@ -11,7 +12,10 @@ const { group, lang = 'pt' } = Astro.props;
 ---
 
 <div class="skill-card reveal">
-  <div class="skill-cat" data-skill-localized data-skill-pt={group.cat.pt} data-skill-en={group.cat.en}>{group.cat[lang]}</div>
+  <div class="skill-cat">
+    <Icon name={group.icon} size={15} strokeWidth={1.7} class="skill-cat-icon" />
+    <span data-skill-localized data-skill-pt={group.cat.pt} data-skill-en={group.cat.en}>{group.cat[lang]}</span>
+  </div>
   <div class="skill-tags">
     {
       group.tags[lang].map((tag, index) => (

@@ -1,0 +1,74 @@
+/* ================================
+   13. DARK MODE
+=============================== */
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #253640;
+    --surface: #2B3D48;
+    --surface-strong: #30434E;
+    --project-tag-background: #2D424E;
+    --project-tag-text: #D6E2E8;
+    --project-tag-border: #4B6472;
+    --project-image-border: #526A77;
+    --project-image-border-active: #8297A2;
+    --project-image-shadow: 0 2px 6px rgb(0 0 0 / 14%);
+    --project-image-shadow-active: 0 3px 8px rgb(0 0 0 / 22%);
+    --text-primary: #EDEEF0;
+    --text-secondary: #B0B4BA;
+    --accent: #A8ADB2;
+    --accent-strong: #C4C8CC;
+    --action-background: #C4C8CC;
+    --action-hover: #E8ECEC;
+    --on-action: #202629;
+    --ambient-rgb: 0, 144, 255;
+    --line: #3B4F5B;
+    --error: #FF9592;
+
+    --cream: var(--background);
+    --brown: var(--accent);
+    --brown-dark: var(--accent-strong);
+    --sand: var(--line);
+    --warm-gray: var(--text-secondary);
+    --tan: var(--accent);
+    --dark: var(--text-primary);
+    --text: var(--text-primary);
+    --text-muted: var(--text-secondary);
+}
+
+[data-theme="dark"] body {
+    background: var(--cream);
+}
+
+[data-theme="dark"] nav {
+    background: var(--background);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24);
+}
+
+[data-theme="dark"] .nav-links::before {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+[data-theme="dark"] .nav-pill {
+    box-shadow: none;
+}
+
+[data-theme="dark"] footer {
+    background: transparent;
+    color: var(--warm-gray);
+}
+
+/* Ondas em dark */
+[data-theme="dark"] .wave-glow {
+    --wave-halo-peak: 0.32;
+    --wave-halo-mid: 0.12;
+    --wave-halo-edge: 0;
+}
+[data-theme="dark"] .wave-1 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.10; }
+[data-theme="dark"] .wave-2 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.07; }
+[data-theme="dark"] .wave-3 .bg-wave-inner { --wave-rgb: var(--ambient-rgb); --wave-alpha: 0.04; }
+
+@media (max-width: 640px) {
+    [data-theme="dark"] .wave-1 .bg-wave-inner { --wave-alpha: 0.10; }
+    [data-theme="dark"] .wave-2 .bg-wave-inner { --wave-alpha: 0.07; }
+    [data-theme="dark"] .wave-3 .bg-wave-inner { --wave-alpha: 0.04; }
+}

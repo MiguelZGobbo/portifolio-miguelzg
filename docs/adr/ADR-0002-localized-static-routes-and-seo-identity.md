@@ -74,3 +74,6 @@ The project-scoped `public/robots.txt` is removed: on a GitHub project site it w
 - [Google canonicalization](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls)
 - [Google robots.txt location](https://developers.google.com/crawling/docs/robots-txt/create-robots-txt)
 
+## Later decision
+
+ADR-0003 supersedes the case-study URL, alternate-link, and six-route validation clauses above. The Portuguese and English homepage routes and their localized metadata remain accepted.

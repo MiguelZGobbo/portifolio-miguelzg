@@ -1,15 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import test from 'node:test';
-
-const contactFormSource = await readFile(new URL('../src/scripts/contact-form.js', import.meta.url), 'utf8');
-const testableSource = contactFormSource.replace(
-  "import { translations } from '../lib/i18n';",
-  `import { translations } from '${pathToFileURL(resolve('src/lib/i18n.ts')).href}';`,
-);
-const contactFormModule = await import(`data:text/javascript;base64,${Buffer.from(testableSource).toString('base64')}`);
+import * as contactFormModule from '../src/scripts/contact-form.js';
 
 function createContactDom({
   lang = 'en',

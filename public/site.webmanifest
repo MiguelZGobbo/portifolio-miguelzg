@@ -5,8 +5,8 @@
   "start_url": "/portifolio-miguelzg/",
   "scope": "/portifolio-miguelzg/",
   "display": "standalone",
-  "background_color": "#F8F0E5",
-  "theme_color": "#F8F0E5",
+  "background_color": "#F9F9FB",
+  "theme_color": "#F9F9FB",
   "icons": [
     {
       "src": "/portifolio-miguelzg/icon-192.png",
