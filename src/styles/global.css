@@ -2329,7 +2329,7 @@ nav,
 }
 
 .skill-card:hover {
-    border-color: var(--accent);
+    border-color: var(--line);
     box-shadow: none;
 }
 
@@ -2345,6 +2345,65 @@ nav,
 
 .skill-cat-icon {
     color: var(--accent-strong);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .skills-grid {
+        grid-auto-rows: 1fr;
+        align-items: stretch;
+    }
+
+    .skill-card {
+        position: relative;
+        isolation: isolate;
+    }
+
+    .skill-card::before {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        z-index: -1;
+        pointer-events: none;
+        background: color-mix(in srgb, var(--accent) 6%, transparent);
+        border: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+        border-radius: 6px;
+        opacity: 0;
+        transition: opacity 180ms ease;
+    }
+
+    .skill-cat,
+    .skill-cat-icon {
+        transition: color 180ms ease;
+    }
+
+    .skill-card:hover {
+        border-top-color: transparent;
+    }
+
+    .skill-card:hover::before {
+        opacity: 1;
+    }
+
+    .skill-card:hover .skill-cat {
+        color: var(--text-primary);
+    }
+
+    .skill-card:hover .skill-cat-icon {
+        color: var(--accent-strong);
+    }
+
+    .skills-grid:has(.skill-card:hover) .skill-card:not(:hover) .skill-cat,
+    .skills-grid:has(.skill-card:hover) .skill-card:not(:hover) .skill-cat-icon {
+        color: var(--text-secondary);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skill-card::before,
+    .skill-cat,
+    .skill-cat-icon {
+        transition: none;
+    }
 }
 
 .skill-tags {
