@@ -1,0 +1,118 @@
+/* ================================
+   19. HOME HIERARCHY
+================================ */
+.logo {
+    text-decoration: none;
+}
+
+.hero-availability {
+    color: var(--text-muted);
+    margin-top: 0.75rem;
+    max-width: 460px;
+    font-size: clamp(0.88rem, 1.2vw, 1rem);
+    line-height: 1.75;
+}
+
+.val-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.7fr);
+    align-items: start;
+    gap: 2.5rem;
+}
+
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.education-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 18px rgba(44, 34, 24, 0.07);
+}
+
+.education-title {
+    color: var(--brown-dark);
+    font-size: calc(var(--fluid-type) * 1.05);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.education-item + .education-item {
+    border-top: 1px solid var(--sand);
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
+
+.education-degree {
+    color: var(--dark);
+    font-size: calc(var(--fluid-type) * 0.9);
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+.education-school,
+.education-dates {
+    color: var(--text-muted);
+    font-size: calc(var(--fluid-type) * 0.82);
+    line-height: 1.55;
+}
+
+.education-dates {
+    margin-top: 0.3rem;
+}
+
+.profile-cv {
+    margin-top: 1.5rem;
+}
+
+.contact-intro {
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin: -0.75rem 0 1.5rem;
+    max-width: 640px;
+}
+
+.skills-intro {
+    color: var(--text-muted);
+    font-size: calc(var(--fluid-type) * 0.92);
+    line-height: 1.6;
+    margin: -1.25rem 0 1.2rem;
+    max-width: 640px;
+}
+
+@media (max-width: 640px) {
+    .hero-availability {
+        font-size: calc(var(--fluid-type) * 0.85);
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-grid {
+        gap: 1rem;
+    }
+
+    .education-card {
+        padding: 1.1rem;
+    }
+
+    .profile-cv {
+        margin-top: 1rem;
+    }
+
+    .contact-intro {
+        font-size: calc(var(--fluid-type) * 0.88);
+        margin-top: -0.35rem;
+    }
+}

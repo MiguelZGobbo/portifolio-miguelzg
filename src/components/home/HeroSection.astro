@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { lang = 'pt' } = Astro.props;
-const dict = translations[lang] as Record<string, string>;
+const dict = translations[lang];
 ---
 
 <section class="snap-section home-section home-section--hero" id="home">

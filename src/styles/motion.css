@@ -1,0 +1,60 @@
+/* ================================
+   21. REDUÇÃO DE MOVIMENTO
+================================ */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .bg-wave {
+        display: none;
+    }
+
+    html.js .reveal,
+    html.js .reveal.visible {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    nav,
+    .logo,
+    nav .logo,
+    .nav-pill,
+    .nav-text,
+    .nav-links a,
+    .nav-btn,
+    nav .nav-controls,
+    .section-title::after,
+    .btn,
+    .btn::after,
+    .project-link,
+    .project-link::after,
+    .profile-photo,
+    .skill-card,
+    .cv-actions .btn,
+    .cv-actions .btn-outline,
+    .form-group input,
+    .form-group textarea,
+    .val-link,
+    .copy-btn,
+    .copy-btn svg,
+    .copy-feedback,
+    .skip-link,
+    .home-section.home-section--contact footer,
+    .lang-part {
+        transition: none;
+    }
+
+    .btn:hover,
+    .btn:hover::after,
+    .project-link:hover,
+    .project-link:hover::after,
+    .profile-photo:hover,
+    .skill-card:hover,
+    .cv-actions .btn-outline:hover,
+    .nav-links a.active,
+    .section-title.reveal.visible::after {
+        transform: none;
+    }
+}

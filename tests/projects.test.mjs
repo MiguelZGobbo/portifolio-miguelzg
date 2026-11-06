@@ -16,7 +16,7 @@ test('keeps the canonical project hierarchy and public order', () => {
 });
 
 test('communicates BeadWise as in development in both supported languages', () => {
-  const beadWise = model.getProjectBySlug('beadwise');
+  const beadWise = model.projects.find(({ slug }) => slug === 'beadwise');
 
   assert.ok(beadWise);
   assert.equal(beadWise.state.pt, 'em desenvolvimento');
@@ -35,11 +35,14 @@ test('identifies each project with its localized kind', () => {
   );
 });
 
-test('keeps H3 projects compact', () => {
+test('keeps complementary projects concise in both languages', () => {
   const compactProjects = model.projects.filter(({ hierarchy }) => hierarchy === 'H3');
 
   assert.equal(compactProjects.length, 2);
-  assert.ok(compactProjects.every(({ compact }) => compact === true));
+  for (const project of compactProjects) {
+    assert.ok(project.showcase.summary.pt.length <= 250);
+    assert.ok(project.showcase.summary.en.length <= 250);
+  }
 });
 
 test('does not expose the deferred financial app', () => {
@@ -49,13 +52,18 @@ test('does not expose the deferred financial app', () => {
   );
 });
 
-test('provides localized summaries and evidence for every project', () => {
+test('provides localized public content and repository destinations for every project', () => {
   for (const project of model.projects) {
-    assert.equal(typeof project.summary.pt, 'string');
-    assert.ok(project.summary.pt.length > 0);
-    assert.equal(typeof project.summary.en, 'string');
-    assert.ok(project.summary.en.length > 0);
-    assert.ok(project.evidence.length > 0);
+    for (const lang of ['pt', 'en']) {
+      for (const content of [project.name, project.state, project.ariaLabel, project.showcase.kind, project.showcase.summary]) {
+        assert.ok(content[lang].length > 0, `${project.slug}: missing ${lang} content`);
+      }
+      if (project.image) {
+        assert.ok(project.image.alt[lang].length > 0);
+        if (project.image.caption) assert.ok(project.image.caption[lang].length > 0);
+      }
+    }
+    assert.match(project.href, /^https:\/\/github\.com\/MiguelZGobbo\//);
   }
 });
 
@@ -64,8 +72,8 @@ test('provides a concise, consistent showcase presentation for every project', (
     assert.ok(project.showcase, `${project.slug} should provide showcase content`);
     assert.equal(typeof project.showcase.summary.pt, 'string');
     assert.equal(typeof project.showcase.summary.en, 'string');
-    assert.ok(project.showcase.summary.pt.length < project.summary.pt.length);
-    assert.ok(project.showcase.summary.en.length < project.summary.en.length);
+    assert.ok(project.showcase.summary.pt.length <= 300);
+    assert.ok(project.showcase.summary.en.length <= 300);
     assert.ok(project.showcase.technologies.length >= 2);
     assert.ok(project.showcase.technologies.length <= 4);
     assert.equal(project.showcase.aspects.length, 4);

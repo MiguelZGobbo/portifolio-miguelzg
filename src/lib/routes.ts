@@ -1,4 +1,4 @@
-import type { Lang } from './i18n';
+import type { Lang } from './i18n.ts';
 
 export type RouteSection = 'home' | 'projects' | 'skills' | 'about' | 'contact';
 

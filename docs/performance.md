@@ -1,5 +1,7 @@
 # Otimização de assets — 6 de novembro de 2026
 
+Registro de medição do ajuste de assets, anterior à refatoração de organização do código. Os tamanhos abaixo são históricos; consulte o build atual para valores novos.
+
 ## Alterações
 
 - Foto inicial: fallback WebP de 480 × 640 px, reutilizando a variante de 480 px. As variantes de 120, 180, 240, 360 e 480 px, prioridade, proporção e enquadramento permanecem iguais.

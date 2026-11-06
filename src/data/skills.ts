@@ -1,7 +1,4 @@
-export interface Localized {
-  pt: string;
-  en: string;
-}
+import type { Localized } from '../lib/i18n';
 
 export interface SkillGroup {
   cat: Localized;

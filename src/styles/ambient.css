@@ -1,0 +1,221 @@
+/* ================================
+    15. ONDAS ANIMADAS
+================================= */
+@property --wave-origin-x {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+}
+
+@property --wave-origin-y {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+}
+
+.bg-wave {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: clip;
+    contain: paint;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bg-wave-inner {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition:
+        --wave-origin-x 900ms ease,
+        --wave-origin-y 900ms ease,
+        opacity 500ms ease;
+}
+
+.wave-glow {
+    --wave-core-radius: 55vw 65vh;
+    --wave-halo-radius: 90vw 95vh;
+    --wave-drift-x: 2vw;
+    --wave-drift-y: 1.5vh;
+    --wave-halo-peak: 0.48;
+    --wave-halo-mid: 0.20;
+    --wave-halo-edge: 0.04;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: var(--wave-alpha);
+}
+
+:root:not([data-theme="dark"]) .wave-glow {
+    --wave-core-inner-stops:
+        rgba(var(--wave-rgb), 1) 0%,
+        rgba(var(--wave-rgb), 0.90) 24%,
+        rgba(var(--wave-rgb), 0.60) 45%;
+}
+
+.wave-glow::before {
+    --wave-core-position: calc(var(--wave-origin-x) + var(--wave-drift-x)) calc(var(--wave-origin-y) + var(--wave-drift-y));
+    content: '';
+    position: absolute;
+    /* A margem interna de pintura evita faixas vazias durante a flutuação. */
+    inset: calc(-1 * var(--wave-drift-y)) calc(-1 * var(--wave-drift-x));
+    background-image:
+        radial-gradient(
+            ellipse var(--wave-core-radius) at var(--wave-core-position),
+            var(--wave-core-inner-stops,
+                rgba(var(--wave-rgb), 1) 0%,
+                rgba(var(--wave-rgb), 0.55) 38%
+            ),
+            rgba(var(--wave-rgb), 0.14) 70%,
+            rgba(var(--wave-rgb), 0) 100%
+        ),
+        radial-gradient(
+            ellipse var(--wave-halo-radius) at var(--wave-core-position),
+            rgba(var(--wave-rgb), var(--wave-halo-peak)) 0%,
+            rgba(var(--wave-rgb), var(--wave-halo-mid)) 58%,
+            rgba(var(--wave-rgb), var(--wave-halo-edge)) 94%,
+            rgba(var(--wave-rgb), 0) 100%
+        );
+    will-change: transform;
+}
+
+/* ── Luz 1: canto superior esquerdo ── */
+.wave-1 .bg-wave-inner {
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.22;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
+}
+.wave-1 .wave-glow::before {
+    animation: waveFloat1 28s ease-in-out infinite;
+}
+
+/* ── Luz 2: canto inferior direito ── */
+.wave-2 .bg-wave-inner {
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.16;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
+}
+.wave-2 .wave-glow::before {
+    animation: waveFloat2 22s ease-in-out infinite;
+}
+
+/* ── Luz 3: canto superior direito ── */
+.wave-3 .bg-wave-inner {
+    --wave-rgb: var(--ambient-rgb);
+    --wave-alpha: 0.09;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
+}
+.wave-3 .wave-glow::before {
+    animation: waveFloat3 18s ease-in-out infinite;
+}
+
+/* ── Presença de cada luz no início ── */
+.wave-1 .bg-wave-inner { opacity: 1; }
+.wave-2 .bg-wave-inner { opacity: 1; }
+.wave-3 .bg-wave-inner { opacity: 0.8; }
+
+/* ── Sobre ── */
+body[data-section="sobre"] .wave-1 .bg-wave-inner,
+body[data-section="about"] .wave-1 .bg-wave-inner {
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
+}
+body[data-section="sobre"] .wave-2 .bg-wave-inner,
+body[data-section="about"] .wave-2 .bg-wave-inner {
+    opacity: 1;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
+}
+body[data-section="sobre"] .wave-3 .bg-wave-inner,
+body[data-section="about"] .wave-3 .bg-wave-inner {
+    opacity: 0.85;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
+}
+
+/* ── Habilidades ── */
+body[data-section="competencias"] .wave-1 .bg-wave-inner,
+body[data-section="skills"] .wave-1 .bg-wave-inner {
+    opacity: 1;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
+}
+body[data-section="competencias"] .wave-2 .bg-wave-inner,
+body[data-section="skills"] .wave-2 .bg-wave-inner {
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
+}
+body[data-section="competencias"] .wave-3 .bg-wave-inner,
+body[data-section="skills"] .wave-3 .bg-wave-inner {
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
+}
+
+/* ── Projetos ── */
+body[data-section="projetos"] .wave-1 .bg-wave-inner,
+body[data-section="projects"] .wave-1 .bg-wave-inner {
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
+}
+body[data-section="projetos"] .wave-2 .bg-wave-inner,
+body[data-section="projects"] .wave-2 .bg-wave-inner {
+    opacity: 1;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 12vh;
+}
+body[data-section="projetos"] .wave-3 .bg-wave-inner,
+body[data-section="projects"] .wave-3 .bg-wave-inner {
+    opacity: 0.9;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
+}
+
+/* ── Contato ── */
+body[data-section="contato"] .wave-1 .bg-wave-inner,
+body[data-section="contact"] .wave-1 .bg-wave-inner {
+    opacity: 1;
+    --wave-origin-x: 88vw;
+    --wave-origin-y: 88vh;
+}
+body[data-section="contato"] .wave-2 .bg-wave-inner,
+body[data-section="contact"] .wave-2 .bg-wave-inner {
+    opacity: 0.9;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 12vh;
+}
+body[data-section="contato"] .wave-3 .bg-wave-inner,
+body[data-section="contact"] .wave-3 .bg-wave-inner {
+    opacity: 0.85;
+    --wave-origin-x: 12vw;
+    --wave-origin-y: 88vh;
+}
+
+/* ── Keyframes ── */
+@keyframes waveFloat1 {
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(var(--wave-drift-x), calc(-1 * var(--wave-drift-y))); }
+    66%      { transform: translate(calc(-0.75 * var(--wave-drift-x)), var(--wave-drift-y)); }
+}
+
+@keyframes waveFloat2 {
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(calc(-1 * var(--wave-drift-x)), calc(0.75 * var(--wave-drift-y))); }
+    66%      { transform: translate(calc(0.75 * var(--wave-drift-x)), calc(-1 * var(--wave-drift-y))); }
+}
+
+@keyframes waveFloat3 {
+    0%, 100% { transform: translate(0, 0); }
+    33%      { transform: translate(calc(0.6 * var(--wave-drift-x)), var(--wave-drift-y)); }
+    66%      { transform: translate(calc(-1 * var(--wave-drift-x)), calc(-0.5 * var(--wave-drift-y))); }
+}

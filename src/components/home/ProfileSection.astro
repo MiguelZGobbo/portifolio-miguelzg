@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { lang = 'pt', id } = Astro.props;
-const dict = translations[lang] as Record<string, string>;
+const dict = translations[lang];
 const base = import.meta.env.BASE_URL;
 const cvFilename = lang === 'en' ? 'MiguelZagerGobbo-CV-EN.pdf' : 'MiguelZagerGobbo-CV.pdf';
 const cvUrl = `${base}files/${cvFilename}`;

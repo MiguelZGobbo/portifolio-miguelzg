@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { readStyles } from './helpers/styles.mjs';
 
 const [main, home, styles, skillCard, baseLayout] = await Promise.all([
   readFile(new URL('../src/scripts/main.js', import.meta.url), 'utf8'),
   readFile(new URL('../src/pages/index.astro', import.meta.url), 'utf8'),
-  readFile(new URL('../src/styles/global.css', import.meta.url), 'utf8'),
+  readStyles(),
   readFile(new URL('../src/components/SkillCard.astro', import.meta.url), 'utf8'),
   readFile(new URL('../src/layouts/BaseLayout.astro', import.meta.url), 'utf8'),
 ]);

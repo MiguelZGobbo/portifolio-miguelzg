@@ -1,9 +1,4 @@
-import { translations } from '../lib/i18n';
-
-function copyMessage(key) {
-  const language = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
-  return translations[language][key];
-}
+import { translatePage } from './browser-i18n.js';
 
 export function initClipboard() {
   document.querySelectorAll('.copy-btn').forEach((button) => {
@@ -54,8 +49,8 @@ export function initClipboard() {
       }
 
       control.dataset.copyState = state;
-      message.textContent = copyMessage(state === 'success' ? 'copy.done' : 'copy.error');
-      feedback.textContent = copyMessage(state === 'success' ? 'copy.done' : 'copy.failed');
+      message.textContent = translatePage(state === 'success' ? 'copy.done' : 'copy.error');
+      feedback.textContent = translatePage(state === 'success' ? 'copy.done' : 'copy.failed');
       error.textContent = state === 'error' ? message.textContent : '';
       timer = setTimeout(resetFeedback, state === 'success' ? 2000 : 5000);
     });

@@ -1,17 +1,7 @@
-import { translations } from '../lib/i18n';
+import { contactFields } from '../data/contact-fields.ts';
+import { translatePage as translate } from './browser-i18n.js';
 
 let emailjsPromise;
-
-const contactFields = [
-  { key: 'name', id: 'campo-nome', errorId: 'campo-nome-error' },
-  { key: 'email', id: 'campo-email', errorId: 'campo-email-error' },
-  { key: 'message', id: 'campo-mensagem', errorId: 'campo-mensagem-error' },
-];
-
-function translate(key) {
-  const language = document.documentElement.dataset.lang === 'en' ? 'en' : 'pt';
-  return translations[language][key] ?? translations.pt[key] ?? key;
-}
 
 function loadEmailJS() {
   if (window.emailjs) return Promise.resolve();

@@ -1,11 +1,6 @@
-export interface Localized {
-  pt: string;
-  en: string;
-}
+import type { Localized } from '../lib/i18n';
 
 export type ProjectHierarchy = 'H1' | 'H2' | 'H3';
-export type ProjectStateKey = 'completed' | 'in-development' | 'active';
-export type ProjectDecision = 'INCLUDE';
 
 export interface ProjectShowcaseContent {
   kind: Localized;
@@ -17,16 +12,8 @@ export interface ProjectShowcaseContent {
 export interface Project {
   slug: string;
   name: Localized;
-  summary: Localized;
-  origin?: Localized;
-  contribution?: Localized;
   state: Localized;
-  stateKey: ProjectStateKey;
   hierarchy: ProjectHierarchy;
-  decision: ProjectDecision;
-  compact: boolean;
-  evidence: Localized[];
-  stack: string[];
   showcase: ProjectShowcaseContent;
   image?: {
     src: string;
@@ -37,70 +24,6 @@ export interface Project {
   ariaLabel: Localized;
 }
 
-const purchaseOrdersSummary: Localized = {
-  pt: 'Projeto individual desenvolvido durante um curso para construir uma API REST de gerenciamento de pedidos de compra e seus itens. Implementa autenticação de usuários via JWT, persistência em PostgreSQL com SQLAlchemy, migrações de banco, documentação com Swagger, execução com Docker e uma rotina de qualidade com testes automatizados, lint e pre-commit.',
-  en: 'Individual project developed as part of a course to build a REST API for managing purchase orders and their items. It includes JWT-based user authentication, PostgreSQL persistence with SQLAlchemy, database migrations, Swagger documentation, Docker-based execution, and an automated quality workflow with testing, linting, and pre-commit checks.',
-};
-
-const purchaseOrdersEvidence: Localized[] = [
-  { pt: 'Backend', en: 'Backend' },
-  { pt: 'REST', en: 'REST' },
-  { pt: 'autenticação', en: 'authentication' },
-  { pt: 'persistência/ORM', en: 'persistence/ORM' },
-  { pt: 'migrações', en: 'migrations' },
-  { pt: 'documentação de API', en: 'API documentation' },
-  { pt: 'Docker', en: 'Docker' },
-  { pt: 'testes automatizados', en: 'automated testing' },
-  { pt: 'qualidade de código', en: 'code quality' },
-];
-
-const beadWiseSummary: Localized = {
-  pt: 'Projeto em desenvolvimento que organiza discovery, especificações, protótipos, código e testes para investigar mecanismos de sistema Windows com critérios explícitos de prova, segurança e reversibilidade.',
-  en: 'Project in development that organizes discovery, specifications, prototypes, source code, and tests to investigate Windows system mechanisms with explicit proof, safety, and reversibility criteria.',
-};
-
-const beadWiseEvidence: Localized[] = [
-  { pt: 'C#/.NET e organização de solution', en: 'C#/.NET and solution organization' },
-  { pt: 'testes estruturais/harnesses', en: 'structural tests/harnesses' },
-  { pt: 'investigação de APIs Windows', en: 'Windows API investigation' },
-  { pt: 'prototipagem técnica', en: 'technical prototyping' },
-  { pt: 'validação por evidência', en: 'evidence-based validation' },
-  { pt: 'mecanismos reversíveis/seguros', en: 'reversible/safe mechanisms' },
-];
-
-const taskApiSummary: Localized = {
-  pt: 'Projeto acadêmico individual de uma API REST para gerenciamento de tarefas, desenvolvido com Java e Spring Boot. Implementa operações de CRUD e persistência em MySQL por meio do Spring Data JPA, com coleção Postman para validação dos endpoints.',
-  en: 'Individual academic project for a task management REST API built with Java and Spring Boot. It implements CRUD operations and MySQL persistence through Spring Data JPA, with a Postman collection used to validate the endpoints.',
-};
-
-const portfolioSummary: Localized = {
-  pt: 'Portfólio pessoal desenvolvido com Astro, CSS e JavaScript para reunir apresentação profissional, projetos, currículo e formas de contato. A implementação utiliza componentes reutilizáveis e inclui PT/EN, dark mode, responsividade, recursos de acessibilidade e SEO, além de build e deploy automatizados com GitHub Actions.',
-  en: 'Personal portfolio built with Astro, CSS, and JavaScript to bring together my professional profile, projects, resume, and contact options. The implementation uses reusable components and includes PT/EN support, dark mode, responsive behavior, accessibility and SEO features, as well as automated build and deployment with GitHub Actions.',
-};
-
-const taskApiEvidence: Localized[] = [
-  { pt: 'Java', en: 'Java' },
-  { pt: 'Spring Boot', en: 'Spring Boot' },
-  { pt: 'REST', en: 'REST' },
-  { pt: 'CRUD', en: 'CRUD' },
-  { pt: 'persistência relacional', en: 'relational persistence' },
-  { pt: 'Spring Data JPA', en: 'Spring Data JPA' },
-  { pt: 'MySQL', en: 'MySQL' },
-  { pt: 'ecossistema Maven/Postman', en: 'Maven/Postman ecosystem' },
-];
-
-const portfolioEvidence: Localized[] = [
-  { pt: 'JavaScript', en: 'JavaScript' },
-  { pt: 'Astro', en: 'Astro' },
-  { pt: 'HTML/CSS', en: 'HTML/CSS' },
-  { pt: 'componentização', en: 'componentization' },
-  { pt: 'responsividade', en: 'responsive behavior' },
-  { pt: 'acessibilidade', en: 'accessibility' },
-  { pt: 'internacionalização', en: 'internationalization' },
-  { pt: 'SEO', en: 'SEO' },
-  { pt: 'CI/CD / GitHub Actions', en: 'CI/CD / GitHub Actions' },
-];
-
 export const projects: Project[] = [
   {
     slug: 'purchase-orders-api',
@@ -110,16 +33,8 @@ export const projects: Project[] = [
       caption: { pt: 'Arquitetura e regras de pedidos', en: 'Architecture and order rules' },
     },
     name: { pt: 'Purchase Orders API', en: 'Purchase Orders API' },
-    summary: purchaseOrdersSummary,
-    origin: { pt: 'Projeto individual desenvolvido durante um curso', en: 'Individual project developed as part of a course' },
-    contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'concluído', en: 'completed' },
-    stateKey: 'completed',
     hierarchy: 'H1',
-    decision: 'INCLUDE',
-    compact: false,
-    evidence: purchaseOrdersEvidence,
-    stack: ['Python', 'Flask', 'PostgreSQL', 'SQLAlchemy', 'JWT', 'Docker', 'Pytest'],
     showcase: {
       kind: { pt: 'API REST · Backend', en: 'REST API · Backend' },
       summary: {
@@ -148,14 +63,8 @@ export const projects: Project[] = [
       caption: { pt: 'Visão do produto · em desenvolvimento', en: 'Product vision · in development' },
     },
     name: { pt: 'BeadWise', en: 'BeadWise' },
-    summary: beadWiseSummary,
     state: { pt: 'em desenvolvimento', en: 'in development' },
-    stateKey: 'in-development',
     hierarchy: 'H2',
-    decision: 'INCLUDE',
-    compact: false,
-    evidence: beadWiseEvidence,
-    stack: ['C#', '.NET', 'Windows APIs'],
     showcase: {
       kind: { pt: 'Aplicação Windows', en: 'Windows application' },
       summary: {
@@ -184,16 +93,8 @@ export const projects: Project[] = [
       caption: { pt: 'Página inicial · captura real', en: 'Homepage · actual screenshot' },
     },
     name: { pt: 'Portfólio Miguel ZG', en: 'Miguel ZG Portfolio' },
-    summary: portfolioSummary,
-    origin: { pt: 'pessoal', en: 'personal' },
-    contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'ativo / em evolução', en: 'active / evolving' },
-    stateKey: 'active',
     hierarchy: 'H3',
-    decision: 'INCLUDE',
-    compact: true,
-    evidence: portfolioEvidence,
-    stack: ['Astro', 'HTML', 'CSS', 'JavaScript'],
     showcase: {
       kind: { pt: 'Site pessoal', en: 'Personal website' },
       summary: {
@@ -222,16 +123,8 @@ export const projects: Project[] = [
       caption: { pt: 'Endpoints e modelo · esquema da implementação', en: 'Endpoints and model · implementation diagram' },
     },
     name: { pt: 'API de Gerenciamento de Tarefas', en: 'Task Management API' },
-    summary: taskApiSummary,
-    origin: { pt: 'acadêmico', en: 'academic' },
-    contribution: { pt: 'individual', en: 'individual' },
     state: { pt: 'concluído', en: 'completed' },
-    stateKey: 'completed',
     hierarchy: 'H3',
-    decision: 'INCLUDE',
-    compact: true,
-    evidence: taskApiEvidence,
-    stack: ['Java', 'Spring Boot', 'Spring Data JPA', 'MySQL', 'Maven', 'Postman'],
     showcase: {
       kind: { pt: 'API REST · Backend', en: 'REST API · Backend' },
       summary: {
@@ -253,7 +146,3 @@ export const projects: Project[] = [
     },
   },
 ];
-
-export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((project) => project.slug === slug);
-}

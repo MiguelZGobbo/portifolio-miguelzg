@@ -1,15 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import test from 'node:test';
-
-const source = await readFile(new URL('../src/scripts/clipboard.js', import.meta.url), 'utf8');
-const testableSource = source.replace(
-  "import { translations } from '../lib/i18n';",
-  `import { translations } from '${pathToFileURL(resolve('src/lib/i18n.ts')).href}';`,
-);
-const { initClipboard } = await import(`data:text/javascript;base64,${Buffer.from(testableSource).toString('base64')}`);
+import { initClipboard } from '../src/scripts/clipboard.js';
 
 function setup(t, { lang = 'pt', writeText } = {}) {
   const previousDocument = globalThis.document;

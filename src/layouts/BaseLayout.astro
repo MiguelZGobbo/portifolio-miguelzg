@@ -30,7 +30,7 @@ const {
   structuredData,
 } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const dict = translations[lang] as Record<string, string>;
+const dict = translations[lang];
 const htmlLang = lang === 'pt' ? 'pt-BR' : 'en';
 const openGraphLocale = lang === 'pt' ? 'pt_BR' : 'en_US';
 const alternateOpenGraphLocale = lang === 'pt' ? 'en_US' : 'pt_BR';

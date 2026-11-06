@@ -25,7 +25,7 @@ const {
   alternateSectionHrefs,
   sectionIds,
 } = Astro.props;
-const dict = translations[lang] as Record<string, string>;
+const dict = translations[lang];
 
 const links = [
   { id: sectionIds.home, section: 'home', translationId: 'home' },

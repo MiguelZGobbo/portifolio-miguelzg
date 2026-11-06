@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import test from 'node:test';
+import { readStyles } from './helpers/styles.mjs';
 
-const stylesheet = await readFile(resolve('src/styles/global.css'), 'utf8');
+const stylesheet = await readStyles();
 const layout = await readFile(resolve('src/layouts/BaseLayout.astro'), 'utf8');
 const waves = await readFile(resolve('src/components/Waves.astro'), 'utf8');
 

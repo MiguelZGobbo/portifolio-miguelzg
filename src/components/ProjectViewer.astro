@@ -1,0 +1,23 @@
+---
+import { translate, type Lang } from '../lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<dialog class="project-viewer" data-project-viewer aria-labelledby="project-viewer-title" aria-describedby="project-viewer-caption">
+  <div class="project-viewer-header">
+    <h2 id="project-viewer-title"></h2>
+    <button type="button" data-viewer-close aria-label={translate(lang, 'projects.close')} autofocus><span aria-hidden="true">×</span></button>
+  </div>
+  <div class="project-viewer-viewport">
+    <img data-viewer-image alt="" />
+  </div>
+  <div class="project-viewer-footer">
+    <p id="project-viewer-caption" data-viewer-caption></p>
+    <p data-viewer-error role="status" hidden>{translate(lang, 'projects.imageError')}</p>
+  </div>
+</dialog>
