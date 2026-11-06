@@ -8,6 +8,16 @@ import { translations } from '../src/lib/i18n.ts';
 const page = await readFile(resolve('dist/index.html'), 'utf8');
 const englishPage = await readFile(resolve('dist/en/index.html'), 'utf8');
 
+test('provides a single accessible image viewer on each localized homepage', () => {
+  for (const source of [page, englishPage]) {
+    assert.equal((source.match(/<dialog\b/g) ?? []).length, 1);
+    assert.match(source, /aria-labelledby="project-viewer-title"/);
+    assert.match(source, /data-viewer-close/);
+    assert.doesNotMatch(source, /data-viewer-zoom|project-preview-hint|data-zoom=/);
+    assert.match(source, /[;{]backdrop-filter:blur\(10px\)/, 'production CSS must retain the standard blur property');
+  }
+});
+
 for (const [id, source] of [['contato', page], ['contact', englishPage]]) {
   test(`renders #${id} with shared contact styling and one localized footer`, () => {
     const contact = source.match(new RegExp(`<section\\b[^>]*id="${id}"[^>]*>[\\s\\S]*?</section>`))?.[0] ?? '';
@@ -149,6 +159,17 @@ for (const [lang, source] of [['pt', page], ['en', englishPage]]) {
       assert.deepEqual(items(aspects), project.showcase.aspects.map((aspect) => aspect[lang]));
       assert.ok(link.includes(`href="${project.href}"`));
       assert.ok(link.includes(`aria-label="${project.ariaLabel[lang]}"`));
+      assert.ok(project.ariaLabel[lang].startsWith(translations[lang]['projects.github']));
+      if (project.image) {
+        const preview = markup.match(/class="project-media project-preview-link"[^>]*href="([^"]+)"/)?.[1];
+        assert.ok(preview?.startsWith('/portifolio-miguelzg/_astro/'), 'preview must use a public build asset URL');
+        assert.ok(markup.includes(`alt="${project.image.alt[lang]}"`));
+        assert.ok(markup.includes('loading="lazy"'));
+        assert.ok(markup.includes(`class="project-media project-preview-link"`));
+        assert.match(markup, /class="project-expand-icon"[^>]*aria-hidden="true"/);
+        assert.match(markup, /<figcaption>[\s\S]*?<\/figcaption>\s*<\/figure>\s*<\/a>/);
+        assert.ok(markup.includes(project.image.caption[lang]));
+      }
       assert.match(link, /target="_blank"/);
       assert.match(link, /rel="noopener noreferrer"/);
       assert.ok(markup.includes(`<span>${translations[lang]['projects.github']}</span>`));

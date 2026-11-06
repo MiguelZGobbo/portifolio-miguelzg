@@ -28,6 +28,11 @@ export interface Project {
   evidence: Localized[];
   stack: string[];
   showcase: ProjectShowcaseContent;
+  image?: {
+    src: string;
+    alt: Localized;
+    caption?: Localized;
+  };
   href: string;
   ariaLabel: Localized;
 }
@@ -99,6 +104,11 @@ const portfolioEvidence: Localized[] = [
 export const projects: Project[] = [
   {
     slug: 'purchase-orders-api',
+    image: {
+      src: 'purchase-orders-api.png',
+      alt: { pt: 'Arquitetura da API: autenticação JWT, Flask, validação de pedidos e PostgreSQL.', en: 'API architecture: JWT authentication, Flask, order validation and PostgreSQL.' },
+      caption: { pt: 'Arquitetura e regras de pedidos', en: 'Architecture and order rules' },
+    },
     name: { pt: 'Purchase Orders API', en: 'Purchase Orders API' },
     summary: purchaseOrdersSummary,
     origin: { pt: 'Projeto individual desenvolvido durante um curso', en: 'Individual project developed as part of a course' },
@@ -126,12 +136,17 @@ export const projects: Project[] = [
     },
     href: 'https://github.com/MiguelZGobbo/purchase-orders-api',
     ariaLabel: {
-      pt: 'Ver o projeto Purchase Orders API no GitHub',
-      en: 'View the Purchase Orders API project on GitHub',
+      pt: 'Ver código do projeto Purchase Orders API no GitHub',
+      en: 'View code for the Purchase Orders API project on GitHub',
     },
   },
   {
     slug: 'beadwise',
+    image: {
+      src: 'beadwise.png',
+      alt: { pt: 'Fluxo conceitual do BeadWise: detectar, entender, recomendar, aplicar, medir e manter ou reverter.', en: 'BeadWise conceptual flow: detect, understand, recommend, apply, measure and keep or roll back.' },
+      caption: { pt: 'Visão do produto · em desenvolvimento', en: 'Product vision · in development' },
+    },
     name: { pt: 'BeadWise', en: 'BeadWise' },
     summary: beadWiseSummary,
     state: { pt: 'em desenvolvimento', en: 'in development' },
@@ -157,12 +172,17 @@ export const projects: Project[] = [
     },
     href: 'https://github.com/MiguelZGobbo/beadwise',
     ariaLabel: {
-      pt: 'Ver o projeto BeadWise no GitHub',
-      en: 'View the BeadWise project on GitHub',
+      pt: 'Ver código do projeto BeadWise no GitHub',
+      en: 'View code for the BeadWise project on GitHub',
     },
   },
   {
     slug: 'portfolio',
+    image: {
+      src: 'portfolio.png',
+      alt: { pt: 'Captura da página inicial do portfólio, com apresentação profissional e foto de Miguel.', en: 'Screenshot of the portfolio homepage with Miguel’s professional introduction and photo.' },
+      caption: { pt: 'Página inicial · captura real', en: 'Homepage · actual screenshot' },
+    },
     name: { pt: 'Portfólio Miguel ZG', en: 'Miguel ZG Portfolio' },
     summary: portfolioSummary,
     origin: { pt: 'pessoal', en: 'personal' },
@@ -190,12 +210,17 @@ export const projects: Project[] = [
     },
     href: 'https://github.com/MiguelZGobbo/portifolio-miguelzg',
     ariaLabel: {
-      pt: 'Ver o projeto Portfólio Miguel ZG no GitHub',
-      en: 'View the Miguel ZG Portfolio project on GitHub',
+      pt: 'Ver código do projeto Portfólio Miguel ZG no GitHub',
+      en: 'View code for the Miguel ZG Portfolio project on GitHub',
     },
   },
   {
     slug: 'task-management-api',
+    image: {
+      src: 'task-management-api.svg',
+      alt: { pt: 'Esquema dos cinco endpoints de tarefas, dos campos da entidade Tarefa e da persistência com JPA e MySQL.', en: 'Diagram of the five task endpoints, the Tarefa entity fields and persistence with JPA and MySQL.' },
+      caption: { pt: 'Endpoints e modelo · esquema da implementação', en: 'Endpoints and model · implementation diagram' },
+    },
     name: { pt: 'API de Gerenciamento de Tarefas', en: 'Task Management API' },
     summary: taskApiSummary,
     origin: { pt: 'acadêmico', en: 'academic' },
@@ -223,8 +248,8 @@ export const projects: Project[] = [
     },
     href: 'https://github.com/MiguelZGobbo/API-de-Gerenciamento-de-Tarefas',
     ariaLabel: {
-      pt: 'Ver o projeto API de Gerenciamento de Tarefas no GitHub',
-      en: 'View the Task Management API project on GitHub',
+      pt: 'Ver código do projeto API de Gerenciamento de Tarefas no GitHub',
+      en: 'View code for the Task Management API project on GitHub',
     },
   },
 ];

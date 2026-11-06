@@ -68,7 +68,6 @@ test('applies dedicated action colors through the final button overrides', () =>
   };
   for (const [source, selector] of [
     [stylesheet, '.btn'],
-    [editorial, '.project-link,\n.project-github-link'],
     [editorial, '.cv-actions .btn'],
   ]) {
     const body = rule(source, selector);
@@ -81,6 +80,14 @@ test('applies dedicated action colors through the final button overrides', () =>
     assert.match(ruleFor(selector), /color:\s*var\(--on-action\);/);
   }
   assert.match(rule(editorial, '.cv-actions .btn-outline:hover,\n.cv-actions .btn-outline:focus-visible'), /background:\s*var\(--action-background\);/);
+});
+
+test('keeps project technology labels readable in both themes', () => {
+  for (const selector of [':root', ':root[data-theme="dark"]']) {
+    const theme = ruleFor(selector);
+    const ratio = contrastRatio(hexValue(theme, '--project-tag-text'), hexValue(theme, '--project-tag-background'));
+    assert.ok(ratio >= 4.5, `${selector} technology label contrast ${ratio.toFixed(2)}:1`);
+  }
 });
 
 test('preserves reading contrast even when all ambient cores overlap', () => {

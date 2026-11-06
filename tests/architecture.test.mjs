@@ -17,6 +17,7 @@ test('main delegates browser behavior to focused initializers only', () => {
     ['reveals', 'initReveals'],
     ['clipboard', 'initClipboard'],
     ['contact-form', 'initContactForm'],
+    ['project-viewer', 'initProjectViewer'],
   ];
 
   const imports = [...main.matchAll(/^import \{ (init[\w]+) \} from '\.\/(.+)\.js';$/gm)]

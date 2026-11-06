@@ -52,6 +52,18 @@ As três manchas usam opacidades de 22%, 16% e 9% no claro e 10%, 7% e 4% no esc
 
 No tema claro, o núcleo do blur mantém 90% da cor em 24% do raio e 60% em 45%, tornando sua presença mais perceptível perto dos cantos. A cor, a opacidade máxima das camadas, os halos, as bordas transparentes e o movimento permanecem iguais; o tema escuro mantém sua distribuição anterior.
 
+## Miniaturas dos projetos
+
+As imagens são opcionais: sem `image`, o projeto ocupa toda a largura. Para adicionar uma, salve o arquivo em `src/assets/projects/` e preencha `image: { src: 'arquivo.png', alt: { pt: 'Descrição da imagem', en: 'Image description' } }` em `src/data/projects.ts`. O componente importa os assets locais com `import.meta.glob`; o Astro gera versões otimizadas dos bitmaps. As miniaturas mantêm a proporção natural e usam carregamento tardio. As URLs ampliadas são geradas por `getImage()`, respeitando o caminho-base do site.
+
+Com JavaScript, a miniatura abre um único visualizador `<dialog>` transparente sobre fundo escurecido e desfocado, com título, legenda e controle de fechar em PT/EN. A imagem se ajusta ao espaço disponível, sem cortes nem controles de zoom. A abertura e o fechamento usam fades de 180 ms. O fechar, Esc e clique externo aguardam a saída antes de restaurar foco e rolagem; há um limite de segurança de 250 ms caso o evento da animação não chegue. Com movimento reduzido, a abertura e o fechamento são imediatos.
+
+A imagem ampliada é carregada somente ao abrir, com espaço reservado pela proporção conhecida e fade quando estiver pronta. Resultados de carregamentos antigos são descartados após fechar ou reabrir. Sem JavaScript, o link abre normalmente a imagem em uma nova aba. O comportamento fica em `src/scripts/project-viewer.js`, inicializado pelo ponto de entrada compartilhado.
+
+Um único link envolve imagem e legenda, com ícone de expansão de 16 px sempre visível ao lado da legenda. Apenas a imagem da miniatura recebe borda de 1 px e sombra curta, ajustadas por tema e levemente intensificadas no hover e no foco. Essas transições duram 180 ms e são desativadas com movimento reduzido. A janela ampliada permanece sem borda ou sombra decorativa.
+
+A seleção atual reúne o diagrama de arquitetura do repositório Purchase Orders API, o infográfico conceitual do repositório BeadWise, uma captura real da página inicial deste portfólio e um esquema vetorial dos endpoints e da entidade da API de tarefas. As legendas distinguem capturas, esquemas e visão de produto em desenvolvimento. A origem de cada arquivo está em `src/assets/projects/README.md`.
+
 ## Tecnologias
 
 - **Astro** — componentes e geração das páginas estáticas em PT/EN.
