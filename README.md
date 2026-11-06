@@ -65,7 +65,7 @@ As imagens ficam em `src/assets/projects/`; a [documentação dos assets](src/as
 
 A foto em `src/assets/` alimenta as variantes otimizadas; a cópia em `public/img/` mantém uma URL estável para compartilhamento. Os dois usos são intencionais. Currículos, imagens e ícones em `public/` fazem parte da publicação e devem continuar versionados.
 
-`src/styles/global.css` define a ordem da cascata. As cores e escalas fluidas ficam em `foundation.css`, com tokens escuros em `theme.css`. A IBM Plex Sans Variable usa o subconjunto latino local de `fonts.css`; revise sua cobertura ao adicionar idiomas. Regenere os PNGs de instalação com `node scripts/generate-icons.mjs`.
+`src/styles/global.css` define a ordem da cascata. As cores e escalas fluidas ficam em `foundation.css`, com tokens escuros em `theme.css`. A IBM Plex Sans Variable usa o subconjunto latino local de `fonts.css`; revise sua cobertura ao adicionar idiomas. Regenere o favicon SVG e os PNGs de instalação com `node scripts/generate-icons.mjs`; o gerador compartilha a mesma geometria e as mesmas cores entre todos os formatos.
 
 ## Git e arquivos locais
 
