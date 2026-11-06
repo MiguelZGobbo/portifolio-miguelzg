@@ -7,6 +7,8 @@ export function initProjectViewer() {
   const caption = dialog.querySelector('[data-viewer-caption]');
   const close = dialog.querySelector('[data-viewer-close]');
   const error = dialog.querySelector('[data-viewer-error]');
+  const header = dialog.querySelector('.project-viewer-header');
+  const footer = dialog.querySelector('.project-viewer-footer');
   let trigger;
   let scrollPosition;
   let previousOverflow;
@@ -14,6 +16,22 @@ export function initProjectViewer() {
   let loadVersion = 0;
   let closeTimeout;
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function fitImage() {
+    if (!dialog.open) return;
+    const style = window.getComputedStyle(dialog);
+    const reservedHeight = header.getBoundingClientRect().height
+      + footer.getBoundingClientRect().height + 2 * parseFloat(style.rowGap);
+    const availableHeight = Math.max(0, parseFloat(style.maxHeight) - reservedHeight);
+    dialog.style.setProperty('--viewer-image-height', `${availableHeight}px`);
+  }
+
+  if (window.ResizeObserver) {
+    const observer = new window.ResizeObserver(fitImage);
+    observer.observe(header);
+    observer.observe(footer);
+  }
+  window.addEventListener('resize', fitImage);
 
   function requestClose() {
     if (!dialog.open || dialog.dataset.state === 'closing') return;
@@ -43,17 +61,23 @@ export function initProjectViewer() {
       image.width = Number(link.dataset.width);
       image.height = Number(link.dataset.height);
       image.style.aspectRatio = `${image.width} / ${image.height}`;
-      image.style.width = `min(${image.width}px, 94vw, calc((90dvh - 100px) * ${image.width / image.height}))`;
+      // Keep text wrapping independent of the image's fitted height.
+      dialog.style.width = `min(${image.width}px, 94vw, calc(90dvh * ${image.width / image.height}))`;
+      image.style.width = `min(${image.width}px, 100%, calc(var(--viewer-image-height) * ${image.width / image.height}))`;
       image.src = link.href;
       document.documentElement.style.overflow = 'hidden';
       dialog.showModal();
+      fitImage();
       close.focus();
       image.decode().then(() => {
         if (version === loadVersion && dialog.open && dialog.dataset.state !== 'closing') {
           dialog.dataset.imageReady = 'true';
         }
       }).catch(() => {
-        if (version === loadVersion && dialog.open && dialog.dataset.state !== 'closing') error.hidden = false;
+        if (version === loadVersion && dialog.open && dialog.dataset.state !== 'closing') {
+          error.hidden = false;
+          fitImage();
+        }
       });
     });
   });

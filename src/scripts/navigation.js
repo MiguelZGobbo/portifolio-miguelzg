@@ -104,6 +104,11 @@ export function initNavigation() {
   if (!sections.length) return;
 
   const navigation = document.querySelector('.nav-links');
+  const header = document.querySelector('nav');
+  const syncHeaderHeight = () => {
+    if (!header) return;
+    document.documentElement.style.setProperty('--nav-height', `${header.getBoundingClientRect().height}px`);
+  };
   const pill = navigation?.querySelector('.nav-pill') ?? document.createElement('div');
   if (navigation && !pill.parentElement) {
     pill.className = 'nav-pill';
@@ -130,9 +135,18 @@ export function initNavigation() {
   };
 
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
-  window.addEventListener('resize', scheduleUpdate);
+  const headerResized = () => {
+    syncHeaderHeight();
+    scheduleUpdate();
+  };
+  if (header && window.ResizeObserver) {
+    const observer = new window.ResizeObserver(headerResized);
+    observer.observe(header);
+  }
+  window.addEventListener('resize', headerResized);
   window.addEventListener('hashchange', scheduleUpdate);
   document.addEventListener('languagechange', scheduleUpdate);
+  syncHeaderHeight();
   update();
   scheduleUpdate();
 }

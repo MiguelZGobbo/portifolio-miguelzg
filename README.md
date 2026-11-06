@@ -27,6 +27,7 @@ Português permanece na rota principal e inglês usa o prefixo `/en/`. A troca d
 - Tema claro/escuro com preferência persistida no navegador.
 - Rotas estáticas independentes em PT/EN, com idioma definido pela URL, histórico e links profundos copiáveis.
 - Navegação responsiva por Início, Projetos, Competências, Sobre e Contato.
+- Escala fluida compartilhada por textos, imagens, controles e espaçamentos, calculada pela largura e altura útil da tela. As colunas se reorganizam pelo espaço disponível; a navegação informa sua altura real para manter as âncoras visíveis.
 - Manchas desfocadas que acompanham as seções e animações de reveal, respeitando `prefers-reduced-motion`.
 - Skip link, foco visível, rótulos acessíveis e HTML estático disponível antes das melhorias de JavaScript.
 - Módulos de navegador separados para tema, navegação observada, reveals, clipboard e formulário de contato.
@@ -65,6 +66,8 @@ Um único link envolve imagem e legenda, com ícone de expansão de 16 px sempre
 A seleção atual reúne o diagrama de arquitetura do repositório Purchase Orders API, o infográfico conceitual do repositório BeadWise, uma captura real da página inicial deste portfólio e um esquema vetorial dos endpoints e da entidade da API de tarefas. As legendas distinguem capturas, esquemas e visão de produto em desenvolvimento. A origem de cada arquivo está em `src/assets/projects/README.md`.
 
 ## Tecnologias
+
+O dimensionamento usa os tokens `--fluid-type`, `--fluid-gap`, `--fluid-space` e `--page-gutter` em `src/styles/global.css`, com a mesma lógica de largura/altura do Conscientiza Queimadas. Limites em `rem` preservam a ampliação de texto. Sem JavaScript, o cabeçalho permanece no fluxo da página para não cobrir conteúdo. `ResizeObserver` complementa o deslocamento das âncoras na navegação fixa e reserva a altura real do título e da legenda no visualizador de imagens. O redimensionamento da janela também atualiza essas medidas quando o observador não está disponível.
 
 - **Astro** — componentes e geração das páginas estáticas em PT/EN.
 - **TypeScript** — modelo tipado dos projetos e conteúdo bilíngue.

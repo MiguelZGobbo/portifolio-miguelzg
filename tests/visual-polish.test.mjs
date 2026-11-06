@@ -232,6 +232,6 @@ test('shares the contact section and footer layout across localized anchors', ()
   assert.match(footer, /position:\s*static;/);
   assert.match(footer, /border-top:\s*1px solid var\(--line\);/);
   assert.match(footer, /text-align:\s*left;/);
-  assert.match(footer, /margin-top:\s*clamp\(3rem, 6vw, 5rem\);/);
+  assert.match(footer, /margin-top:\s*var\(--fluid-space\);/);
   assert.match(stylesheet, /body\[data-section="contato"\] \.home-section\.home-section--contact footer,\s*body\[data-section="contact"\] \.home-section\.home-section--contact footer\s*\{[^}]*opacity:\s*1;/);
 });

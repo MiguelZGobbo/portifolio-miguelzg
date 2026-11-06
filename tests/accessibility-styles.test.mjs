@@ -128,7 +128,7 @@ test('keeps navigation restrained and its utility controls usable on mobile in b
   const editorialStyles = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
   assert.match(editorialStyles, /background:\s*var\(--background\);[\s\S]*border-bottom:\s*1px solid var\(--line\);/);
-  assert.match(editorialStyles, /nav \.nav-btn\s*\{[^}]*min-width:\s*34px;[^}]*min-height:\s*34px;/);
+  assert.match(editorialStyles, /nav \.nav-btn\s*\{[^}]*min-width:\s*44px;[^}]*height:\s*max\(44px, calc\(var\(--fluid-type\) \* 2\.25\)\);/);
   assert.match(editorialStyles, /\.nav-btn:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--accent-strong\);/);
   const mobileHomeNavigation = ruleFor('body[data-section="home"] nav');
   assert.match(mobileHomeNavigation, /background:\s*var\(--background\);/);
@@ -218,27 +218,25 @@ test('contains decorative overflow and protects anchor and focus destinations fr
   assert.match(wave, /overflow:\s*clip;/);
   assert.match(wave, /contain:\s*paint;/);
   assert.doesNotMatch(stylesheet, /\.bg-raw|\.raw-[1-4]/);
-  assert.match(ruleFor('.snap-section'), /scroll-margin-top:\s*calc\(var\(--nav-top\) \+ var\(--nav-height\) \+ 1rem\);/);
+  assert.match(ruleFor('.snap-section'), /scroll-margin-top:\s*0;/);
+  assert.match(stylesheet, /scroll-padding-top:\s*calc\(var\(--nav-height\) \+ var\(--fluid-gap\)\);/);
   assert.doesNotMatch(stylesheet, /main:focus/);
   assert.match(stylesheet, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brown-dark\);/);
 });
 
-test('keeps the open portrait frame visible on desktop and smaller on mobile', () => {
+test('keeps the open portrait frame visible with fluid dimensions', () => {
   const editorialStyles = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
   assert.match(editorialStyles, /\.hero-photo\s*\{[^}]*overflow:\s*visible;/);
-  assert.match(editorialStyles, /\.hero-photo::before,\s*\.hero-photo::after\s*\{[^}]*width:\s*36px;[^}]*height:\s*36px;[^}]*var\(--accent\)/);
+  assert.match(editorialStyles, /\.hero-photo::before,\s*\.hero-photo::after\s*\{[^}]*width:\s*clamp\(1\.5rem, min\(2\.5vw, 4svh\), 2\.25rem\);[^}]*height:\s*clamp\(1\.5rem, min\(2\.5vw, 4svh\), 2\.25rem\);[^}]*var\(--accent\)/);
   assert.match(editorialStyles, /\.hero-photo::before\s*\{[^}]*top:\s*-8px;[^}]*left:\s*-8px;[^}]*border-top-width:\s*1\.5px;[^}]*border-left-width:\s*1\.5px;/);
   assert.match(editorialStyles, /\.hero-photo::after\s*\{[^}]*right:\s*-8px;[^}]*bottom:\s*-8px;[^}]*border-right-width:\s*1\.5px;[^}]*border-bottom-width:\s*1\.5px;/);
-  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::before,\s*\.hero-photo::after\s*\{[^}]*width:\s*24px;[^}]*height:\s*24px;/);
-  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::before\s*\{[^}]*top:\s*-5px;[^}]*left:\s*-5px;[^}]*border-top-width:\s*1px;[^}]*border-left-width:\s*1px;/);
-  assert.match(editorialStyles, /@media \(max-width: 640px\)[\s\S]*\.hero-photo::after\s*\{[^}]*right:\s*-5px;[^}]*bottom:\s*-5px;[^}]*border-right-width:\s*1px;[^}]*border-bottom-width:\s*1px;/);
 });
 
 test('keeps keyboard focus scrolling immediate', () => {
   assert.match(ruleFor('html'), /scroll-behavior:\s*auto;/);
   assert.doesNotMatch(ruleFor('html'), /scroll-behavior:\s*smooth;/);
-  assert.match(stylesheet, /@media \(max-width: 640px\)[\s\S]*html\s*\{[^}]*scroll-padding-bottom:\s*152px;/);
+  assert.match(stylesheet, /scroll-padding-bottom:\s*var\(--fluid-gap\);/);
 });
 
 test('uses an intentional compact brand instead of clipping the full mobile logo', () => {
@@ -250,8 +248,8 @@ test('uses an intentional compact brand instead of clipping the full mobile logo
 test('keeps the five-item navigation inside its tablet and notebook container', () => {
   const compactNavigation = stylesheet.slice(stylesheet.indexOf('22. EDITORIAL REDESIGN'));
 
-  assert.match(compactNavigation, /@media \(min-width: 641px\) and \(max-width: 1023px\)[\s\S]*nav\s*\{[^}]*left:\s*0;[^}]*right:\s*0;[^}]*padding-inline:\s*1\.25rem;/);
-  assert.match(compactNavigation, /\.nav-links a\s*\{[^}]*padding-inline:\s*0\.2rem;[^}]*font-size:\s*0\.76rem;/);
+  assert.match(compactNavigation, /nav,\s*\[data-theme="dark"\] nav\s*\{[^}]*left:\s*0;[^}]*right:\s*0;[^}]*height:\s*auto;[^}]*padding:[^;]*var\(--page-gutter\);[^}]*flex-wrap:\s*wrap;/);
+  assert.match(compactNavigation, /\.nav-links\s*\{[^}]*flex-wrap:\s*wrap;[^}]*overflow:\s*visible;/);
 });
 
 test('keeps editorial project entries readable when names and summaries are long', () => {

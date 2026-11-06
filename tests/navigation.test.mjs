@@ -253,6 +253,49 @@ test('hides the section indicator when no navigation link matches', () => {
   assert.equal(pill.hidden, true);
 });
 
+test('tracks actual navigation height after content resizes, with a window-resize fallback', t => {
+  const originalDocument = globalThis.document;
+  const originalWindow = globalThis.window;
+  t.after(() => { globalThis.document = originalDocument; globalThis.window = originalWindow; });
+  for (const hasObserver of [true, false]) {
+    const properties = new Map();
+    const listeners = new Map();
+    const frames = [];
+    let height = 58;
+    let notifyResize;
+    let observed;
+    const header = { getBoundingClientRect: () => ({ height }) };
+    const section = { id: 'home', getBoundingClientRect: () => ({ top: 0, height: 900 }) };
+    globalThis.document = {
+      documentElement: { style: { setProperty: (name, value) => properties.set(name, value) } },
+      body: { dataset: {} },
+      getElementById: () => null,
+      querySelectorAll: selector => selector === 'main > section[id]' ? [section] : [],
+      querySelector: selector => selector === 'nav' ? header : null,
+      createElement: () => ({ style: {} }),
+      addEventListener() {},
+    };
+    globalThis.window = {
+      scrollY: 0, innerHeight: 900,
+      addEventListener: (name, callback) => listeners.set(name, callback),
+      requestAnimationFrame: callback => { frames.push(callback); return frames.length; },
+      ...(hasObserver ? { ResizeObserver: class {
+        constructor(callback) { notifyResize = callback; }
+        observe(element) { observed = element; }
+      } } : {}),
+    };
+    navigation.initNavigation();
+    while (frames.length) frames.shift()();
+    assert.equal(properties.get('--nav-height'), '58px');
+    if (hasObserver) assert.equal(observed, header);
+    height = 136;
+    if (hasObserver) notifyResize();
+    else listeners.get('resize')();
+    while (frames.length) frames.shift()();
+    assert.equal(properties.get('--nav-height'), '136px');
+  }
+});
+
 test('repositions the active navigation pill after a language change updates link geometry', () => {
   assert.equal(typeof navigation.initNavigation, 'function');
 

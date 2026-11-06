@@ -2,21 +2,22 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { initProjectViewer } from '../src/scripts/project-viewer.js';
 
-function viewerEnvironment(t, { reducedMotion = true, decode = () => Promise.resolve() } = {}) {
+function viewerEnvironment(t, { reducedMotion = true, decode = () => Promise.resolve(), hasObserver = true } = {}) {
   const previousDocument = globalThis.document;
   const previousWindow = globalThis.window;
   t.after(() => { globalThis.document = previousDocument; globalThis.window = previousWindow; });
   class Element extends EventTarget {
     dataset = {};
-    style = {};
+    style = { setProperty(name, value) { this[name] = value; } };
+    height = 44;
     attributes = {};
     setAttribute(name, value) { this.attributes[name] = value; }
     removeAttribute(name) { delete this[name]; }
     focus(options) { document.activeElement = this; this.focusOptions = options; }
     scrollTo(x, y) { this.scroll = [x, y]; }
-    getBoundingClientRect() { return { left: 10, right: 200, top: 10, bottom: 200 }; }
+    getBoundingClientRect() { return { left: 10, right: 200, top: 10, bottom: 200, height: this.height }; }
   }
-  const selectors = ['[data-viewer-image]', '#project-viewer-title', '[data-viewer-caption]', '[data-viewer-close]', '[data-viewer-error]'];
+  const selectors = ['[data-viewer-image]', '#project-viewer-title', '[data-viewer-caption]', '[data-viewer-close]', '[data-viewer-error]', '.project-viewer-header', '.project-viewer-footer'];
   const nodes = Object.fromEntries(selectors.map(selector => [selector, new Element()]));
   nodes['[data-viewer-image]'].decode = decode;
   const dialog = new Element();
@@ -29,14 +30,41 @@ function viewerEnvironment(t, { reducedMotion = true, decode = () => Promise.res
   globalThis.document = { querySelector: () => dialog, querySelectorAll: () => [link], documentElement: { style: { overflow: 'auto' } } };
   const motion = new EventTarget();
   motion.matches = reducedMotion;
-  globalThis.window = { matchMedia: () => motion, scrollX: 0, scrollY: 700, scrollTo(x, y) { this.scrollX = x; this.scrollY = y; } };
+  const listeners = new Map();
+  let notifyResize;
+  globalThis.window = {
+    matchMedia: () => motion, scrollX: 0, scrollY: 700,
+    getComputedStyle: () => ({ maxHeight: '351px', rowGap: '16px' }),
+    addEventListener: (name, callback) => listeners.set(name, callback),
+    ...(hasObserver ? { ResizeObserver: class {
+      constructor(callback) { notifyResize = callback; }
+      observe() {}
+    } } : {}),
+    scrollTo(x, y) { this.scrollX = x; this.scrollY = y; },
+  };
   initProjectViewer();
   function click(element, overrides = {}) {
     const event = Object.assign(new Event('click', { cancelable: true }), { button: 0, ...overrides });
     element.dispatchEvent(event);
     return event;
   }
-  return { dialog, nodes, link, click };
+  return { dialog, nodes, link, click, resize: () => hasObserver ? notifyResize?.() : listeners.get('resize')?.() };
+}
+
+for (const hasObserver of [true, false]) {
+  test(`reserves actual title and caption heights when fitting the image (ResizeObserver: ${hasObserver})`, t => {
+    const { dialog, nodes, link, click, resize } = viewerEnvironment(t, { hasObserver });
+    click(link);
+    assert.equal(dialog.style['--viewer-image-height'], '231px');
+    nodes['.project-viewer-header'].height = 100;
+    nodes['.project-viewer-footer'].height = 84;
+    resize();
+    assert.equal(dialog.style['--viewer-image-height'], '135px');
+    assert.ok(nodes['[data-viewer-image]'].style.width.includes('100%'));
+    dialog.close();
+    resize();
+    assert.equal(dialog.style['--viewer-image-height'], '135px');
+  });
 }
 
 test('loads only the requested image and restores focus and scroll after a native close', t => {
