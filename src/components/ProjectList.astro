@@ -15,7 +15,9 @@ const dict = translations[lang] as Record<string, string>;
 const projectImages = import.meta.glob<ImageMetadata>('../assets/projects/*.{png,jpg,webp,svg}', { eager: true, import: 'default' });
 const fullImages = Object.fromEntries(await Promise.all(projects.filter(project => project.image).map(async project => {
   const source = projectImages[`../assets/projects/${project.image!.src}`];
-  const image = await getImage({ src: source, width: source.width, format: source.format === 'svg' ? 'svg' : 'webp', quality: 90 });
+  const image = source.format === 'svg'
+    ? source
+    : await getImage({ src: source, width: source.width, format: 'webp', quality: 90 });
   return [project.slug, image];
 })));
 ---
@@ -44,16 +46,28 @@ const fullImages = Object.fromEntries(await Promise.all(projects.filter(project 
               aria-label={`${dict['projects.enlarge']}: ${project.name[lang]}${project.image.caption ? ` — ${project.image.caption[lang]}` : ''}`}
             >
               <figure>
-              <Image
-                src={projectImages[`../assets/projects/${project.image.src}`]}
-                alt={project.image.alt[lang]}
-                width={640}
-                widths={[320, 640, 960, 1280]}
-                sizes="auto, 100vw"
-                loading="lazy"
-                decoding="async"
-                class="project-thumbnail"
-              />
+              {projectImages[`../assets/projects/${project.image.src}`].format === 'svg' ? (
+                <img
+                  src={projectImages[`../assets/projects/${project.image.src}`].src}
+                  alt={project.image.alt[lang]}
+                  width={projectImages[`../assets/projects/${project.image.src}`].width}
+                  height={projectImages[`../assets/projects/${project.image.src}`].height}
+                  loading="lazy"
+                  decoding="async"
+                  class="project-thumbnail"
+                />
+              ) : (
+                <Image
+                  src={projectImages[`../assets/projects/${project.image.src}`]}
+                  alt={project.image.alt[lang]}
+                  width={640}
+                  widths={[320, 640, 960, 1280]}
+                  sizes="auto, 100vw"
+                  loading="lazy"
+                  decoding="async"
+                  class="project-thumbnail"
+                />
+              )}
             <figcaption>
               {project.image.caption && <span>{project.image.caption[lang]}</span>}
               <svg class="project-expand-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>

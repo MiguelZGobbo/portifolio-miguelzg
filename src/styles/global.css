@@ -825,9 +825,6 @@ footer {
         margin-top: auto;
         margin-bottom: auto;
     }
-    .reveal {
-        will-change: opacity, transform;
-    }
 }
 
 /* ================================

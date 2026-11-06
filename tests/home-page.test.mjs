@@ -8,13 +8,66 @@ import { translations } from '../src/lib/i18n.ts';
 const page = await readFile(resolve('dist/index.html'), 'utf8');
 const englishPage = await readFile(resolve('dist/en/index.html'), 'utf8');
 
-test('provides a single accessible image viewer on each localized homepage', () => {
+function stylesheetPaths(source) {
+  return [...source.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*href="([^"]+)"[^>]*>/g)]
+    .map(([, href]) => resolve('dist', href.replace(/^\/portifolio-miguelzg\//, '')));
+}
+
+async function stylesFor(source) {
+  const inline = [...source.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)].map(([, css]) => css);
+  const external = await Promise.all(stylesheetPaths(source).map((path) => readFile(path, 'utf8')));
+  return [...inline, ...external].join('\n');
+}
+
+test('provides a single accessible image viewer on each localized homepage', async () => {
   for (const source of [page, englishPage]) {
     assert.equal((source.match(/<dialog\b/g) ?? []).length, 1);
     assert.match(source, /aria-labelledby="project-viewer-title"/);
     assert.match(source, /data-viewer-close/);
     assert.doesNotMatch(source, /data-viewer-zoom|project-preview-hint|data-zoom=/);
-    assert.match(source, /[;{]backdrop-filter:blur\(10px\)/, 'production CSS must retain the standard blur property');
+    assert.match(await stylesFor(source), /[;{]backdrop-filter:blur\(10px\)/, 'production CSS must retain the standard blur property');
+  }
+});
+
+test('shares an external stylesheet across languages and keeps the Latin variable font', async () => {
+  const stylesheets = stylesheetPaths(page);
+  assert.ok(stylesheets.length > 0, 'large stylesheets should be reusable between page visits');
+  assert.deepEqual(stylesheetPaths(englishPage), stylesheets);
+  const css = await stylesFor(page);
+  const fonts = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)].map(([, rule]) => rule);
+  assert.equal(fonts.length, 1, 'only the supported content subset should be published');
+  assert.match(fonts[0], /font-family:["']?IBM Plex Sans Variable/);
+  assert.match(fonts[0], /font-weight:100 700/);
+  assert.match(fonts[0], /font-display:swap/);
+  assert.match(fonts[0], /latin-wght-normal[^)]+\.woff2/);
+});
+
+test('keeps a small eager profile fallback with high-density responsive candidates', () => {
+  for (const source of [page, englishPage]) {
+    const photo = source.match(/<img\b[^>]*class="profile-photo"[^>]*>/)?.[0] ?? '';
+    assert.match(photo, /\bwidth="480"/);
+    assert.match(photo, /\bheight="640"/);
+    assert.match(photo, /\bloading="eager"/);
+    assert.match(photo, /\bfetchpriority="high"/);
+    const fallback = photo.match(/\bsrc="([^"]+)"/)?.[1];
+    assert.ok(fallback);
+    assert.ok(photo.includes(`${fallback} 480w`), 'fallback should reuse the largest responsive image');
+    for (const width of [120, 180, 240, 360, 480]) assert.ok(photo.includes(` ${width}w`));
+  }
+});
+
+test('reuses a single vector asset for the task diagram thumbnail and enlarged view', () => {
+  for (const source of [page, englishPage]) {
+    const markup = projectMarkup('task-management-api', source);
+    const preview = markup.match(/href="([^"]+)"/)?.[1];
+    const thumbnail = markup.match(/<img\b[^>]*>/)?.[0] ?? '';
+    const src = thumbnail.match(/\bsrc="([^"]+)"/)?.[1];
+    assert.ok(src?.endsWith('.svg'));
+    assert.equal(src, preview, 'opening a vector should reuse the same asset');
+    assert.doesNotMatch(thumbnail, /\bsrcset=|\bsizes=/);
+    assert.match(thumbnail, /\bwidth="\d+"/);
+    assert.match(thumbnail, /\bheight="\d+"/);
+    assert.match(thumbnail, /\bloading="lazy"/);
   }
 });
 

@@ -44,7 +44,7 @@ function mediaBlock(css, marker, occurrence = 0) {
 }
 
 test('uses one self-hosted IBM Plex Sans family throughout the interface', () => {
-  assert.match(layout, /@fontsource-variable\/ibm-plex-sans/);
+  assert.match(layout, /import ['"]\.\.\/styles\/fonts\.css['"]/);
   assert.doesNotMatch(layout, /dm-sans/i);
   assert.match(stylesheet, /font-family:\s*'IBM Plex Sans Variable',\s*sans-serif;/);
   assert.doesNotMatch(stylesheet, /DM Sans Variable|Playfair Display Variable/);

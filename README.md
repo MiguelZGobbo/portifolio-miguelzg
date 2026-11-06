@@ -57,6 +57,8 @@ No tema claro, o núcleo do blur mantém 90% da cor em 24% do raio e 60% em 45%,
 
 As imagens são opcionais: sem `image`, o projeto ocupa toda a largura. Para adicionar uma, salve o arquivo em `src/assets/projects/` e preencha `image: { src: 'arquivo.png', alt: { pt: 'Descrição da imagem', en: 'Image description' } }` em `src/data/projects.ts`. O componente importa os assets locais com `import.meta.glob`; o Astro gera versões otimizadas dos bitmaps. As miniaturas mantêm a proporção natural e usam carregamento tardio. As URLs ampliadas são geradas por `getImage()`, respeitando o caminho-base do site.
 
+As ampliações dos bitmaps usam WebP com qualidade 90. O esquema SVG usa o mesmo arquivo vetorial na miniatura e no visualizador, sem variantes de resolução. A foto inicial mantém variantes de 120 a 480 px e um fallback de 480 px; o JPEG em `public/img/` permanece reservado às prévias de compartilhamento.
+
 Com JavaScript, a miniatura abre um único visualizador `<dialog>` transparente sobre fundo escurecido e desfocado, com título, legenda e controle de fechar em PT/EN. A imagem se ajusta ao espaço disponível, sem cortes nem controles de zoom. A abertura e o fechamento usam fades de 180 ms. O fechar, Esc e clique externo aguardam a saída antes de restaurar foco e rolagem; há um limite de segurança de 250 ms caso o evento da animação não chegue. Com movimento reduzido, a abertura e o fechamento são imediatos.
 
 A imagem ampliada é carregada somente ao abrir, com espaço reservado pela proporção conhecida e fade quando estiver pronta. Resultados de carregamentos antigos são descartados após fechar ou reabrir. Sem JavaScript, o link abre normalmente a imagem em uma nova aba. O comportamento fica em `src/scripts/project-viewer.js`, inicializado pelo ponto de entrada compartilhado.
@@ -76,6 +78,8 @@ O dimensionamento usa os tokens `--fluid-type`, `--fluid-gap`, `--fluid-space` e
 - **EmailJS** — carregado sob demanda pelo formulário de contato.
 - **@fontsource-variable** — IBM Plex Sans auto-hospedada.
 - **@astrojs/sitemap** — geração do sitemap durante o build.
+
+O CSS é extraído automaticamente pelo Astro e compartilhado pelas duas páginas. `src/styles/fonts.css` declara somente o WOFF2 latino da IBM Plex Sans variável, com pesos de 100 a 700 e `font-display: swap`. Esse subconjunto cobre os acentos e a pontuação do conteúdo atual em PT/EN; ao incluir outros idiomas ou caracteres, revise essa cobertura. O relatório de otimização fica em [docs/phases/asset-optimization.md](docs/phases/asset-optimization.md).
 
 ## Como executar
 
