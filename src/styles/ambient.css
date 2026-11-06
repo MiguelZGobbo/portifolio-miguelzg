@@ -219,3 +219,84 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
     33%      { transform: translate(calc(0.6 * var(--wave-drift-x)), var(--wave-drift-y)); }
     66%      { transform: translate(calc(-1 * var(--wave-drift-x)), calc(-0.5 * var(--wave-drift-y))); }
 }
+
+/* Reflexo estático de superfície polida, independente das manchas animadas. */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body::before {
+    background: linear-gradient(119deg,
+        transparent 2%,
+        rgba(235, 246, 253, 0.018) 15%,
+        rgba(240, 248, 254, 0.067) 24%,
+        rgba(244, 250, 255, 0.038) 30%,
+        transparent 43%,
+        rgba(224, 240, 251, 0.018) 57%,
+        rgba(238, 248, 254, 0.055) 70%,
+        rgba(239, 248, 255, 0.027) 77%,
+        transparent 94%);
+    mask-image: radial-gradient(ellipse 125% 105% at 50% 38%, #000 15%,
+        transparent 100%);
+}
+
+body::after {
+    background: linear-gradient(119deg,
+        transparent 34%,
+        rgba(236, 247, 255, 0.014) 37%,
+        rgba(245, 251, 255, 0.045) 39.5%,
+        rgba(250, 253, 255, 0.063) 40.5%,
+        rgba(242, 250, 255, 0.024) 42%,
+        transparent 46%),
+        radial-gradient(ellipse 52% 35% at 78% 12%,
+        rgba(228, 242, 253, 0.043),
+        transparent 78%),
+        radial-gradient(ellipse 52% 42% at 20% 85%,
+        rgba(228, 242, 253, 0.038),
+        transparent 78%);
+    mask-image: radial-gradient(ellipse 62% 64% at 58% 4%, #000 8%,
+        rgba(0, 0, 0, 0.75) 43%,
+        transparent 86%);
+}
+
+:root:not([data-theme="dark"]) body::before {
+    background: linear-gradient(119deg,
+        transparent 2%,
+        rgba(100, 125, 138, 0.015) 12%,
+        rgba(255, 255, 255, 0.10) 15%,
+        rgba(100, 125, 138, 0.04) 20%,
+        rgba(255, 255, 255, 0.38) 24%,
+        rgba(255, 255, 255, 0.18) 32%,
+        rgba(100, 125, 138, 0.035) 36%,
+        transparent 43%,
+        rgba(255, 255, 255, 0.09) 57%,
+        rgba(100, 125, 138, 0.04) 66%,
+        rgba(255, 255, 255, 0.30) 70%,
+        rgba(255, 255, 255, 0.12) 79%,
+        rgba(100, 125, 138, 0.025) 84%,
+        transparent 94%);
+}
+
+:root:not([data-theme="dark"]) body::after {
+    background: linear-gradient(119deg,
+        transparent 34%,
+        rgba(100, 125, 138, 0.025) 35.5%,
+        rgba(255, 255, 255, 0.06) 37%,
+        rgba(100, 125, 138, 0.055) 38%,
+        rgba(255, 255, 255, 0.24) 39.5%,
+        rgba(255, 255, 255, 0.50) 40.5%,
+        rgba(255, 255, 255, 0.12) 42%,
+        rgba(100, 125, 138, 0.035) 43.5%,
+        transparent 46%),
+        radial-gradient(ellipse 52% 35% at 78% 12%,
+        rgba(255, 255, 255, 0.22),
+        transparent 78%),
+        radial-gradient(ellipse 52% 42% at 20% 85%,
+        rgba(255, 255, 255, 0.18),
+        transparent 78%);
+}

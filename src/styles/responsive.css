@@ -2,6 +2,14 @@
     17. TELAS PEQUENAS (≤ 640px)
 ================================ */
 @media (max-width: 640px) {
+    body::before {
+        opacity: 0.8;
+    }
+
+    body::after {
+        opacity: 0.75;
+    }
+
     html {
         scroll-padding-bottom: var(--fluid-gap);
     }

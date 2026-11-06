@@ -38,6 +38,8 @@ Alguns componentes recebem refinamentos no último arquivo. Reordenar imports ou
 - Botão de fechar, Esc e clique externo respeitam o fade de saída de 180 ms, com limite de segurança de 250 ms. Movimento reduzido torna abertura e fechamento imediatos.
 - Preserve o fallback de imagem em nova aba, validação acessível, feedback do clipboard e bloqueio do envio de contato local. Testes não devem enviar mensagens reais.
 - As luzes decorativas e os reveals devem respeitar movimento reduzido; os demais controles continuam utilizáveis por teclado.
+- O acabamento polido do fundo usa pseudoelementos fixos do `body`, com brilho distribuído e um feixe concentrado. O reflexo é estático: não acompanha mouse, tempo ou seção e não intercepta cliques. Apenas as três manchas existentes se movem; com movimento reduzido, elas ficam ocultas e o polimento permanece visível.
+- No tema claro, a base permanece `#F9F9FB`; transições cinza-azuladas (`100, 125, 138`, até 4% nos reflexos amplos e 5,5% no feixe) destacam o branco iluminado. O pico branco do feixe tem 50% de opacidade, mantendo o ângulo de 119°, as máscaras e as intensidades reduzidas para celular.
 
 ## Verificação
 
