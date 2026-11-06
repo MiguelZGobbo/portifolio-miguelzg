@@ -220,3 +220,18 @@ test('keeps content-led section rhythm', () => {
   assert.match(stylesheet, /@media \(min-width: 641px\)[\s\S]*\.home-section--hero\s*\{[^}]*min-height:\s*100vh;/);
   assert.match(stylesheet, /@media \(min-width: 641px\)[\s\S]*\.home-section:not\(\.home-section--hero\)\s*\{[^}]*min-height:\s*auto;[^}]*padding-block:\s*clamp/);
 });
+
+test('shares the contact section and footer layout across localized anchors', () => {
+  const contactSelector = '.home-section.home-section--contact';
+  const contact = declarationsFor(stylesheet, contactSelector);
+  const footer = declarationsFor(stylesheet, `${contactSelector} footer`);
+
+  assert.doesNotMatch(stylesheet, /#contato\b/);
+  assert.match(contact, /min-height:\s*0;/);
+  assert.match(contact, /padding-bottom:\s*0;/);
+  assert.match(footer, /position:\s*static;/);
+  assert.match(footer, /border-top:\s*1px solid var\(--line\);/);
+  assert.match(footer, /text-align:\s*left;/);
+  assert.match(footer, /margin-top:\s*clamp\(3rem, 6vw, 5rem\);/);
+  assert.match(stylesheet, /body\[data-section="contato"\] \.home-section\.home-section--contact footer,\s*body\[data-section="contact"\] \.home-section\.home-section--contact footer\s*\{[^}]*opacity:\s*1;/);
+});

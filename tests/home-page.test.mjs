@@ -8,6 +8,17 @@ import { translations } from '../src/lib/i18n.ts';
 const page = await readFile(resolve('dist/index.html'), 'utf8');
 const englishPage = await readFile(resolve('dist/en/index.html'), 'utf8');
 
+for (const [id, source] of [['contato', page], ['contact', englishPage]]) {
+  test(`renders #${id} with shared contact styling and one localized footer`, () => {
+    const contact = source.match(new RegExp(`<section\\b[^>]*id="${id}"[^>]*>[\\s\\S]*?</section>`))?.[0] ?? '';
+    assert.match(contact, /class="[^"]*\bhome-section\b[^"]*\bhome-section--contact\b[^"]*"/);
+    assert.equal((contact.match(/<footer\b/g) ?? []).length, 1);
+    const lang = id === 'contato' ? 'pt' : 'en';
+    const expected = translations[lang]['contact.footer'].replace('{year}', String(new Date().getFullYear()));
+    assert.ok(contact.includes(expected));
+  });
+}
+
 function positionOf(id) {
   return page.indexOf(`id="${id}"`);
 }

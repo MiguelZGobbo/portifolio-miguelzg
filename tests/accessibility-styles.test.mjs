@@ -185,7 +185,7 @@ test('keeps the reduced-motion contract after component motion and disables deco
   assert.match(reducedMotionBlocks[0][1], /\.bg-wave\s*\{[^}]*display:\s*none;/);
   assert.match(reducedMotionBlocks[0][1], /\.nav-pill[\s\S]*?transition:\s*none;/);
   assert.match(reducedMotionBlocks[0][1], /\.btn:hover[\s\S]*?transform:\s*none;/);
-  assert.match(reducedMotionStyles, /nav[\s\S]*?\.cv-actions \.btn[\s\S]*?#contato footer[\s\S]*?transition:\s*none;/);
+  assert.match(reducedMotionStyles, /nav[\s\S]*?\.cv-actions \.btn[\s\S]*?\.home-section\.home-section--contact footer[\s\S]*?transition:\s*none;/);
 });
 
 test('sizes direct interactive controls and preserves mobile utility targets', () => {

@@ -489,21 +489,21 @@ button:enabled {
 /* ================================
    10. SEÇÃO — CONTATO
 ================================ */
-#contato {
+.home-section.home-section--contact {
     position: relative;
     justify-content: center;
     padding-bottom: 80px;
     border-bottom: none;
 }
 
-#contato .section-inner {
+.home-section.home-section--contact .section-inner {
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin: 0 auto;
 }
 
-#contato footer {
+.home-section.home-section--contact footer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -788,7 +788,7 @@ footer {
    12. RESPONSIVO — MOBILE
 ================================ */
 @media (max-width: 900px) {
-    #contato {
+    .home-section.home-section--contact {
         padding-bottom: 50px;
     }
 
@@ -845,10 +845,10 @@ footer {
 }
 
 @media (max-height: 700px) {
-    #contato {
+    .home-section.home-section--contact {
         padding-bottom: 60px;
     }
-    #contato footer {
+    .home-section.home-section--contact footer {
         padding: 0.6rem;
     }
     .contact-grid {
@@ -894,10 +894,10 @@ footer {
 } 
 /* max-height 650 ainda mais compacto */
 @media (max-height: 650px) {
-    #contato {
+    .home-section.home-section--contact {
         padding-bottom: 48px;
     }
-    #contato footer {
+    .home-section.home-section--contact footer {
         padding: 0.5rem;
     }
     .section-label {
@@ -1028,7 +1028,7 @@ footer {
         grid-row: auto;
         margin-top: 1.5rem;
     }
-    #contato {
+    .home-section.home-section--contact {
         padding-bottom: 60px;
     }
 }
@@ -1544,15 +1544,15 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         height: 12px;
     }
 
-    #contato {
+    .home-section.home-section--contact {
         justify-content: center;
         padding-bottom: 130px;
     }
-    #contato .section-inner {
+    .home-section.home-section--contact .section-inner {
         justify-content: flex-start;
     }
 
-    #contato footer {
+    .home-section.home-section--contact footer {
         position: fixed;
         bottom: 86px;
         left: 24px;
@@ -1564,7 +1564,8 @@ body[data-section="contact"] .wave-3 .bg-wave-inner {
         pointer-events: none;
         transition: opacity 0.3s ease;
     }
-    body[data-section="contato"] #contato footer {
+    body[data-section="contato"] .home-section.home-section--contact footer,
+    body[data-section="contact"] .home-section.home-section--contact footer {
         opacity: 1;
         pointer-events: auto;
     }
@@ -2066,7 +2067,7 @@ html[data-lang="en"] .lang-en {
     .copy-btn svg,
     .copy-feedback,
     .skip-link,
-    #contato footer,
+    .home-section.home-section--contact footer,
     .lang-part {
         transition: none;
     }
@@ -2764,17 +2765,17 @@ nav,
     min-height: 44px;
 }
 
-#contato {
+.home-section.home-section--contact {
     min-height: 0;
     justify-content: flex-start;
     padding-bottom: 0;
 }
 
-#contato .section-inner {
+.home-section.home-section--contact .section-inner {
     margin: 0 auto;
 }
 
-#contato footer {
+.home-section.home-section--contact footer {
     position: static;
     margin-top: clamp(3rem, 6vw, 5rem);
     background: transparent;
@@ -3064,11 +3065,11 @@ footer {
         margin-top: 0;
     }
 
-    #contato {
+    .home-section.home-section--contact {
         padding-bottom: 0;
     }
 
-    #contato footer {
+    .home-section.home-section--contact footer {
         position: static;
         inset: auto;
         margin-top: 3rem;
