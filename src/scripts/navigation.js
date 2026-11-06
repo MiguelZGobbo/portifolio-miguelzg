@@ -12,31 +12,56 @@ export function findActiveSection(sections, scrollTop, viewportHeight) {
   ), sections[0]).id;
 }
 
-export function updateNavigationPill(pill, link) {
-  if (!pill) return;
-
-  pill.hidden = !link;
-  if (!link || window.matchMedia('(max-width: 640px)').matches) return;
+function navigationPillUpdate(pill, link) {
+  if (!pill) return null;
+  if (!link) return { hidden: true, position: null };
+  if (window.matchMedia('(max-width: 640px)').matches) {
+    return { hidden: false, position: null };
+  }
 
   const navigation = link.parentElement;
-  if (!navigation) return;
+  if (!navigation) return { hidden: false, position: null };
 
   const navigationRect = navigation.getBoundingClientRect();
   const linkRect = link.getBoundingClientRect();
-  pill.style.left = `${linkRect.left - navigationRect.left}px`;
-  pill.style.width = `${linkRect.width}px`;
-  pill.style.bottom = `${navigationRect.bottom - linkRect.bottom}px`;
+  return {
+    hidden: false,
+    position: {
+      left: `${linkRect.left - navigationRect.left}px`,
+      width: `${linkRect.width}px`,
+      bottom: `${navigationRect.bottom - linkRect.bottom}px`,
+    },
+  };
+}
+
+function applyNavigationPillUpdate(pill, update) {
+  if (!pill || !update) return;
+
+  if (pill.hidden !== update.hidden) pill.hidden = update.hidden;
+  if (!update.position) return;
+
+  for (const [property, value] of Object.entries(update.position)) {
+    if (pill.style[property] !== value) pill.style[property] = value;
+  }
+}
+
+export function updateNavigationPill(pill, link) {
+  applyNavigationPillUpdate(pill, navigationPillUpdate(pill, link));
 }
 
 export function updateNavigationState(links, sectionId) {
   let activeLink = null;
   for (const link of links) {
     const isActive = link.getAttribute('href') === `#${sectionId}`;
-    link.classList.toggle('active', isActive);
+    if (link.classList.contains('active') !== isActive) {
+      link.classList.toggle('active', isActive);
+    }
     if (isActive) {
-      link.setAttribute('aria-current', 'location');
+      if (link.getAttribute('aria-current') !== 'location') {
+        link.setAttribute('aria-current', 'location');
+      }
       activeLink = link;
-    } else {
+    } else if (link.getAttribute('aria-current') !== null) {
       link.removeAttribute('aria-current');
     }
   }
@@ -64,15 +89,19 @@ export function updateLanguageDestination(toggle, activeLink, sectionId) {
   const defaultHref = toggle.getAttribute('data-language-default');
   const destination = alternateHref || defaultHref;
 
-  if (destination) toggle.setAttribute('href', destination);
+  if (destination && toggle.getAttribute('href') !== destination) {
+    toggle.setAttribute('href', destination);
+  }
 }
 
-function setActiveNavigation(sectionId, links, pill) {
-  document.body.dataset.section = sectionId;
+function setActiveNavigation(sectionId, links, pill, pillUpdate) {
+  if (document.body.dataset.section !== sectionId) {
+    document.body.dataset.section = sectionId;
+  }
   const activeLink = updateNavigationState(links, sectionId);
 
   updateLanguageDestination(document.getElementById('lang-toggle'), activeLink, sectionId);
-  updateNavigationPill(pill, activeLink);
+  applyNavigationPillUpdate(pill, pillUpdate);
 }
 
 function sectionGeometry(section) {
@@ -105,24 +134,34 @@ export function initNavigation() {
 
   const navigation = document.querySelector('.nav-links');
   const header = document.querySelector('nav');
-  const syncHeaderHeight = () => {
-    if (!header) return;
-    document.documentElement.style.setProperty('--nav-height', `${header.getBoundingClientRect().height}px`);
+  let previousHeaderHeight;
+  let headerHeightNeedsSync = Boolean(header);
+  const syncHeaderHeight = height => {
+    if (height === null || height === previousHeaderHeight) return;
+
+    previousHeaderHeight = height;
+    document.documentElement.style.setProperty('--nav-height', `${height}px`);
   };
   const pill = navigation?.querySelector('.nav-pill') ?? document.createElement('div');
-  if (navigation && !pill.parentElement) {
-    pill.className = 'nav-pill';
-    navigation.appendChild(pill);
-  }
+  const needsPillAppend = navigation && !pill.parentElement;
+  if (navigation && !pill.parentElement) pill.className = 'nav-pill';
 
   const update = () => {
-    const activeSection = findActiveSection(
-      navigationGeometry(sections),
-      window.scrollY,
-      window.innerHeight,
-    );
+    const headerHeight = headerHeightNeedsSync ? header.getBoundingClientRect().height : null;
+    headerHeightNeedsSync = false;
+    const geometry = navigationGeometry(sections);
+    const activeSection = findActiveSection(geometry, window.scrollY, window.innerHeight);
 
-    if (activeSection) setActiveNavigation(activeSection, links, pill);
+    let activeLink = null;
+    let pillUpdate = null;
+    if (activeSection) {
+      activeLink = links.find(link => link.getAttribute('href') === `#${activeSection}`) ?? null;
+      pillUpdate = navigationPillUpdate(pill, activeLink);
+    }
+
+    if (needsPillAppend && !pill.parentElement) navigation.appendChild(pill);
+    syncHeaderHeight(headerHeight);
+    if (activeSection) setActiveNavigation(activeSection, links, pill, pillUpdate);
   };
 
   let animationFrame = 0;
@@ -136,7 +175,7 @@ export function initNavigation() {
 
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   const headerResized = () => {
-    syncHeaderHeight();
+    headerHeightNeedsSync = Boolean(header);
     scheduleUpdate();
   };
   if (header && window.ResizeObserver) {
@@ -146,7 +185,10 @@ export function initNavigation() {
   window.addEventListener('resize', headerResized);
   window.addEventListener('hashchange', scheduleUpdate);
   document.addEventListener('languagechange', scheduleUpdate);
-  syncHeaderHeight();
   update();
   scheduleUpdate();
+  document.fonts?.ready?.then(() => {
+    headerHeightNeedsSync = Boolean(header);
+    scheduleUpdate();
+  });
 }
