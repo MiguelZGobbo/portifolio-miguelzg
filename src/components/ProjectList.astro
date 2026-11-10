@@ -23,13 +23,15 @@ const dict = translations[lang];
         data-hierarchy={project.hierarchy}
         aria-labelledby={`project-${project.slug}`}
       >
-        {project.image && <ProjectMedia image={project.image} title={project.name[lang]} lang={lang} />}
-        <div class="project-entry-copy">
+        <header class="project-entry-header">
           <h3 class="project-name" id={`project-${project.slug}`}>{project.name[lang]}</h3>
           <p class="project-meta">
             <span class="project-kind">{project.showcase.kind[lang]}</span>
             <span class="project-state">{project.state[lang]}</span>
           </p>
+        </header>
+        {project.image && <ProjectMedia image={project.image} title={project.name[lang]} lang={lang} />}
+        <div class="project-entry-copy">
           <p class="project-summary">{project.showcase.summary[lang]}</p>
 
           <ul class="project-technologies" aria-label={dict['projects.technologies']}>
